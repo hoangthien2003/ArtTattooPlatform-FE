@@ -15,9 +15,9 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { Avatar } from "@mui/material";
-import Logo from "../assets/images/Logo.png";
-import { NavLink } from "react-router-dom";
+import { Avatar, Tab, Tabs } from "@mui/material";
+import Logo from "../../assets/images/Logo.png";
+import { Link } from "react-router-dom";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -54,14 +54,27 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("md")]: {
-      width: "20ch",
+      width: "20rem",
     },
   },
 }));
 
+const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
+  ({ theme }) => ({
+    color: "rgba(255, 255, 255, 0.7)",
+    "&.Mui-selected": {
+      color: "#fff",
+    },
+    "&.Mui-focusVisible": {
+      backgroundColor: "rgba(100, 95, 228, 0.32)",
+    },
+  })
+);
+
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [value, setValue] = React.useState(0);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -157,17 +170,26 @@ export default function Navbar() {
     </Menu>
   );
 
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
-        position="sticky"
+        position="static"
         sx={{
           backgroundColor: "#000",
           paddingLeft: 4,
           paddingRight: 4,
         }}
       >
-        <Toolbar>
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
           <IconButton
             size="large"
             edge="start"
@@ -184,7 +206,6 @@ export default function Navbar() {
             <MenuIcon />
           </IconButton>
           <Box
-            to="/"
             sx={{
               display: "flex",
               alignItems: "center",
@@ -200,7 +221,7 @@ export default function Navbar() {
               VNINK
             </Typography>
           </Box>
-          <Search>
+          {/* <Search>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
@@ -208,8 +229,31 @@ export default function Navbar() {
               placeholder="Service..."
               inputProps={{ "aria-label": "search" }}
             />
-          </Search>
-          <Box sx={{ flexGrow: 1 }} />
+          </Search> */}
+          <Box
+            sx={{
+              display: {
+                xs: "none",
+                md: "flex",
+                borderBottom: 1,
+                borderColor: "divider",
+              },
+            }}
+          >
+            <Tabs value={value} onChange={handleChange}>
+              {/* <Link href="/" rel="noreferrer" underline="none">
+                <StyledTab label="Home" />
+              </Link> */}
+              <StyledTab
+                label="Home"
+                onClick={() => {
+                  window.location.href = "/";
+                }}
+              />
+              <StyledTab label="Service" />
+              <StyledTab label="Studio" />
+            </Tabs>
+          </Box>
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
               size="large"
