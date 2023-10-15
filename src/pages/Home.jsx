@@ -23,6 +23,7 @@ const Home = () => {
   };
 
   return (
+    
     <Container maxWidth="xl">
       <Stack spacing={3} direction={"column"} paddingTop={5} paddingBottom={5}>
         <Typography variant="h5">TOP RATE SERVICE</Typography>
