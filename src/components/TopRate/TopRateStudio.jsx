@@ -14,7 +14,6 @@ const TopRateStudio = () => {
     await axios
       .get(import.meta.env.VITE_REACT_APP_API_URL + "/Studio/GetAll")
       .then((res) => {
-        console.log(res.data.$values);
         setdata(res.data.$values);
       })
       .catch((err) => setdata(err));
@@ -47,6 +46,7 @@ const TopRateStudio = () => {
           return (
             <CardStudio
               key={index}
+              studioId={studio.studioId}
               studioName={studio.studioName}
               logo={studio.logo}
             />

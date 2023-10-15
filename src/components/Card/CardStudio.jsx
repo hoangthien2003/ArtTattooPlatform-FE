@@ -10,13 +10,16 @@ import {
 import React from "react";
 
 const CardStudio = (props) => {
-  const { studioName, studioLogo } = props;
+  const { studioId, studioName, logo } = props;
+
+  const handleOnClickStudio = (e) => {};
 
   return (
     <Card
+      key={studioId}
       sx={{ width: "80%", backgroundColor: "#322F2F", placeSelf: "center" }}
     >
-      <CardActionArea>
+      <CardActionArea onClick={handleOnClickStudio}>
         <CardContent>
           <Stack
             spacing={2}
@@ -24,7 +27,7 @@ const CardStudio = (props) => {
             justifyContent={"flex-start"}
             alignItems={"center"}
           >
-            <Avatar alt={studioName} src={studioLogo} />
+            <Avatar alt={studioName} src={logo} />
             <Stack
               spacing={1}
               justifyContent={"flex-start"}

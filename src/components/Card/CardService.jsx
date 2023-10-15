@@ -40,9 +40,18 @@ const CardService = (props) => {
       });
   };
 
+  const handleOnClickService = (event) => {
+    window.location.href = `/services/${serviceId}`;
+  };
+
+  const handleOnClickBooking = (event) => {
+    event.stopPropagation();
+    console.log(2);
+  };
+
   return (
-    <Card sx={{ width: "95%" }}>
-      <CardActionArea>
+    <Card sx={{ width: "90%" }} key={serviceId}>
+      <CardActionArea onClick={handleOnClickService}>
         <CardMedia
           component="img"
           alt={serviceName}
@@ -84,6 +93,7 @@ const CardService = (props) => {
                 size="medium"
                 variant="outlined"
                 sx={{ position: "absolute", right: 0 }}
+                onClick={handleOnClickBooking}
               >
                 <Typography variant="body2" color="#FF7F22">
                   Booking

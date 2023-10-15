@@ -30,15 +30,11 @@ const Home = () => {
         <SliderCard serviceList={serviceList} />
         <Typography variant="h5">NEW SERVICE</Typography>
       </Stack>
-      <Grid
-        container
-        spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 4, sm: 8, md: 12 }}
-      >
-        <Grid item xs={8}>
+      <Grid container spacing={3} columns={{ xs: 4, sm: 8, md: 12 }}>
+        <Grid item xs={9}>
           <PaginationCard serviceList={serviceList} />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <TopRateStudio />
         </Grid>
       </Grid>
