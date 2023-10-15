@@ -15,16 +15,24 @@ const PaginationCard = ({ serviceList }) => {
   const displayedServices = serviceList.slice(startIndex, endIndex);
 
   return (
-    <Box>
+    <Box
+      sx={{
+        width: "auto",
+        backgroundColor: "#322F2F",
+        paddingTop: 2,
+        paddingBottom: 2,
+        borderRadius: 5,
+      }}
+    >
       <Stack spacing={4}>
         <Grid
           container
-          spacing={{ xs: 2, md: 1 }}
+          spacing={{ xs: 2, md: 3 }}
           columns={{ xs: 4, sm: 8, md: 12 }}
         >
           {displayedServices.map((service, index) => {
             return (
-              <Grid item xs={4} sm={4} md={4} key={index}>
+              <Grid item xs={4} sm={8} md={4} key={index}>
                 <CardService
                   serviceId={service.serviceId}
                   serviceName={service.serviceName}
