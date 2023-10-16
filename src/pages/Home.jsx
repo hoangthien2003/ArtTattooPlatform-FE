@@ -23,18 +23,17 @@ const Home = () => {
   };
 
   return (
-    
-    <Container maxWidth="xl">
+    <Container maxWidth="lg" sx={{ marginTop: 5, marginBottom: 5 }}>
       <Stack spacing={3} direction={"column"} paddingTop={5} paddingBottom={5}>
         <Typography variant="h5">TOP RATE SERVICE</Typography>
         <SliderCard serviceList={serviceList} />
         <Typography variant="h5">NEW SERVICE</Typography>
       </Stack>
       <Grid container spacing={3} columns={{ xs: 4, sm: 8, md: 12 }}>
-        <Grid item xs={9}>
+        <Grid item xs={8}>
           <PaginationCard serviceList={serviceList} />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <TopRateStudio />
         </Grid>
       </Grid>
