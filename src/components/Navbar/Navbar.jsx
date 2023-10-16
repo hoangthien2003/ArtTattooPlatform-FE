@@ -15,9 +15,10 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { Avatar, Tab, Tabs } from "@mui/material";
+import { Avatar, Container, Slide, Tab, Tabs } from "@mui/material";
 import Logo from "../../assets/images/Logo.png";
 import { Link } from "react-router-dom";
+import { Close, CloseSharp } from "@mui/icons-material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -75,6 +76,7 @@ export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [value, setValue] = React.useState(0);
+  const [showSearchBar, setShowSearchBar] = React.useState(false);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -136,14 +138,6 @@ export default function Navbar() {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
         <IconButton
           size="large"
           aria-label="show 17 new notifications"
@@ -177,17 +171,26 @@ export default function Navbar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
-        position="static"
+        position="sticky"
         sx={{
           backgroundColor: "#000",
-          paddingLeft: 4,
-          paddingRight: 4,
+          paddingLeft: {
+            xs: 2,
+            md: 6,
+          },
+          paddingRight: {
+            xs: 0,
+            md: 6,
+          },
         }}
       >
         <Toolbar
           sx={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: {
+              md: "space-between",
+            },
+            alignItems: "center",
           }}
         >
           <IconButton
@@ -198,7 +201,8 @@ export default function Navbar() {
             sx={{
               mr: 2,
               display: {
-                xs: "flex",
+                xs: showSearchBar ? "none" : "flex",
+                sm: "flex",
                 md: "none",
               },
             }}
@@ -207,8 +211,15 @@ export default function Navbar() {
           </IconButton>
           <Box
             sx={{
-              display: "flex",
+              display: {
+                xs: showSearchBar ? "none" : "flex",
+                sm: "flex",
+                md: "flex",
+              },
               alignItems: "center",
+            }}
+            onClick={() => {
+              window.location.href = "/";
             }}
           >
             <Avatar src={Logo} />
@@ -221,29 +232,49 @@ export default function Navbar() {
               VNINK
             </Typography>
           </Box>
-          {/* <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Service..."
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search> */}
+          <Box
+            sx={{
+              position: "absolute",
+              left: {
+                md: "31%",
+                xs: 0,
+                sm: "30%",
+              },
+              width: {
+                md: "30rem",
+                xs: "18rem",
+                sm: "25rem",
+              },
+            }}
+          >
+            <Slide
+              in={showSearchBar}
+              direction="down"
+              mountOnEnter
+              unmountOnExit
+            >
+              <Search>
+                <SearchIconWrapper>
+                  <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder="Service..."
+                  inputProps={{ "aria-label": "search" }}
+                />
+              </Search>
+            </Slide>
+          </Box>
           <Box
             sx={{
               display: {
                 xs: "none",
-                md: "flex",
+                md: showSearchBar ? "none" : "flex",
                 borderBottom: 1,
                 borderColor: "divider",
               },
             }}
           >
             <Tabs value={value} onChange={handleChange}>
-              {/* <Link href="/" rel="noreferrer" underline="none">
-                <StyledTab label="Home" />
-              </Link> */}
               <StyledTab
                 label="Home"
                 onClick={() => {
@@ -254,11 +285,48 @@ export default function Navbar() {
               <StyledTab label="Studio" />
             </Tabs>
           </Box>
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <Box
+            sx={{
+              flexGrow: {
+                xs: 1,
+              },
+              display: {
+                md: "none",
+              },
+            }}
+          />
+          <Box
+            sx={{
+              display: {
+                md: "flex",
+              },
+            }}
+          >
+            <IconButton
+              size="large"
+              color="inherit"
+              onClick={() => {
+                setShowSearchBar(!showSearchBar);
+              }}
+              sx={{
+                display: {
+                  xs: showSearchBar ? "none" : "flex",
+                  md: "flex",
+                },
+              }}
+            >
+              <SearchIcon />
+            </IconButton>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
+              sx={{
+                display: {
+                  xs: "none",
+                  md: "flex",
+                },
+              }}
             >
               <Badge badgeContent={17} color="error">
                 <NotificationsIcon />
@@ -272,6 +340,12 @@ export default function Navbar() {
               aria-haspopup="true"
               onClick={handleProfileMenuOpen}
               color="inherit"
+              sx={{
+                display: {
+                  xs: "none",
+                  md: "flex",
+                },
+              }}
             >
               <AccountCircle />
             </IconButton>
@@ -282,10 +356,14 @@ export default function Navbar() {
               aria-label="show more"
               aria-controls={mobileMenuId}
               aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
+              onClick={() => {
+                showSearchBar
+                  ? setShowSearchBar(false)
+                  : handleMobileMenuOpen();
+              }}
               color="inherit"
             >
-              <MoreIcon />
+              {showSearchBar ? <Close /> : <MoreIcon />}
             </IconButton>
           </Box>
         </Toolbar>
