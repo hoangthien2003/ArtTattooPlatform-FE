@@ -1,11 +1,9 @@
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { useState } from "react";
 import theme from "./lib/Theme";
-import Home from "./pages/Home";
 import Footer from "./components/Footer/Footer";
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/Navbar/Navbar";
 
 function App() {
   const HomePage = lazy(() => import("./pages/Home"));
@@ -14,6 +12,7 @@ function App() {
     <BrowserRouter basename="/">
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <Navbar />
         <Suspense fallback={<p>Loading...</p>}>
           <Navbar />
           <Routes>
