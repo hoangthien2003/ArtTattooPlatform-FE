@@ -32,7 +32,7 @@ const PaginationCard = ({ serviceList }) => {
         >
           {displayedServices.map((service, index) => {
             return (
-              <Grid item xs={4} sm={8} md={4} key={index}>
+              <Grid item xs={4} sm={4} md={4} key={index}>
                 <CardService
                   serviceId={service.serviceId}
                   serviceName={service.serviceName}

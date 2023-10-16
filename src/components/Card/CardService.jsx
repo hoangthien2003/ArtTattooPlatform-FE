@@ -41,6 +41,7 @@ const CardService = (props) => {
   };
 
   const handleOnClickService = (event) => {
+    console.log(1);
     window.location.href = `/services/${serviceId}`;
   };
 
@@ -50,7 +51,7 @@ const CardService = (props) => {
   };
 
   return (
-    <Card sx={{ width: "90%" }} key={serviceId}>
+    <Card sx={{ width: "85%" }} key={serviceId}>
       <CardActionArea onClick={handleOnClickService}>
         <CardMedia
           component="img"
