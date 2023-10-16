@@ -12,13 +12,21 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { Avatar, Container, Slide, Tab, Tabs } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Container,
+  Fade,
+  Slide,
+  Tab,
+  Tabs,
+} from "@mui/material";
 import Logo from "../../assets/images/Logo.png";
-import { Link } from "react-router-dom";
 import { Close, CloseSharp } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import Login from "../Modal/Login";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -74,12 +82,17 @@ const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
 
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorNavEl, setAnchorNavEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [value, setValue] = React.useState(0);
   const [showSearchBar, setShowSearchBar] = React.useState(false);
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const [open, setOpen] = React.useState(false);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isNavMenuOpen = Boolean(anchorNavEl);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -98,7 +111,23 @@ export default function Navbar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const handleNavMenuOpen = (event) => {
+    setAnchorNavEl(event.currentTarget);
+  };
+
+  const handleNavMenuClose = (event) => {
+    setAnchorNavEl(null);
+  };
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const menuId = "primary-search-account-menu";
+  const navMenus = [
+    { name: "Home", path: "/" },
+    { name: "Service", path: "/" },
+    { name: "Studio", path: "/" },
+  ];
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -117,6 +146,38 @@ export default function Navbar() {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+    </Menu>
+  );
+
+  const renderNavMenu = (
+    <Menu
+      anchorEl={anchorNavEl}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={isNavMenuOpen}
+      onClose={handleNavMenuClose}
+    >
+      {navMenus.map((navMenu, index) => {
+        return (
+          <MenuItem
+            key={index}
+            onClick={() => {
+              navigate(navMenu.path);
+              handleNavMenuClose();
+            }}
+          >
+            {navMenu.name}
+          </MenuItem>
+        );
+      })}
     </Menu>
   );
 
@@ -176,11 +237,11 @@ export default function Navbar() {
           backgroundColor: "#000",
           paddingLeft: {
             xs: 2,
-            md: 6,
+            md: 5,
           },
           paddingRight: {
             xs: 0,
-            md: 6,
+            md: 5,
           },
         }}
       >
@@ -188,7 +249,7 @@ export default function Navbar() {
           sx={{
             display: "flex",
             justifyContent: {
-              md: "space-between",
+              md: token ? "space-between" : "",
             },
             alignItems: "center",
           }}
@@ -198,6 +259,8 @@ export default function Navbar() {
             edge="start"
             color="inherit"
             aria-label="open drawer"
+            aria-controls={mobileMenuId}
+            aria-haspopup="true"
             sx={{
               mr: 2,
               display: {
@@ -206,6 +269,7 @@ export default function Navbar() {
                 md: "none",
               },
             }}
+            onClick={handleNavMenuOpen}
           >
             <MenuIcon />
           </IconButton>
@@ -213,13 +277,13 @@ export default function Navbar() {
             sx={{
               display: {
                 xs: showSearchBar ? "none" : "flex",
-                sm: "flex",
                 md: "flex",
               },
               alignItems: "center",
+              cursor: "pointer",
             }}
             onClick={() => {
-              window.location.href = "/";
+              navigate("/");
             }}
           >
             <Avatar src={Logo} />
@@ -227,7 +291,7 @@ export default function Navbar() {
               variant="h6"
               noWrap
               component="div"
-              sx={{ display: { xs: "none", sm: "block" } }}
+              sx={{ display: { sm: "block" } }}
             >
               VNINK
             </Typography>
@@ -236,15 +300,16 @@ export default function Navbar() {
             sx={{
               position: "absolute",
               left: {
-                md: "31%",
-                xs: 0,
-                sm: "30%",
+                sm: token ? "50%" : "30%",
+                xs: "43%",
               },
+              transform: "translateX(-50%)",
               width: {
-                md: "30rem",
-                xs: "18rem",
+                md: "25rem",
+                xs: "17rem",
                 sm: "25rem",
               },
+              display: "flex",
             }}
           >
             <Slide
@@ -253,16 +318,32 @@ export default function Navbar() {
               mountOnEnter
               unmountOnExit
             >
-              <Search>
+              <Search
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
                 <SearchIconWrapper>
                   <SearchIcon />
                 </SearchIconWrapper>
                 <StyledInputBase
-                  placeholder="Service..."
+                  placeholder="Anime design tattoo..."
                   inputProps={{ "aria-label": "search" }}
                 />
               </Search>
             </Slide>
+            <IconButton
+              size="medium"
+              sx={{
+                display: showSearchBar ? "flex" : "none",
+              }}
+              onClick={() => {
+                setShowSearchBar(false);
+              }}
+            >
+              <Close />
+            </IconButton>
           </Box>
           <Box
             sx={{
@@ -271,6 +352,7 @@ export default function Navbar() {
                 md: showSearchBar ? "none" : "flex",
                 borderBottom: 1,
                 borderColor: "divider",
+                marginLeft: "5rem",
               },
             }}
           >
@@ -278,7 +360,7 @@ export default function Navbar() {
               <StyledTab
                 label="Home"
                 onClick={() => {
-                  window.location.href = "/";
+                  navigate("/");
                 }}
               />
               <StyledTab label="Service" />
@@ -291,15 +373,16 @@ export default function Navbar() {
                 xs: 1,
               },
               display: {
-                md: "none",
+                md: token && "none",
               },
             }}
           />
           <Box
             sx={{
               display: {
-                md: "flex",
+                sm: "flex",
               },
+              alignItems: "center",
             }}
           >
             <IconButton
@@ -317,59 +400,93 @@ export default function Navbar() {
             >
               <SearchIcon />
             </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-              sx={{
-                display: {
-                  xs: "none",
-                  md: "flex",
-                },
-              }}
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-              sx={{
-                display: {
-                  xs: "none",
-                  md: "flex",
-                },
-              }}
-            >
-              <AccountCircle />
-            </IconButton>
+            {token ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <IconButton
+                  size="large"
+                  aria-label="show 17 new notifications"
+                  color="inherit"
+                  sx={{
+                    display: {
+                      xs: "none",
+                      md: "flex",
+                    },
+                  }}
+                >
+                  <Badge badgeContent={17} color="error">
+                    <NotificationsIcon />
+                  </Badge>
+                </IconButton>
+                <IconButton
+                  size="large"
+                  edge="end"
+                  aria-label="account of current user"
+                  aria-controls={menuId}
+                  aria-haspopup="true"
+                  onClick={handleProfileMenuOpen}
+                  color="inherit"
+                  sx={{
+                    display: {
+                      xs: "none",
+                      md: "flex",
+                    },
+                  }}
+                >
+                  <AccountCircle />
+                </IconButton>
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  display: {
+                    sm: "flex",
+                    xs: "none",
+                  },
+                  alignItems: "center",
+                }}
+              >
+                <Typography
+                  sx={{
+                    ":hover": {
+                      textDecoration: "underline",
+                    },
+                    cursor: "pointer",
+                    paddingLeft: 2,
+                    paddingRight: 4,
+                  }}
+                  onClick={() => handleOpen()}
+                >
+                  Login
+                </Typography>
+                <Button variant="outlined" onClick={() => handleOpen()}>
+                  Signup
+                </Button>
+              </Box>
+            )}
           </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
+          <Box sx={{ display: { xs: "flex", sm: "none" } }}>
             <IconButton
               size="large"
               aria-label="show more"
               aria-controls={mobileMenuId}
               aria-haspopup="true"
-              onClick={() => {
-                showSearchBar
-                  ? setShowSearchBar(false)
-                  : handleMobileMenuOpen();
-              }}
+              onClick={handleMobileMenuOpen}
               color="inherit"
             >
-              {showSearchBar ? <Close /> : <MoreIcon />}
+              <MoreIcon />
             </IconButton>
           </Box>
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      {renderNavMenu}
+      <Login open={open} setOpen={setOpen} />
     </Box>
   );
 }
