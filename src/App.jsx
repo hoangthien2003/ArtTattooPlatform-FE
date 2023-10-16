@@ -12,7 +12,6 @@ function App() {
     <BrowserRouter basename="/">
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Navbar />
         <Suspense fallback={<p>Loading...</p>}>
           <Navbar />
           <Routes>
