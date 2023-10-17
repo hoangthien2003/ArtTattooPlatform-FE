@@ -12,18 +12,21 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useRef } from "react";
 import { useShowAuthModal } from "../../stores/useShowAuthModal";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router";
+import axios from "axios";
 
 function Login(props) {
   const { setIsLogin } = props;
   const [showPassword, setShowPassword] = React.useState(false);
   const navigate = useNavigate();
+  const emailRef = useRef();
+  const passwordRef = useRef();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -41,6 +44,25 @@ function Login(props) {
     },
   });
 
+  async function handleLogin(event) {
+    event.preventDefault();
+    const email = emailRef.current.value;
+    const password = passwordRef.current.value;
+    const loginRequest = {
+      email: email,
+      password: password,
+    };
+    await axios
+      .post(`${import.meta.env.VITE_REACT_APP_API_URL}/login`, loginRequest)
+      .then((res) => {
+        localStorage.setItem("token", res.data);
+        navigate(0);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   return (
     <>
       <Typography variant="h4" textAlign="center">
@@ -50,8 +72,16 @@ function Login(props) {
         style={{
           marginTop: "2.5rem",
         }}
+        onSubmit={handleLogin}
       >
-        <TextField id="outlined-email" label="Email" fullWidth required />
+        <TextField
+          id="outlined-email"
+          label="Email"
+          fullWidth
+          required
+          inputRef={emailRef}
+          type="email"
+        />
         <FormControl
           sx={{
             marginTop: 2,
@@ -79,6 +109,7 @@ function Login(props) {
               </InputAdornment>
             }
             label="Password"
+            inputRef={passwordRef}
           />
         </FormControl>
         <Button
