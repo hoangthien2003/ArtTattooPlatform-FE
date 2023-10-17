@@ -7,10 +7,11 @@ import CardMedia from "@mui/material/CardMedia";
 import { Button, CardActionArea, CardActions } from "@mui/material";
 import "../index.css"
 import Rating from '@mui/material/Rating';
+import { useNavigate } from 'react-router';
 
 export default function StudioPage() {
     const [studio, setStudio] = useState([]);
-
+    const navigate = useNavigate()
     useEffect(() => {
         getStudio();
     }, []);
@@ -53,12 +54,11 @@ export default function StudioPage() {
 
                             </CardActionArea>
                                 <CardActions>
-                                <Link to={`StudioDetail/${studio.studioId}`}>
 
-                                    <Button size="small" color="primary">
+                                    <Button size="small" color="primary" onClick={()=>navigate(`/StudioDetail/${studio.studioId}`)}>
                                         View more
                                     </Button>
-                                    </Link>
+                                    
 
                                 </CardActions>
                         </Card>
