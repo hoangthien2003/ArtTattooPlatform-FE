@@ -18,24 +18,12 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useGoogleLogin } from "@react-oauth/google";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 530,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  paddingTop: 6,
-  paddingLeft: 10,
-  paddingRight: 10,
-  paddingBottom: 6,
-};
+import { useNavigate } from "react-router";
 
 function Login(props) {
   const { setIsLogin } = props;
   const [showPassword, setShowPassword] = React.useState(false);
+  const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -45,16 +33,16 @@ function Login(props) {
 
   const handleLoginGoogle = useGoogleLogin({
     onSuccess: (credentialResponse) => {
-      console.log(credentialResponse);
+      localStorage.setItem("token", credentialResponse.access_token);
+      window.location.reload();
     },
     onError: () => {
       console.log("Login failed!");
     },
-    flow: "auth-code",
   });
 
   return (
-    <Box sx={style}>
+    <>
       <Typography variant="h4" textAlign="center">
         Welcome back!
       </Typography>
@@ -150,10 +138,10 @@ function Login(props) {
             setIsLogin(false);
           }}
         >
-          Sign up now
+          Sign up
         </Typography>
       </Box>
-    </Box>
+    </>
   );
 }
 

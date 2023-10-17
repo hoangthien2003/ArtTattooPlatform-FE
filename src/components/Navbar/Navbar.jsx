@@ -29,8 +29,7 @@ import { Close } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { googleLogout } from "@react-oauth/google";
 import Register from "../Modal/Register";
-
-const Login = React.lazy(() => import("../Modal/Login"));
+import Login from "../Modal/Login";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -98,6 +97,29 @@ export default function Navbar() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const isNavMenuOpen = Boolean(anchorNavEl);
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: {
+      sm: 530,
+      xs: 350,
+    },
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    paddingTop: 6,
+    paddingLeft: {
+      sm: 10,
+      xs: 4,
+    },
+    paddingRight: {
+      sm: 10,
+      xs: 4,
+    },
+    paddingBottom: 6,
+  };
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -397,9 +419,7 @@ export default function Navbar() {
           />
           <Box
             sx={{
-              display: {
-                sm: "flex",
-              },
+              display: "flex",
               alignItems: "center",
             }}
           >
@@ -423,18 +443,16 @@ export default function Navbar() {
                 sx={{
                   display: "flex",
                   alignItems: "center",
+                  display: {
+                    xs: "none",
+                    sm: "flex",
+                  },
                 }}
               >
                 <IconButton
                   size="large"
                   aria-label="show 17 new notifications"
                   color="inherit"
-                  sx={{
-                    display: {
-                      xs: "none",
-                      md: "flex",
-                    },
-                  }}
                 >
                   <Badge badgeContent={17} color="error">
                     <NotificationsIcon />
@@ -448,12 +466,6 @@ export default function Navbar() {
                   aria-haspopup="true"
                   onClick={handleProfileMenuOpen}
                   color="inherit"
-                  sx={{
-                    display: {
-                      xs: "none",
-                      md: "flex",
-                    },
-                  }}
                 >
                   <AccountCircle />
                 </IconButton>
@@ -461,10 +473,7 @@ export default function Navbar() {
             ) : (
               <Box
                 sx={{
-                  display: {
-                    sm: "flex",
-                    xs: "none",
-                  },
+                  display: "flex",
                   alignItems: "center",
                 }}
               >
@@ -478,6 +487,10 @@ export default function Navbar() {
                     paddingRight: 4,
                     paddingTop: 1,
                     paddingBottom: 1,
+                    display: {
+                      sm: "flex",
+                      xs: "none",
+                    },
                   }}
                   onClick={() => {
                     setIsLogin(true);
@@ -492,13 +505,19 @@ export default function Navbar() {
                     setIsLogin(false);
                     handleOpen();
                   }}
+                  sx={{
+                    display: {
+                      xs: showSearchBar ? "none" : "flex",
+                      sm: "flex",
+                    },
+                  }}
                 >
                   Signup
                 </Button>
               </Box>
             )}
           </Box>
-          <Box sx={{ display: { xs: "flex", sm: "none" } }}>
+          <Box sx={{ display: { xs: token ? "flex" : "none", sm: "none" } }}>
             <IconButton
               size="large"
               aria-label="show more"
@@ -530,13 +549,13 @@ export default function Navbar() {
         }}
       >
         <Fade in={open}>
-          <div>
+          <Box sx={style}>
             {isLogin ? (
               <Login setIsLogin={setIsLogin} />
             ) : (
               <Register setIsLogin={setIsLogin} />
             )}
-          </div>
+          </Box>
         </Fade>
       </Modal>
     </Box>
