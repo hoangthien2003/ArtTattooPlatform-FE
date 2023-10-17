@@ -30,22 +30,8 @@ function Register(props) {
     event.presentDefault();
   };
 
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 530,
-    bgcolor: "background.paper",
-    boxShadow: 24,
-    paddingTop: 6,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingBottom: 6,
-  };
-
   return (
-    <Box sx={style}>
+    <>
       <Typography variant="h4" textAlign="center">
         Register
       </Typography>
@@ -158,10 +144,10 @@ function Register(props) {
             setIsLogin(true);
           }}
         >
-          Log in now
+          Log in
         </Typography>
       </Box>
-    </Box>
+    </>
   );
 }
 
