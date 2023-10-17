@@ -3,11 +3,22 @@ import theme from "./lib/Theme";
 import Footer from "./components/Footer/Footer";
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Navbar from "./components/Navbar/Navbar";
+import { useGoogleOneTapLogin } from "@react-oauth/google";
 
 function App() {
   const HomePage = lazy(() => import("./pages/Home"));
   const ServiceDetail = lazy(() => import("./pages/ServiceDetail"));
+  const Navbar = lazy(() => import("./components/Navbar/Navbar"));
+
+  useGoogleOneTapLogin({
+    onSuccess: (credentialResponse) => {
+      console.log(credentialResponse);
+    },
+    onError: () => {
+      console.log("Login failed!");
+    },
+  });
+
   return (
     <BrowserRouter basename="/">
       <ThemeProvider theme={theme}>

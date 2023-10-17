@@ -16,17 +16,21 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import {
   Avatar,
+  Backdrop,
   Button,
-  Container,
   Fade,
+  Modal,
   Slide,
   Tab,
   Tabs,
 } from "@mui/material";
 import Logo from "../../assets/images/Logo.png";
-import { Close, CloseSharp } from "@mui/icons-material";
+import { Close } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import Login from "../Modal/Login";
+import { googleLogout } from "@react-oauth/google";
+import Register from "../Modal/Register";
+
+const Login = React.lazy(() => import("../Modal/Login"));
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -89,6 +93,7 @@ export default function Navbar() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const [open, setOpen] = React.useState(false);
+  const [isLogin, setIsLogin] = React.useState(true);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -120,7 +125,14 @@ export default function Navbar() {
   };
 
   const handleOpen = () => setOpen(true);
+
   const handleClose = () => setOpen(false);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    googleLogout();
+    navigate(0);
+  };
 
   const menuId = "primary-search-account-menu";
   const navMenus = [
@@ -146,6 +158,7 @@ export default function Navbar() {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleLogout}>Logout</MenuItem>
     </Menu>
   );
 
@@ -364,7 +377,12 @@ export default function Navbar() {
                 }}
               />
               <StyledTab label="Service" />
-              <StyledTab label="Studio" />
+              <StyledTab
+                label="Studio"
+                onClick={() => {
+                  navigate("/StudioPage");
+                }}
+              />
             </Tabs>
           </Box>
           <Box
@@ -458,12 +476,23 @@ export default function Navbar() {
                     cursor: "pointer",
                     paddingLeft: 2,
                     paddingRight: 4,
+                    paddingTop: 1,
+                    paddingBottom: 1,
                   }}
-                  onClick={() => handleOpen()}
+                  onClick={() => {
+                    setIsLogin(true);
+                    handleOpen();
+                  }}
                 >
                   Login
                 </Typography>
-                <Button variant="outlined" onClick={() => handleOpen()}>
+                <Button
+                  variant="outlined"
+                  onClick={() => {
+                    setIsLogin(false);
+                    handleOpen();
+                  }}
+                >
                   Signup
                 </Button>
               </Box>
@@ -486,7 +515,30 @@ export default function Navbar() {
       {renderMobileMenu}
       {renderMenu}
       {renderNavMenu}
-      <Login open={open} setOpen={setOpen} />
+
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={open}>
+          <div>
+            {isLogin ? (
+              <Login setIsLogin={setIsLogin} />
+            ) : (
+              <Register setIsLogin={setIsLogin} />
+            )}
+          </div>
+        </Fade>
+      </Modal>
     </Box>
   );
 }

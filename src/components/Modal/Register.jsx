@@ -1,41 +1,22 @@
 import {
-  Backdrop,
   Box,
   Button,
-  Fade,
   FormControl,
   IconButton,
-  InputAdornment,
-  InputLabel,
-  Modal,
   OutlinedInput,
   TextField,
   Typography,
+  InputLabel,
+  InputAdornment,
 } from "@mui/material";
-import React from "react";
-import { useShowAuthModal } from "../../stores/useShowAuthModal";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import GoogleIcon from "@mui/icons-material/Google";
-import { useGoogleLogin } from "@react-oauth/google";
+import React from "react";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 530,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  paddingTop: 6,
-  paddingLeft: 10,
-  paddingRight: 10,
-  paddingBottom: 6,
-};
-
-function Login(props) {
+function Register(props) {
   const { setIsLogin } = props;
   const [showPassword, setShowPassword] = React.useState(false);
+  const [showConfirm, setShowConfirm] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -43,20 +24,30 @@ function Login(props) {
     event.presentDefault();
   };
 
-  const handleLoginGoogle = useGoogleLogin({
-    onSuccess: (credentialResponse) => {
-      console.log(credentialResponse);
-    },
-    onError: () => {
-      console.log("Login failed!");
-    },
-    flow: "auth-code",
-  });
+  const handleClickShowConfirm = () => setShowConfirm((show) => !show);
+
+  const handleMouseDownConfirm = (event) => {
+    event.presentDefault();
+  };
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 530,
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    paddingTop: 6,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingBottom: 6,
+  };
 
   return (
     <Box sx={style}>
       <Typography variant="h4" textAlign="center">
-        Welcome back!
+        Register
       </Typography>
       <form
         style={{
@@ -64,6 +55,15 @@ function Login(props) {
         }}
       >
         <TextField id="outlined-email" label="Email" fullWidth required />
+        <TextField
+          id="outlined-username"
+          label="Username"
+          fullWidth
+          required
+          sx={{
+            marginTop: 2,
+          }}
+        />
         <FormControl
           sx={{
             marginTop: 2,
@@ -93,6 +93,35 @@ function Login(props) {
             label="Password"
           />
         </FormControl>
+        <FormControl
+          sx={{
+            marginTop: 2,
+          }}
+          fullWidth
+          variant="outlined"
+          required
+        >
+          <InputLabel htmlFor="outlined-adornment-confirm">
+            Confirm password
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-confirm"
+            type={showConfirm ? "text" : "password"}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowConfirm}
+                  onMouseDown={handleMouseDownConfirm}
+                  edge="end"
+                >
+                  {showConfirm ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Confirm password"
+          />
+        </FormControl>
         <Button
           fullWidth
           variant="contained"
@@ -103,30 +132,9 @@ function Login(props) {
           }}
           type="submit"
         >
-          Login
+          Register
         </Button>
       </form>
-      <div
-        style={{
-          backgroundColor: "gray",
-          width: "100%",
-          height: 0.5,
-          marginTop: "1.5rem",
-          marginBottom: "1.5rem",
-        }}
-      ></div>
-      <Button
-        variant="outlined"
-        fullWidth
-        sx={{
-          paddingTop: 1.2,
-          paddingBottom: 1.2,
-        }}
-        onClick={handleLoginGoogle}
-      >
-        <GoogleIcon sx={{ marginRight: 1 }} />
-        Continue with Google
-      </Button>
       <Box
         sx={{
           textAlign: "center",
@@ -136,7 +144,7 @@ function Login(props) {
           justifyContent: "center",
         }}
       >
-        <Typography variant="subtitle2">Don't have an account?</Typography>
+        <Typography variant="subtitle2">Already have an account?</Typography>
         <Typography
           variant="subtitle2"
           sx={{
@@ -147,14 +155,14 @@ function Login(props) {
             marginLeft: 1,
           }}
           onClick={() => {
-            setIsLogin(false);
+            setIsLogin(true);
           }}
         >
-          Sign up now
+          Log in now
         </Typography>
       </Box>
     </Box>
   );
 }
 
-export default Login;
+export default Register;
