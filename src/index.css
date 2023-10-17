@@ -39,3 +39,9 @@ body {
     background-color: #f9f9f9;
   }
 }
+.ellipsis {
+  white-space: nowrap; 
+  width: 'auto'; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
