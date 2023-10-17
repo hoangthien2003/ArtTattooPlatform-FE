@@ -126,7 +126,7 @@ export default function Navbar() {
   const navMenus = [
     { name: "Home", path: "/" },
     { name: "Service", path: "/" },
-    { name: "Studio", path: "/" },
+    { name: "Studio", path: "/StudioPage" },
   ];
   const renderMenu = (
     <Menu

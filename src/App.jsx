@@ -4,6 +4,7 @@ import Footer from "./components/Footer/Footer";
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
+import StudioPage from "./pages/StudioPage";
 
 function App() {
   const HomePage = lazy(() => import("./pages/Home"));
@@ -17,6 +18,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/services:serviceId" element={<ServiceDetail />} />
+            <Route path="/StudioPage" element={<StudioPage/>} />
           </Routes>
           <Footer />
         </Suspense>
