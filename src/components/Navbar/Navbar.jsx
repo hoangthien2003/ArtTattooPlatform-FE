@@ -159,7 +159,7 @@ export default function Navbar() {
   const menuId = "primary-search-account-menu";
   const navMenus = [
     { name: "Home", path: "/" },
-    { name: "Service", path: "/" },
+    { name: "Service", path: "/services" },
     { name: "Studio", path: "/StudioPage" },
   ];
   const renderMenu = (
@@ -398,7 +398,12 @@ export default function Navbar() {
                   navigate("/");
                 }}
               />
-              <StyledTab label="Service" />
+              <StyledTab
+                label="Service"
+                onClick={() => {
+                  navigate("/services");
+                }}
+              />
               <StyledTab
                 label="Studio"
                 onClick={() => {

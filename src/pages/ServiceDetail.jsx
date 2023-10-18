@@ -30,6 +30,7 @@ const ServiceDetail = () => {
           `/Service/v2/GetServiceByID/${serviceId}`
       )
       .then((res) => {
+        console.log(res.data);
         setData(res.data); //data: {$id, service, studio}
       })
       .catch((err) => {
@@ -71,7 +72,7 @@ const ServiceDetail = () => {
           to="/services"
           sx={{ textDecoration: "none" }}
         >
-          Name Service
+          {data && data.service && data.service.serviceName}
         </Typography>
       </Breadcrumbs>
       {/* Contain service card */}
@@ -88,14 +89,18 @@ const ServiceDetail = () => {
         <Grid item xs={6}>
           <Stack direction={"column"} spacing={1}>
             <Typography variant="h5" color="white">
-              Service Name
+              {data && data.service && data.service.serviceName}
             </Typography>
             <Stack direction={"row"} spacing={2} alignContent={"center"}>
               <Rating size="medium" defaultValue={4} precision={0.5} readOnly />
               <Typography variant="subtitle2">Số lần đánh giá</Typography>
             </Stack>
-            <Typography variant="subtitle2">Số Tiền VNĐ</Typography>
-            <Typography variant="body2">Description</Typography>
+            <Typography variant="subtitle2">
+              {data && data.service && data.service.price} VNĐ
+            </Typography>
+            <Typography variant="body2">
+              {data && data.service && data.service.description}
+            </Typography>
             <Button fullWidth variant="outlined">
               Booking
             </Button>
