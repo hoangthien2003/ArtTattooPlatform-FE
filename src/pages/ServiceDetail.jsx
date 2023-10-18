@@ -15,9 +15,9 @@ import SliderPicture from "../components/Slider/SliderPicture";
 import Feedback from "../components/Feedback/Feedback";
 
 const ServiceDetail = () => {
-  const serviceId = useParams();
+  const { serviceId } = useParams();
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState();
 
   useEffect(() => {
     getServiceByID();
@@ -30,8 +30,7 @@ const ServiceDetail = () => {
           `/Service/v2/GetServiceByID/${serviceId}`
       )
       .then((res) => {
-        console.log(res.data.$values);
-        setData(res.data.$values);
+        setData(res.data); //data: {$id, service, studio}
       })
       .catch((err) => {
         console.log(err);
