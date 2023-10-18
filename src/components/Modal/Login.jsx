@@ -4,6 +4,7 @@ import {
   Button,
   Fade,
   FormControl,
+  FormHelperText,
   IconButton,
   InputAdornment,
   InputLabel,
@@ -27,6 +28,7 @@ function Login(props) {
   const navigate = useNavigate();
   const emailRef = useRef();
   const passwordRef = useRef();
+  const [errorElement, setErrorElement] = React.useState("");
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -60,6 +62,12 @@ function Login(props) {
       })
       .catch((err) => {
         console.log(err);
+        if (err.response.data === "auth/incorrect-email") {
+          setErrorElement("email");
+        }
+        if (err.response.data === "auth/incorrect-password") {
+          setErrorElement("password");
+        }
       });
   }
 
@@ -81,6 +89,8 @@ function Login(props) {
           required
           inputRef={emailRef}
           type="email"
+          error={errorElement === "email"}
+          helperText={errorElement === "email" && "Email not found!"}
         />
         <FormControl
           sx={{
@@ -110,7 +120,13 @@ function Login(props) {
             }
             label="Password"
             inputRef={passwordRef}
+            error={errorElement === "password"}
           />
+          {errorElement === "password" && (
+            <FormHelperText error id="password-error">
+              Incorrect password!
+            </FormHelperText>
+          )}
         </FormControl>
         <Button
           fullWidth

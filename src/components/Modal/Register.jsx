@@ -8,15 +8,23 @@ import {
   Typography,
   InputLabel,
   InputAdornment,
+  FormHelperText,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import React from "react";
+import React, { useRef } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 function Register(props) {
   const { setIsLogin } = props;
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirm, setShowConfirm] = React.useState(false);
+  const emailRef = useRef();
+  const usernameRef = useRef();
+  const passwordRef = useRef();
+  const confirmRef = useRef();
+  const [errorElement, setErrorElement] = React.useState("");
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -30,6 +38,41 @@ function Register(props) {
     event.presentDefault();
   };
 
+  async function handleRegister(event) {
+    event.preventDefault();
+    const email = emailRef.current.value;
+    const username = usernameRef.current.value;
+    const password = passwordRef.current.value;
+    const confirm = confirmRef.current.value;
+    if (password == confirm) {
+      const registerRequest = {
+        email: email,
+        password: password,
+        username: username,
+      };
+      await axios
+        .post(
+          `${import.meta.env.VITE_REACT_APP_API_URL}/register`,
+          registerRequest
+        )
+        .then((res) => {
+          console.log(res);
+          toast.success("Register successfully! Please login to continue");
+          setIsLogin(true);
+        })
+        .catch((err) => {
+          if (err.response.data === "auth/existed-email") {
+            setErrorElement("email");
+          }
+          if (err.response.data === "auth/existed-username") {
+            setErrorElement("username");
+          }
+        });
+    } else {
+      setErrorElement("confirm");
+    }
+  }
+
   return (
     <>
       <Typography variant="h4" textAlign="center">
@@ -39,20 +82,33 @@ function Register(props) {
         style={{
           marginTop: "2.5rem",
         }}
+        onSubmit={handleRegister}
       >
-        <TextField id="outlined-email" label="Email" fullWidth required />
+        <TextField
+          id="outlined-email"
+          label="Email"
+          fullWidth
+          required
+          inputRef={emailRef}
+          onFocus={() => setErrorElement("")}
+          error={errorElement === "email"}
+          helperText={errorElement === "email" && "Existed email!"}
+        />
         <TextField
           id="outlined-username"
           label="Username"
           fullWidth
           required
           sx={{
-            marginTop: 2,
+            marginTop: 3,
           }}
+          inputRef={usernameRef}
+          error={errorElement === "username"}
+          helperText={errorElement === "username" && "Existed username!"}
         />
         <FormControl
           sx={{
-            marginTop: 2,
+            marginTop: 3,
           }}
           fullWidth
           variant="outlined"
@@ -77,11 +133,21 @@ function Register(props) {
               </InputAdornment>
             }
             label="Password"
+            inputRef={passwordRef}
+            onFocus={() => setErrorElement("")}
           />
+          <FormHelperText
+            error={errorElement === "password"}
+            id="password-helper"
+          >
+            {errorElement === "password"
+              ? "Invalid password!"
+              : "Password must contains 8 characters, lowercases, numbers"}
+          </FormHelperText>
         </FormControl>
         <FormControl
           sx={{
-            marginTop: 2,
+            marginTop: 3,
           }}
           fullWidth
           variant="outlined"
@@ -106,7 +172,15 @@ function Register(props) {
               </InputAdornment>
             }
             label="Confirm password"
+            inputRef={confirmRef}
+            error={errorElement === "confirm"}
+            onFocus={() => setErrorElement("")}
           />
+          {errorElement === "confirm" && (
+            <FormHelperText error id="confirm-error">
+              Password does not match!
+            </FormHelperText>
+          )}
         </FormControl>
         <Button
           fullWidth

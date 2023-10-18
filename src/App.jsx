@@ -6,6 +6,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useGoogleOneTapLogin } from "@react-oauth/google";
 import StudioPage from "./pages/StudioPage";
 import StudioDetail from "./pages/StudioDetail";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const HomePage = lazy(() => import("./pages/Home"));
@@ -25,13 +27,17 @@ function App() {
     <BrowserRouter basename="/">
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <ToastContainer />
         <Suspense fallback={<p>Loading...</p>}>
           <Navbar />
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/services:serviceId" element={<ServiceDetail />} />
-            <Route path="/StudioPage" element={<StudioPage/>} />
-            <Route path='/StudioDetail/:studioId' element={<StudioDetail/>}></Route>
+            <Route path="/StudioPage" element={<StudioPage />} />
+            <Route
+              path="/StudioDetail/:studioId"
+              element={<StudioDetail />}
+            ></Route>
           </Routes>
           <Footer />
         </Suspense>
