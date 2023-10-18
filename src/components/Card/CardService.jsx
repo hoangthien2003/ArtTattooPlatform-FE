@@ -6,20 +6,20 @@ import {
   CardActions,
   CardContent,
   CardMedia,
-  Container,
   Rating,
   Stack,
   Typography,
 } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import theme from "../../lib/Theme";
+import { useNavigate } from "react-router-dom";
+import "../../styles/CardService.css";
 
 const CardService = (props) => {
-  const { serviceId, serviceName, description, studioId, price, imageService } =
-    props;
+  const { serviceId, serviceName, studioId, price, imageService } = props;
   const [studioName, setStudioName] = useState("");
   const [studioLogo, setStudioLogo] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     getStudio();
@@ -42,7 +42,7 @@ const CardService = (props) => {
 
   const handleOnClickService = (event) => {
     console.log(1);
-    window.location.href = `/services/${serviceId}`;
+    navigate(`/services/${serviceId}`);
   };
 
   const handleOnClickBooking = (event) => {
@@ -51,7 +51,7 @@ const CardService = (props) => {
   };
 
   return (
-    <Card sx={{ width: "85%" }} key={serviceId}>
+    <Card sx={{ width: "90%" }} key={serviceId}>
       <CardActionArea onClick={handleOnClickService}>
         <CardMedia
           component="img"
@@ -70,23 +70,25 @@ const CardService = (props) => {
             alignItems={"center"}
           >
             <Avatar alt={studioName} src={studioLogo} />
-            <Stack>
-              <Typography>{studioName}</Typography>
+            <Typography>{studioName}</Typography>
+          </Stack>
+        </CardContent>
+        <CardContent>
+          <Stack spacing={3} sx={{ position: "relative" }}>
+            <Stack spacing={1}>
+              <Typography
+                className="ellipsis-serviceName"
+                variant="body2"
+                color="#7C7676"
+              >
+                {serviceName}
+              </Typography>
               <Rating
                 size="small"
                 defaultValue={2.5}
                 precision={0.5}
                 readOnly
               />
-            </Stack>
-          </Stack>
-        </CardContent>
-        <CardContent>
-          <Stack spacing={4} sx={{ position: "relative" }}>
-            <Stack spacing={1}>
-              <Typography variant="body1" color="#7C7676">
-                {serviceName}
-              </Typography>
               <Typography variant="subtitle2">Cost: {price} VNĐ</Typography>
             </Stack>
             <CardActions>

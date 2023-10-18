@@ -12,12 +12,11 @@ function App() {
     <BrowserRouter basename="/">
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Navbar />
         <Suspense fallback={<p>Loading...</p>}>
           <Navbar />
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/services:serviceId" element={<ServiceDetail />} />
+            <Route path="/services/:serviceId" element={<ServiceDetail />} />
           </Routes>
           <Footer />
         </Suspense>
