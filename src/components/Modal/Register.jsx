@@ -25,6 +25,7 @@ function Register(props) {
   const passwordRef = useRef();
   const confirmRef = useRef();
   const [errorElement, setErrorElement] = React.useState("");
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*d)[A-Za-zd]{8,}$/;
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -44,6 +45,10 @@ function Register(props) {
     const username = usernameRef.current.value;
     const password = passwordRef.current.value;
     const confirm = confirmRef.current.value;
+    if (!passwordRegex.test(password)) {
+      setErrorElement("password");
+      return;
+    }
     if (password == confirm) {
       const registerRequest = {
         email: email,
@@ -135,6 +140,7 @@ function Register(props) {
             label="Password"
             inputRef={passwordRef}
             onFocus={() => setErrorElement("")}
+            error={errorElement === "password"}
           />
           <FormHelperText
             error={errorElement === "password"}
