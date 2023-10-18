@@ -10,6 +10,7 @@ import StudioPage from "./pages/StudioPage";
 import StudioDetail from "./pages/StudioDetail";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   const HomePage = lazy(() => import("./pages/Home"));
@@ -37,6 +38,7 @@ function App() {
             <Route path="/services" element={<Service />} />
             <Route path="/services/:serviceId" element={<ServiceDetail />} />
             <Route path="/StudioPage" element={<StudioPage />} />
+            <Route path="/ProfilePage" element={<ProfilePage />} />
             <Route
               path="/StudioDetail/:studioId"
               element={<StudioDetail />}
