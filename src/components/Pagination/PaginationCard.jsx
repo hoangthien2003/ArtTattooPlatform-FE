@@ -15,44 +15,44 @@ const PaginationCard = ({ serviceList }) => {
   const displayedServices = serviceList.slice(startIndex, endIndex);
 
   return (
-    <Box
-      sx={{
-        width: "auto",
-        backgroundColor: "#322F2F",
-        paddingTop: 2,
-        paddingBottom: 2,
-        borderRadius: 5,
-      }}
+    <Stack
+      spacing={4}
+      justifyContent={"center"}
+      alignItems={"center"}
+      bgcolor={"#322F2F"}
+      borderRadius={5}
+      paddingTop={2}
+      paddingBottom={2}
     >
-      <Stack spacing={4}>
-        <Grid
-          container
-          spacing={{ xs: 2, md: 3 }}
-          columns={{ xs: 4, sm: 8, md: 12 }}
-        >
-          {displayedServices.map((service, index) => {
-            return (
-              <Grid item xs={4} sm={4} md={4} key={index}>
-                <CardService
-                  serviceId={service.serviceId}
-                  serviceName={service.serviceName}
-                  studioId={service.studioId}
-                  description={service.description}
-                  imageService={service.imageService}
-                  price={service.price}
-                />
-              </Grid>
-            );
-          })}
-        </Grid>
-        <Pagination
-          sx={{ placeSelf: "center" }}
-          count={Math.ceil(serviceList.length / itemsPerPage)}
-          page={page}
-          onChange={handleChange}
-        />
-      </Stack>
-    </Box>
+      <Grid
+        container
+        spacing={{ xs: 2, md: 3 }}
+        columns={{ xs: 4, sm: 8, md: 12 }}
+        direction={"row"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        {displayedServices.map((service, index) => {
+          return (
+            <Grid item xs={4} sm={4} md={4} key={index}>
+              <CardService
+                serviceId={service.serviceId}
+                serviceName={service.serviceName}
+                studioId={service.studioId}
+                description={service.description}
+                imageService={service.imageService}
+                price={service.price}
+              />
+            </Grid>
+          );
+        })}
+      </Grid>
+      <Pagination
+        count={Math.ceil(serviceList.length / itemsPerPage)}
+        page={page}
+        onChange={handleChange}
+      />
+    </Stack>
   );
 };
 

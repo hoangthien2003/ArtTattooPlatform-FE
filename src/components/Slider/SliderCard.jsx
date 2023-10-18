@@ -20,7 +20,6 @@ const SliderCard = ({ serviceList }) => {
   return (
     <Box
       sx={{
-        backgroundColor: "#322F2F",
         paddingTop: 5,
         paddingBottom: 5,
         borderRadius: 5,
