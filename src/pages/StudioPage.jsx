@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Container, Link, Typography } from '@mui/material';
+import { Avatar, Container, Link, Typography } from '@mui/material';
 import axios from 'axios';
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -8,8 +8,14 @@ import { Button, CardActionArea, CardActions } from "@mui/material";
 import "../index.css"
 import Rating from '@mui/material/Rating';
 import { useNavigate } from 'react-router';
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 export default function StudioPage() {
+
     const [studio, setStudio] = useState([]);
     const navigate = useNavigate()
     useEffect(() => {
@@ -25,27 +31,59 @@ export default function StudioPage() {
             .catch((err) => {
                 console.log(err);
             });
-        console.log(studio)
+
 
     };
     return (
         <Container className='mt-5 mb-5'>
+            <Typography variant='h4'>
+                Studio
+            </Typography>
+
             <div className='row'>
-                {studio.map((studio) => (
-                    <div className='col-md-4 mt-5'>
-                        <Card sx={{ maxWidth: 300 }}>
-                            <CardActionArea>
-                                <CardMedia
-                                    component="img"
-                                    height="140"
-                                    image={studio.logo}
-                                    alt="Studio"
-                                />
+                {studio.map((studio, index) => (
+                    <div key={index} className='col-md-4 mt-5'>
+                        <Card sx={{ display: 'flex', maxWidth: 345 }}>
+                        <CardActionArea onClick={() => navigate(`/StudioDetail/${studio.studioId}`)}>
+
+                            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                                <Box className='ps-3'>
+                                    <Avatar
+                                        alt="Remy Sharp"
+                                        src={studio.logo}
+                                        sx={{ width: 100, height: 'auto' }}
+                                        className='mt-3 mb-3'
+                                    />
+                                </Box>
+                                <CardContent sx={{ flex: '1 0 auto' }}>
+                                    <Typography component="div" variant="h5">
+                                        {studio.studioName}
+                                    </Typography>
+                                    <Typography variant="subtitle1" color="text.secondary" component="div" className='ellipsis'>
+                                        {studio.description}
+                                    </Typography>
+                                    <Rating name="size-small" readOnly defaultValue={4} size="small" className='mt-1' />
+                                </CardContent>
+
+                            </Box>
+                            </CardActionArea>
+                        </Card>
+                        {/* <Card key={index} sx={{ maxWidth: 345, display:'flex'}}>
+                            <CardActionArea onClick={() => navigate(`/StudioDetail/${studio.studioId}`)}>
+                                <CardMedia className='ps-3'>
+                                    <Avatar
+                                        alt="Remy Sharp"
+                                        src={studio.logo}
+                                        sx={{ width: 100, height: 'auto' }}
+                                        className='mt-3 mb-3'
+                                    />
+                                </CardMedia>
+
                                 <CardContent>
                                     <Typography gutterBottom variant="h5" component="div">
                                         {studio.studioName}
                                     </Typography>
-                                    <Typography  className='ellipsis'> 
+                                    <Typography className='ellipsis'>
                                         {studio.description}
                                     </Typography>
                                     <Rating name="size-small" readOnly defaultValue={4} size="small" className='mt-1' />
@@ -53,15 +91,7 @@ export default function StudioPage() {
                                 </CardContent>
 
                             </CardActionArea>
-                                <CardActions>
-
-                                    <Button size="small" color="primary" onClick={()=>navigate(`/StudioDetail/${studio.studioId}`)}>
-                                        View more
-                                    </Button>
-                                    
-
-                                </CardActions>
-                        </Card>
+                        </Card> */}
                     </div>
 
                 ))}

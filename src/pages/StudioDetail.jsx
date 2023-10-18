@@ -2,9 +2,11 @@ import React from 'react'
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Container } from '@mui/system';
+import { Typography } from '@mui/material';
 
 export default function StudioDetail() {
-  const studioId = useParams();
+  const {studioId} = useParams();
 
   const [data, setData] = useState();
 
@@ -16,19 +18,25 @@ export default function StudioDetail() {
     await axios
       .get(
         import.meta.env.VITE_REACT_APP_API_URL +
-          `/Studio/GetStudioByID/${studioId}`
+        `/Studio/GetStudioByID/${studioId}`
       )
       .then((res) => {
-        console.log(res.data);
-        setData(res.data);
+        // setData(res.data);
+        setData(res.data)
+        console.log(data)
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  console.log(data)
 
   return (
-    <div>StudioDetail</div>
+    <div>
+      <Container>
+        <Typography gutterBottom variant="h5" component="div">
+          {}
+       </Typography>
+      </Container>
+    </div>
   )
 }
