@@ -43,11 +43,11 @@ export default function StudioPage() {
             <div className='row'>
                 {studio.map((studio, index) => (
                     <div key={index} className='col-md-4 mt-5'>
-                        <Card sx={{ display: 'flex', maxWidth: 345 }}>
+                        <Card sx={{  Width: 345 }}>
                         <CardActionArea onClick={() => navigate(`/StudioDetail/${studio.studioId}`)}>
 
-                            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                                <Box className='ps-3'>
+                            <Box className='row'>
+                                <Box className='ps-4 col-md-4'>
                                     <Avatar
                                         alt="Remy Sharp"
                                         src={studio.logo}
@@ -55,7 +55,7 @@ export default function StudioPage() {
                                         className='mt-3 mb-3'
                                     />
                                 </Box>
-                                <CardContent sx={{ flex: '1 0 auto' }}>
+                                <CardContent className='col-md-8 ps-4 pe-4'>
                                     <Typography component="div" variant="h5">
                                         {studio.studioName}
                                     </Typography>
@@ -64,7 +64,6 @@ export default function StudioPage() {
                                     </Typography>
                                     <Rating name="size-small" readOnly defaultValue={4} size="small" className='mt-1' />
                                 </CardContent>
-
                             </Box>
                             </CardActionArea>
                         </Card>
