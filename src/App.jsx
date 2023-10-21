@@ -4,6 +4,8 @@ import Footer from "./components/Footer/Footer";
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useGoogleOneTapLogin } from "@react-oauth/google";
+// import HomePage from "./pages/Home";
+// import Service from "./pages/Service";
 import StudioPage from "./pages/StudioPage";
 import StudioDetail from "./pages/StudioDetail";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,8 +16,8 @@ import Service from "./pages/Service";
 function App() {
   const HomePage = lazy(() => import("./pages/Home"));
   const ServiceDetail = lazy(() => import("./pages/ServiceDetail"));
+  const Service = lazy(() => import("./pages/Service"));
   const Navbar = lazy(() => import("./components/Navbar/Navbar"));
-
   useGoogleOneTapLogin({
     onSuccess: (credentialResponse) => {
       console.log(credentialResponse);

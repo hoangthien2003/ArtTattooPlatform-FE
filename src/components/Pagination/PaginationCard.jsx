@@ -19,7 +19,6 @@ const PaginationCard = ({ serviceList }) => {
       spacing={4}
       justifyContent={"center"}
       alignItems={"center"}
-      bgcolor={"#322F2F"}
       borderRadius={5}
       paddingTop={2}
       paddingBottom={2}

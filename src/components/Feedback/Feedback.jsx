@@ -2,6 +2,7 @@ import { Button, Container, Grid, Stack, Typography } from "@mui/material";
 import React from "react";
 import { StarList } from "./StarList";
 import CommentList from "./CommentList";
+import FeedbackForm from "./FeedbackForm";
 
 const Feedback = () => {
   const ratings = [
@@ -24,7 +25,7 @@ const Feedback = () => {
         <Grid item xs={6}>
           <Stack spacing={4}>
             <StarList ratings={ratings} />
-            <Button variant="outlined">Make a feedback</Button>
+            <FeedbackForm/>
           </Stack>
         </Grid>
         <Grid item xs={6}>
