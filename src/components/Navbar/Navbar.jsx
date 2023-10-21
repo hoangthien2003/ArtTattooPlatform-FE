@@ -178,7 +178,13 @@ export default function Navbar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem
+        onClick={() => {
+          navigate("/profile");
+        }}
+      >
+        Profile
+      </MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
       <MenuItem onClick={handleLogout}>Logout</MenuItem>
     </Menu>
@@ -398,7 +404,12 @@ export default function Navbar() {
                   navigate("/");
                 }}
               />
-              <StyledTab label="Service" />
+              <StyledTab
+                label="Service"
+                onClick={() => {
+                  navigate("/services");
+                }}
+              />
               <StyledTab
                 label="Studio"
                 onClick={() => {

@@ -4,6 +4,7 @@ import {
   Button,
   Container,
   Grid,
+  Modal,
   Rating,
   Stack,
   Typography,
@@ -13,8 +14,12 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import SliderPicture from "../components/Slider/SliderPicture";
 import Feedback from "../components/Feedback/Feedback";
+import Booking from "../components/Modal/Booking";
 
 const ServiceDetail = () => {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const { serviceId } = useParams();
 
   const [data, setData] = useState();
@@ -30,6 +35,7 @@ const ServiceDetail = () => {
           `/Service/v2/GetServiceByID/${serviceId}`
       )
       .then((res) => {
+        console.log(res.data);
         setData(res.data); //data: {$id, service, studio}
       })
       .catch((err) => {
@@ -71,7 +77,7 @@ const ServiceDetail = () => {
           to="/services"
           sx={{ textDecoration: "none" }}
         >
-          Name Service
+          {data && data.service && data.service.serviceName}
         </Typography>
       </Breadcrumbs>
       {/* Contain service card */}
@@ -83,22 +89,36 @@ const ServiceDetail = () => {
         marginBottom={3}
       >
         <Grid item xs={6}>
-          <SliderPicture />
+          <SliderPicture
+            image={data && data.service && data.service.imageService}
+          />
         </Grid>
         <Grid item xs={6}>
-          <Stack direction={"column"} spacing={1}>
+          <Stack direction={"column"} spacing={2}>
             <Typography variant="h5" color="white">
-              Service Name
+              {data && data.service && data.service.serviceName}
             </Typography>
             <Stack direction={"row"} spacing={2} alignContent={"center"}>
               <Rating size="medium" defaultValue={4} precision={0.5} readOnly />
               <Typography variant="subtitle2">Số lần đánh giá</Typography>
             </Stack>
-            <Typography variant="subtitle2">Số Tiền VNĐ</Typography>
-            <Typography variant="body2">Description</Typography>
-            <Button fullWidth variant="outlined">
+            <Typography variant="subtitle2">
+              {data && data.service && data.service.price} VNĐ
+            </Typography>
+            <Typography variant="body2">
+              {data && data.service && data.service.description}
+            </Typography>
+            <Button fullWidth variant="outlined" onClick={handleOpen}>
               Booking
             </Button>
+            <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Booking data={data} />
+            </Modal>
           </Stack>
         </Grid>
       </Grid>

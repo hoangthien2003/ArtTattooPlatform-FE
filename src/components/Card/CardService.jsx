@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import "../../styles/CardService.css";
 
 const CardService = (props) => {
-  const { serviceId, serviceName, studioId, price, imageService } = props;
+  const { serviceId, serviceName, studioId, price, imageService, rate } = props;
   const [studioName, setStudioName] = useState("");
   const [studioLogo, setStudioLogo] = useState("");
   const navigate = useNavigate();
@@ -85,8 +85,9 @@ const CardService = (props) => {
               </Typography>
               <Rating
                 size="small"
-                defaultValue={2.5}
-                precision={0.5}
+                value={rate}
+                defaultValue={0}
+                precision={1}
                 readOnly
               />
               <Typography variant="subtitle2">Cost: {price} VNĐ</Typography>
