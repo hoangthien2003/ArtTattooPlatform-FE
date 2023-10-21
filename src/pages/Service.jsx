@@ -24,8 +24,7 @@ const Service = () => {
   };
   return (
     <Container maxWidth="lg" sx={{ paddingTop: 5, paddingBottom: 5 }}>
-      {/* Breadcrumbs */}
-      <Breadcrumbs sx={{ paddingBottom: 5 }} aria-label="breadcrumb">
+      <Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: 5 }}>
         <Stack
           spacing={1}
           direction={"row"}
