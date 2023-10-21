@@ -20,7 +20,7 @@ const IconList = [
 
 const Footer = () => {
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ bottom: 0 }}>
       <Toolbar>
         <Container
           maxWidth="md"
