@@ -15,7 +15,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 export default function StudioPage() {
-
+    //api
     const [studio, setStudio] = useState([]);
     const navigate = useNavigate()
     useEffect(() => {
@@ -34,65 +34,63 @@ export default function StudioPage() {
 
 
     };
+    //sort
+    const [sortType, setSortType] = useState(null);
+
+    const handleSortClick = (type) => {
+        setSortType(type);
+    };
+
+    const sortStudios = (a, b) => {
+        if (sortType === "name") {
+            return a.studioName.localeCompare(b.studioName);
+        } else {
+            // Add more sorting options if needed
+            return 0;
+        }
+    };
+
+    const sortedStudios = [...studio].sort(sortStudios);
     return (
+
         <Container className='mt-5 mb-5'>
-            <Typography variant='h4'>
-                Studio
-            </Typography>
-
+            <Box sx={{ minWidth: 120 }}>
+                <FormControl sx={{ width: '200px' }} variant="standard">
+                    <InputLabel>Sort By</InputLabel>
+                    <Select>
+                        <MenuItem value="name" onClick={() => handleSortClick("name")} >Name</MenuItem>
+                        <MenuItem value="rating" onClick={() => handleSortClick("rating")} >Rating</MenuItem>
+                    </Select>
+                </FormControl>
+            </Box>
             <div className='row'>
-                {studio.map((studio, index) => (
+                {sortedStudios.map((studio, index) => (
                     <div key={index} className='col-md-4 mt-5'>
-                        <Card sx={{  Width: 345 }}>
-                        <CardActionArea onClick={() => navigate(`/StudioDetail/${studio.studioId}`)}>
+                        <Card sx={{ Width: 345 }}>
+                            <CardActionArea onClick={() => navigate(`/StudioDetail/${studio.studioId}`)}>
 
-                            <Box className='row'>
-                                <Box className='ps-4 col-md-4'>
-                                    <Avatar
-                                        alt="Remy Sharp"
-                                        src={studio.logo}
-                                        sx={{ width: 100, height: 'auto' }}
-                                        className='mt-3 mb-3'
-                                    />
+                                <Box className='row'>
+                                    <Box className='ps-4 col-md-4'>
+                                        <Avatar
+                                            alt="Remy Sharp"
+                                            src={studio.logo}
+                                            sx={{ width: 100, height: 'auto' }}
+                                            className='mt-3 mb-3'
+                                        />
+                                    </Box>
+                                    <CardContent className='col-md-8 ps-4 pe-4'>
+                                        <Typography component="div" variant="h5">
+                                            {studio.studioName}
+                                        </Typography>
+                                        <Typography variant="subtitle1" color="text.secondary" component="div" className='ellipsis'>
+                                            {studio.description}
+                                        </Typography>
+                                        <Rating name="size-small" readOnly defaultValue={4} size="small" className='mt-1' />
+                                    </CardContent>
                                 </Box>
-                                <CardContent className='col-md-8 ps-4 pe-4'>
-                                    <Typography component="div" variant="h5">
-                                        {studio.studioName}
-                                    </Typography>
-                                    <Typography variant="subtitle1" color="text.secondary" component="div" className='ellipsis'>
-                                        {studio.description}
-                                    </Typography>
-                                    <Rating name="size-small" readOnly defaultValue={4} size="small" className='mt-1' />
-                                </CardContent>
-                            </Box>
                             </CardActionArea>
                         </Card>
-                        {/* <Card key={index} sx={{ maxWidth: 345, display:'flex'}}>
-                            <CardActionArea onClick={() => navigate(`/StudioDetail/${studio.studioId}`)}>
-                                <CardMedia className='ps-3'>
-                                    <Avatar
-                                        alt="Remy Sharp"
-                                        src={studio.logo}
-                                        sx={{ width: 100, height: 'auto' }}
-                                        className='mt-3 mb-3'
-                                    />
-                                </CardMedia>
-
-                                <CardContent>
-                                    <Typography gutterBottom variant="h5" component="div">
-                                        {studio.studioName}
-                                    </Typography>
-                                    <Typography className='ellipsis'>
-                                        {studio.description}
-                                    </Typography>
-                                    <Rating name="size-small" readOnly defaultValue={4} size="small" className='mt-1' />
-
-                                </CardContent>
-
-                            </CardActionArea>
-                        </Card> */}
                     </div>
-
                 ))}
             </div>
 
