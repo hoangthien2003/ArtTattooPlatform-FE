@@ -25,13 +25,14 @@ const Invoice = (props) => {
               <Typography variant="subtitle2">{booking.phone}</Typography>
               <Typography variant="subtitle2">{booking.dateTime}</Typography>
               <Typography variant="subtitle2">
-                {data.service.serviceName}
+                {data && data.service && data.service.serviceName}
               </Typography>
               <Typography variant="subtitle2">
-                {data.studio.studioName}
+                {console.log(data && data.studio && data.studio.studioName)}
+                {data && data.studio && data.studio.studioName}
               </Typography>
               <Typography variant="subtitle2">
-                {data.service.price}.000 VND
+                {data && data.service && data.service.price}.000 VND
               </Typography>
             </Stack>
           </Grid>
