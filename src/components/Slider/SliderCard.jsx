@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import CardService from "../Card/CardService";
 import Slider from "react-slick";
 import { Box } from "@mui/material";
@@ -6,12 +6,13 @@ import { Container } from "@mui/system";
 
 const SliderCard = ({ serviceList }) => {
   const settings = {
-    className: "center",
+    // className: "center",
     dots: false,
     infinite: true,
-    centerMode: true,
+    centerPadding: "50px",
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 3,
+    swipeToSlide: true,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 2500,
@@ -71,7 +72,6 @@ const SliderCard = ({ serviceList }) => {
         </Slider>
       </Box>
     </Container>
-
   );
 };
 
