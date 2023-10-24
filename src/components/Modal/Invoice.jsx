@@ -5,6 +5,8 @@ import React from "react";
 const Invoice = (props) => {
   const { booking, data } = props;
 
+  // console.log("Invoice: ", props);
+
   return (
     <Container sx={{ marginTop: 5, marginBottom: 5 }}>
       <Box>

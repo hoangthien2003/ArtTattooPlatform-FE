@@ -34,6 +34,7 @@ const SliderCard = ({ serviceList }) => {
               serviceId={data.serviceId}
               serviceName={data.serviceName}
               studioId={data.studioId}
+              rate={data.rating}
               description={data.description}
               imageService={data.imageService}
               price={data.price}

@@ -15,7 +15,7 @@ const Home = () => {
     await axios
       .get(import.meta.env.VITE_REACT_APP_API_URL + "/Service/GetAll")
       .then((res) => {
-        console.log(res.data.$values);
+        // console.log(res.data.$values);
         setServiceList(res.data.$values);
       })
       .catch((err) => {
