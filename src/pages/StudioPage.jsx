@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar, Container, Link, Typography } from '@mui/material';
+import { Avatar, Breadcrumbs, Container, Stack, Typography } from '@mui/material';
 import axios from 'axios';
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -13,6 +13,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { Home } from '@mui/icons-material';
+import { Link } from "react-router-dom";
 
 export default function StudioPage() {
     //api
@@ -54,6 +56,32 @@ export default function StudioPage() {
     return (
 
         <Container className='mt-5 mb-5'>
+            <Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: 5 }}>
+                <Stack
+                    spacing={1}
+                    direction={"row"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                >
+                    <Home fontSize="inherit" />
+                    <Typography
+                        variant="body1"
+                        component={Link}
+                        to="/"
+                        sx={{ textDecoration: "none" }}
+                    >
+                        Home
+                    </Typography>
+                </Stack>
+                <Typography
+                    variant="body1"
+                    component={Link}
+                    to="/StudioPage"
+                    sx={{ textDecoration: "none" }}
+                >
+                    Studio
+                </Typography>
+            </Breadcrumbs>
             <Box sx={{ minWidth: 120 }}>
                 <FormControl sx={{ width: '200px' }} variant="standard">
                     <InputLabel>Sort By</InputLabel>
@@ -93,7 +121,6 @@ export default function StudioPage() {
                     </div>
                 ))}
             </div>
-
         </Container>
 
     )
