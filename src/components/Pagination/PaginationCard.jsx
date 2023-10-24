@@ -32,12 +32,15 @@ const PaginationCard = ({ serviceList }) => {
         alignItems={"center"}
       >
         {displayedServices.map((service, index) => {
+          // console.log("service:", displayedServices);
+
           return (
             <Grid item xs={4} sm={4} md={4} key={index}>
               <CardService
                 serviceId={service.serviceId}
                 serviceName={service.serviceName}
                 studioId={service.studioId}
+                rate={service.rating}
                 description={service.description}
                 imageService={service.imageService}
                 price={service.price}

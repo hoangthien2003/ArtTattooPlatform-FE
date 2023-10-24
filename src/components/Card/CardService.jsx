@@ -13,20 +13,25 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "../../styles/CardService.css";
 import Booking from "../Modal/Booking";
 
 const CardService = (props) => {
   const { serviceId, serviceName, studioId, price, imageService, rate } = props;
+
   const [open, setOpen] = useState(false);
   const [studioName, setStudioName] = useState("");
   const [studioLogo, setStudioLogo] = useState("");
+  // console.log("rate: ", rate);
+  // console.log("props: ", props);
+  const [data, setData] = useState();
 
   const navigate = useNavigate();
 
   useEffect(() => {
     getStudio();
+    getServiceById();
   }, []);
 
   const getStudio = async () => {
@@ -36,8 +41,24 @@ const CardService = (props) => {
           `/Studio/GetStudioByID/${studioId}`
       )
       .then((res) => {
+        // console.log(res.data);
         setStudioLogo(res.data.logo);
         setStudioName(res.data.studioName);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getServiceById = async () => {
+    await axios
+      .get(
+        import.meta.env.VITE_REACT_APP_API_URL +
+          `/Service/v2/GetServiceByID/${serviceId}`
+      )
+      .then((res) => {
+        console.log(res.data);
+        setData(res.data); //data: {$id, service, studio}
       })
       .catch((err) => {
         console.log(err);
@@ -118,7 +139,7 @@ const CardService = (props) => {
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
             >
-              <Booking props={props} />
+              <Booking data={data} />
             </Modal>
           </CardActions>
         </Stack>
