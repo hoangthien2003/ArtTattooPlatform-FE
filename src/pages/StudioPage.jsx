@@ -96,7 +96,6 @@ export default function StudioPage() {
                     <div key={index} className='col-md-4 mt-5'>
                         <Card sx={{ Width: 345 }}>
                             <CardActionArea onClick={() => navigate(`/StudioDetail/${studio.studioId}`)}>
-
                                 <Box className='row'>
                                     <Box className='ps-4 col-md-4'>
                                         <Avatar
