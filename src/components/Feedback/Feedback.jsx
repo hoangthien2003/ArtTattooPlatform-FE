@@ -27,7 +27,7 @@ const Feedback = ({ serviceId }) => {
         <Grid item xs={6}>
           <Stack spacing={4}>
             <StarList ratings={ratings} />
-            <FeedbackForm />
+            <FeedbackForm serviceId={serviceId} />
           </Stack>
         </Grid>
         <Grid item xs={6}>

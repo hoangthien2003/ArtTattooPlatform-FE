@@ -478,7 +478,8 @@ export default function Navbar() {
                   onClick={handleProfileMenuOpen}
                   color="inherit"
                 >
-                  <AccountCircle />
+                  <Avatar />
+                  {/* <AccountCircle /> */}
                 </IconButton>
               </Box>
             ) : (

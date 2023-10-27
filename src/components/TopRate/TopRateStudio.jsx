@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import CardStudio from "../Card/CardStudio";
 
 const TopRateStudio = () => {
-  const [data, setdata] = useState([]);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     getStudio();
@@ -14,9 +14,10 @@ const TopRateStudio = () => {
     await axios
       .get(import.meta.env.VITE_REACT_APP_API_URL + "/Studio/GetAll")
       .then((res) => {
-        setdata(res.data.$values);
+        console.log(res.data.$values);
+        setData(res.data.$values);
       })
-      .catch((err) => setdata(err));
+      .catch((err) => setData(err));
   };
   return (
     <Box
@@ -49,6 +50,7 @@ const TopRateStudio = () => {
               studioId={studio.studioId}
               studioName={studio.studioName}
               logo={studio.logo}
+              rate={studio.rating}
             />
           );
         })}

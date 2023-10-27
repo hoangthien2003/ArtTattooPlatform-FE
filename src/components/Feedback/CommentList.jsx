@@ -29,7 +29,7 @@ const CommentList = ({ serviceId }) => {
           `/Feedback/GetFeedbackByServiceID/${serviceId}`
       )
       .then((res) => {
-        console.log(res.data.$values);
+        // console.log(res.data.$values);
         setComments(res.data.$values);
       })
       .catch((err) => {

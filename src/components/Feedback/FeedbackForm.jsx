@@ -13,19 +13,65 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useState } from "react";
 
-export default function FeedbackForm() {
+export default function FeedbackForm({ serviceId }) {
+  const [title, setTitle] = React.useState("");
+  const [rating, setRating] = React.useState(0);
   const [open, setOpen] = React.useState(false);
-  // const isCommentDisabled = () => {
-  //   if (comment.text.length === 0 && comment.rating === 0) return false;
-  //   return true;
-  // };
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const handleClickClose = () => {
     setOpen(false);
+  };
+
+  const isFeedBackEnabled = () => {
+    if (title.length === 0 || rating === 0) {
+      return false;
+    }
+    return true;
+  };
+
+  const onClickSubmit = async () => {
+    const token = localStorage.getItem("token");
+
+    // Lấy giá trị đầu vào của người dùng
+    const titleValue = title;
+    const ratingValue = rating;
+    const date = new Date(Date.now());
+    const DateFormat = date.toLocaleString();
+
+    if (token != null) {
+      const email = jwtDecode(token).email;
+      const feedbackRequest = {
+        FeedbackDetail: titleValue,
+        Rating: ratingValue,
+        ServiceID: serviceId,
+        FeedbackDate: DateFormat,
+      };
+
+      await axios
+        .post(
+          `${
+            import.meta.env.VITE_REACT_APP_API_URL
+          }/Feedback/AddFeedback${email}`,
+          feedbackRequest,
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        )
+        .then((res) => {
+          toast.success("Feedback saved successfully");
+          console.log(res);
+        })
+        .catch((err) => {
+          toast.error("Feedback saved failed");
+          console.log(err);
+        });
+    }
   };
 
   return (
@@ -33,7 +79,7 @@ export default function FeedbackForm() {
       <Button variant="outlined" onClick={handleClickOpen}>
         Give us your feedback
       </Button>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClickClose}>
         <DialogContent>
           <Typography component="legend" className="mt-3">
             Feedback service
@@ -45,14 +91,20 @@ export default function FeedbackForm() {
             type="feedback"
             fullWidth
             variant="standard"
+            onChange={(event) => setTitle(event.target.value)}
           />
           <Typography component="legend" className="mt-3">
             Rating service
           </Typography>
-          <Rating name="simple-controlled size-small" />
+          <Rating
+            onChange={(event) => setRating(event.target.value)}
+            name="simple-controlled size-small"
+          />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Submit</Button>
+          <Button onClick={onClickSubmit} disabled={!isFeedBackEnabled()}>
+            Submit
+          </Button>
         </DialogActions>
       </Dialog>
     </div>
