@@ -1,31 +1,44 @@
-import { Box, Button, Container, Stack, TextField } from "@mui/material";
-import { DateTimePicker } from "@mui/x-date-pickers";
+import {
+  Box,
+  Button,
+  Container,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { DatePicker, DateTimePicker, TimePicker } from "@mui/x-date-pickers";
 import React, { useState } from "react";
+import SliderSlotTime from "../Slider/SliderSlotTime";
 
-const FormBooking = ({ nameRef, phoneRef, datetimeRef }) => {
+const FormBooking = ({ nameRef, phoneRef, dateRef, timeRef }) => {
   return (
     <Container maxWidth="sm">
-      <Box sx={{ paddingTop: 10, paddingBottom: 10 }}>
-        <Stack spacing={4}>
-          <TextField
-            id="user"
-            label="Username"
-            variant="outlined"
-            inputRef={nameRef}
-            required
-          />
-          <TextField
-            id="phone"
-            label="PhoneNumber"
-            variant="outlined"
-            inputRef={phoneRef}
-            type="tel"
-            pattern="[0-9]{10}"
-            required
-          />
-          <DateTimePicker inputRef={datetimeRef} required />
-        </Stack>
-      </Box>
+      <Stack spacing={2} paddingTop={3} textAlign={"center"}>
+        <Typography variant="h5">Contact Info</Typography>
+        <Box>
+          <Stack spacing={4}>
+            <TextField
+              id="user"
+              label="Username"
+              variant="outlined"
+              inputRef={nameRef}
+              required
+            />
+            <TextField
+              id="phone"
+              label="PhoneNumber"
+              variant="outlined"
+              inputRef={phoneRef}
+              type="tel"
+              pattern="[0-9]{10}"
+              required
+            />
+            <DatePicker inputRef={dateRef} required />
+            {/* <TimePicker inputRef={timeRef} required /> */}
+            <SliderSlotTime timeRef={timeRef} />
+          </Stack>
+        </Box>
+      </Stack>
     </Container>
   );
 };

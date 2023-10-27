@@ -19,7 +19,9 @@ const Booking = (props) => {
   const [activeStep, setActiveStep] = useState(0);
   const nameRef = useRef();
   const phoneRef = useRef();
-  const datetimeRef = useRef();
+  // const datetimeRef = useRef();
+  const timeRef = useRef();
+  const dateRef = useRef();
   const [booking, setBooking] = useState({
     name: "",
     phone: "",
@@ -27,11 +29,26 @@ const Booking = (props) => {
   });
   const { data } = props;
 
+  const phoneRegExp = /^\d{10,12}$/;
+  const nameRegExp = /^[a-zA-Z]+$/;
+
   const handleNext = () => {
     const nameValue = nameRef.current.value;
     const phoneValue = phoneRef.current.value;
-    const dateTimeValue = datetimeRef.current.value;
-    if (nameValue && phoneValue && dateTimeValue) {
+    const dateValue = dateRef.current.value;
+    const timeValue = timeRef.current.value;
+    const dateTimeValue = dateValue.concat(" ", timeValue);
+    if (!phoneRegExp.test(phoneValue)) {
+      // Phone number must only contain numbers
+      return;
+    }
+
+    if (!nameRegExp.test(nameValue)) {
+      // Name must only contain letters
+      return;
+    }
+
+    if (nameValue && phoneValue && dateValue && timeValue) {
       console.log(nameValue, phoneValue, dateTimeValue);
       setBooking({
         name: nameValue,
@@ -52,12 +69,12 @@ const Booking = (props) => {
       const email = jwtDecode(token).email;
       const bookingRequest = {
         PhoneNumber: booking.phone,
-        BookingDate: booking.dateTime,
+        BookingDate: booking.date,
         ServiceId: data.service.serviceId,
         StudioId: data.studio.studioID,
         Total: data.service.price,
       };
-
+      console.log("bookingRequest: " + bookingRequest);
       await axios
         .post(
           `${
@@ -99,7 +116,8 @@ const Booking = (props) => {
           <FormBooking
             nameRef={nameRef}
             phoneRef={phoneRef}
-            datetimeRef={datetimeRef}
+            dateRef={dateRef}
+            timeRef={timeRef}
           />
         )}
         {activeStep === 1 && <Invoice booking={booking} data={data} />}
