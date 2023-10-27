@@ -33,11 +33,11 @@ const Times = () => {
       status: false,
     },
     {
-      time: "4:00",
+      time: "04:00",
       status: false,
     },
     {
-      time: "4:30",
+      time: "04:30",
       status: false,
     },
     {
@@ -194,10 +194,6 @@ const Times = () => {
     },
     {
       time: "24:00",
-      status: false,
-    },
-    {
-      time: "24:30",
       status: false,
     },
   ];
