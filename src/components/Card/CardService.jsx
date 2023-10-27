@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../../styles/CardService.css";
 import Booking from "../Modal/Booking";
@@ -57,7 +57,7 @@ const CardService = (props) => {
           `/Service/v2/GetServiceByID/${serviceId}`
       )
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setData(res.data); //data: {$id, service, studio}
       })
       .catch((err) => {

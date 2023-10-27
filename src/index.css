@@ -40,8 +40,8 @@ body {
   }
 }
 .ellipsis {
-  white-space: nowrap; 
-  width: 'auto'; 
+  white-space: nowrap;
+  width: "auto";
   overflow: hidden;
-  text-overflow: ellipsis; 
+  text-overflow: ellipsis;
 }
