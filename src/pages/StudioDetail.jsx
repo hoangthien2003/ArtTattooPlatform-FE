@@ -1,7 +1,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
-import { Breadcrumbs, Button, CardActionArea, CardActions, CardContent, CardMedia, Container, Grid, Modal, Stack } from "@mui/material";
+import {
+  Breadcrumbs,
+  Button,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Container,
+  Grid,
+  Modal,
+  Stack,
+} from "@mui/material";
 import { Avatar, Card, Rating, Typography } from "@mui/material";
 import Booking from "../components/Modal/Booking";
 import CardService from "../components/Card/CardService";
@@ -10,6 +21,7 @@ import { Home } from "@mui/icons-material";
 import { StarList } from "../components/Feedback/StarList";
 import FeedbackForm from "../components/Feedback/FeedbackForm";
 import CommentList from "../components/Feedback/CommentList";
+import ProfileStudio from "../components/Box/ProfileStudio";
 
 export default function StudioDetail() {
   const { studioId } = useParams();
@@ -26,8 +38,9 @@ export default function StudioDetail() {
     try {
       const response = await axios.get(
         import.meta.env.VITE_REACT_APP_API_URL +
-        `/Studio/GetStudioByID/${studioId}`
+          `/Studio/GetStudioByID/${studioId}`
       );
+      // console.log(response.data);
       setStudioData(response.data);
     } catch (error) {
       console.log(error);
@@ -38,7 +51,7 @@ export default function StudioDetail() {
     try {
       const response = await axios.get(
         import.meta.env.VITE_REACT_APP_API_URL +
-        `/Service/GetServiceByStudio/${studioId}`
+          `/Service/GetServiceByStudio/${studioId}`
       );
       setServiceData(response.data.$values);
     } catch (error) {
@@ -65,26 +78,27 @@ export default function StudioDetail() {
           slidesToShow: 3,
           slidesToScroll: 3,
           infinite: true,
-          dots: true
-        }
+          dots: true,
+        },
       },
       {
         breakpoint: 600,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 2,
-          initialSlide: 2
-        }
+          initialSlide: 2,
+        },
       },
       {
         breakpoint: 480,
         settings: {
           slidesToShow: 1,
-          slidesToScroll: 1
-        }
-      }
-    ]
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
+
   const ratings = [
     { rate: 5, count: 100 },
     { rate: 4, count: 50 },
@@ -92,8 +106,9 @@ export default function StudioDetail() {
     { rate: 2, count: 10 },
     { rate: 1, count: 5 },
   ];
+
   return (
-    <Container className='mt-5 mb-5'>
+    <Container className="mt-5 mb-5">
       <Breadcrumbs aria-label="breadcrumb">
         <Stack
           spacing={1}
@@ -114,65 +129,115 @@ export default function StudioDetail() {
         <Typography
           variant="body1"
           component={Link}
-          to="/services"
+          to="/StudioPage"
           sx={{ textDecoration: "none" }}
         >
-          Service
+          Studio
         </Typography>
-        <Typography
-          variant="body1"
-          sx={{ textDecoration: "none" }}
-        >
+        <Typography variant="body1" sx={{ textDecoration: "none" }}>
           {studioData && studioData.studioName}
         </Typography>
       </Breadcrumbs>
       <div className="row mt-5 mb-5">
         <div className="col-md-4">
-          <Card>
-            <Stack direction="column" justifyContent={'center'} alignItems={'center'}>
-              <Avatar sx={{ width: 100, height: 100, borderColor: 'white' }} className='mt-5 mb-4' src={studioData && studioData.logo} />
-              <Typography gutterBottom variant="h5" component="div" sx={{ textAlign: 'center' }} className='mb-1'>
+          {/* <ProfileStudio studioData={studioData} /> */}
+          <Card sx={{ border: "1px solid", borderRadius: 3 }}>
+            <Stack
+              spacing={2}
+              direction="column"
+              justifyContent={"center"}
+              alignItems={"center"}
+            >
+              <Avatar
+                sx={{ width: 100, height: 100, borderColor: "white" }}
+                className="mt-5 mb-4"
+                src={studioData && studioData.logo}
+              />
+              <Typography
+                gutterBottom
+                variant="h5"
+                component="div"
+                sx={{ textAlign: "center" }}
+                className="mb-1"
+              >
                 {studioData && studioData.studioName}
               </Typography>
-              <Typography gutterBottom variant="h6" component="div" sx={{ textAlign: 'center' }} className='mb-1'>
+              <Typography
+                gutterBottom
+                variant="h6"
+                sx={{ textAlign: "center" }}
+                className="mb-1"
+              >
                 {studioData && studioData.description}
               </Typography>
-              <Rating name="size-small" defaultValue={4} size="small" />
-              <Typography gutterBottom variant="h7" component="div" sx={{ textAlign: 'center' }} className='mb-1'>
+              <Rating
+                name="size-small"
+                value={studioData && studioData.rating}
+                size="small"
+                readOnly
+              />
+              <Typography
+                gutterBottom
+                variant="h7"
+                component="div"
+                sx={{ textAlign: "center" }}
+                className="mb-1"
+              >
                 {studioData && studioData.studioEmail}
               </Typography>
-              <Typography gutterBottom variant="h7" component="div" sx={{ textAlign: 'center' }} className='mb-1'>
+              <Typography
+                gutterBottom
+                variant="h7"
+                component="div"
+                sx={{ textAlign: "center" }}
+                className="mb-1"
+              >
                 {studioData && studioData.studioPhone}
               </Typography>
-              <Typography gutterBottom variant="h7" component="div" sx={{ textAlign: 'center' }} className='mb-5'>
+              <Typography
+                gutterBottom
+                variant="h7"
+                component="div"
+                sx={{ textAlign: "center" }}
+                className="mb-5"
+              >
                 {studioData && studioData.address}
               </Typography>
             </Stack>
           </Card>
-          <Typography variant="h5" className="mt-3">Our ratings</Typography>
+          <Typography variant="h5" className="mt-5">
+            Our ratings
+          </Typography>
           {/* give reviews and write review content */}
-                <StarList  ratings={ratings}  />
-        
+          <StarList ratings={ratings} />
         </div>
         <div className="col-md-8">
           <Container>
-            <Typography gutterBottom variant="h6" component="div" sx={{ textAlign: 'center' }} className="mb-4">
+            <Typography
+              gutterBottom
+              variant="h6"
+              component="div"
+              sx={{ textAlign: "center" }}
+              className="mb-4"
+            >
               OUR SERVICE
             </Typography>
             <Slider {...settings} className="ps-4">
-              {serviceData && serviceData.map((dataService, index) => {
-                return (
-                  <CardService key={index}
-                    serviceId={dataService.serviceId}
-                    serviceName={dataService.serviceName}
-                    studioId={dataService.studioId}
-                    rate={dataService.rating}
-                    description={dataService.description}
-                    imageService={dataService.imageService}
-                    price={dataService.price}
-                  />
-                );
-              })}
+              {serviceData &&
+                serviceData.map((dataService, index) => {
+                  return (
+                    <CardService
+                      key={index}
+                      serviceId={dataService.serviceId}
+                      serviceName={dataService.serviceName}
+                      studioId={dataService.studioId}
+                      rate={dataService.rating}
+                      description={dataService.description}
+                      imageService={dataService.imageService}
+                      price={dataService.price}
+                    />
+                  );
+                })}
             </Slider>
           </Container>
         </div>
