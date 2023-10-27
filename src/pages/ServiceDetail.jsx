@@ -35,7 +35,7 @@ const ServiceDetail = () => {
           `/Service/v2/GetServiceByID/${serviceId}`
       )
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setData(res.data); //data: {$id, service, studio}
       })
       .catch((err) => {
@@ -123,7 +123,7 @@ const ServiceDetail = () => {
         </Grid>
       </Grid>
       {/* Feedback from member */}
-      <Feedback />
+      <Feedback serviceId={serviceId} />
     </Container>
   );
 };

@@ -1,10 +1,11 @@
 import { Button, Container, Grid, Stack, Typography } from "@mui/material";
-import React from "react";
+import React, { useRef, useState } from "react";
 import { StarList } from "./StarList";
 import CommentList from "./CommentList";
 import FeedbackForm from "./FeedbackForm";
+import axios from "axios";
 
-const Feedback = () => {
+const Feedback = ({ serviceId }) => {
   const ratings = [
     { rate: 5, count: 100 },
     { rate: 4, count: 50 },
@@ -12,6 +13,7 @@ const Feedback = () => {
     { rate: 2, count: 10 },
     { rate: 1, count: 5 },
   ];
+
   return (
     <Container maxWidth="lg">
       <Typography variant="h5">Feedback from customers</Typography>
@@ -25,11 +27,11 @@ const Feedback = () => {
         <Grid item xs={6}>
           <Stack spacing={4}>
             <StarList ratings={ratings} />
-            <FeedbackForm/>
+            <FeedbackForm />
           </Stack>
         </Grid>
         <Grid item xs={6}>
-          <CommentList />
+          <CommentList serviceId={serviceId} />
         </Grid>
       </Grid>
     </Container>
