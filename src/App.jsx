@@ -12,6 +12,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import ProfilePage from "./pages/ProfilePage";
 import Service from "./pages/Service";
+import DashboardManagerPage from "./pages/BookingManagement";
+import BookingManagement from "./pages/BookingManagement";
 
 function App() {
   const HomePage = lazy(() => import("./pages/Home"));
@@ -40,9 +42,8 @@ function App() {
             <Route path="/services/:serviceId" element={<ServiceDetail />} />
             <Route path="/StudioPage" element={<StudioPage />} />
             <Route path="/profile" element={<ProfilePage />} />
-            <Route
-              path="/StudioDetail/:studioId"
-              element={<StudioDetail />}
+            <Route path="/BookingManagement" element={<BookingManagement />} />
+            <Route path="/StudioDetail/:studioId" element={<StudioDetail />}
             ></Route>
           </Routes>
           <Footer />
