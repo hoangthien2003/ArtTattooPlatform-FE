@@ -24,9 +24,9 @@ const TopRateStudio = () => {
       sx={{
         paddingTop: 5,
         paddingBottom: 5,
-        backgroundColor: "#322F2F",
         textAlign: "center",
-        borderRadius: 5,
+        borderRadius: 1,
+        border:'2px solid #322F2F'
       }}
     >
       <Stack
