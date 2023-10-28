@@ -117,7 +117,7 @@ export default function StudioDetail() {
           to="/services"
           sx={{ textDecoration: "none" }}
         >
-          Service
+          Studio
         </Typography>
         <Typography
           variant="body1"
