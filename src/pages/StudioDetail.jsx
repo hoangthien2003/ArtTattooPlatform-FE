@@ -172,7 +172,7 @@ export default function StudioDetail() {
               </Typography>
               <Rating
                 name="size-small"
-                value={studioData && studioData.rating}
+                value={studioData && studioData.RatingStb}
                 size="small"
                 readOnly
               />

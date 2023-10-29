@@ -66,7 +66,6 @@ const CardService = (props) => {
   };
 
   const handleOnClickService = (event) => {
-    console.log(1);
     navigate(`/services/${serviceId}`);
   };
 
