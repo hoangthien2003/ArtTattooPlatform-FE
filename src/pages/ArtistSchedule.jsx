@@ -11,7 +11,7 @@ import { Home } from '@mui/icons-material';
 import { Link } from "react-router-dom";
 
 
-export default function BookingHistory() {
+export default function ArtistSchedule() {
     return (
 
         <Container className='mt-5 mb-5'>
@@ -38,20 +38,21 @@ export default function BookingHistory() {
                     variant="body1"
                     sx={{ textDecoration: "none" }}
                 >
-                    Booking History
+                    Schedule
                 </Typography>
             </Breadcrumbs>
-            <Typography variant="h5" className='mb-3'>Booking History</Typography>
+            <Typography variant="h5" className='mb-3'>Artist Schedule</Typography>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
                             <TableCell>Service</TableCell>
                             <TableCell align="left">Price</TableCell>
-                            <TableCell align="left">Studio</TableCell>
+                            <TableCell align="left">Customer</TableCell>
+                            <TableCell align="left">Phone</TableCell>
                             <TableCell align="left">Time</TableCell>
                             <TableCell align="left">Status</TableCell>
-                            <TableCell align="left"></TableCell>
+
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -60,15 +61,13 @@ export default function BookingHistory() {
                             <TableCell component="th" scope="row">
                                 Tattoo
                             </TableCell>
-                            <TableCell align="left">TAINK</TableCell>
                             <TableCell align="left">100.000</TableCell>
+                            <TableCell align="left"> Van A</TableCell>
+                            <TableCell align="left">0987654321</TableCell>
+
                             <TableCell align="left">12:11:11</TableCell>
                             <TableCell align="left">pending</TableCell>
-                            <TableCell align="left">
-                                <Link sx={{ textDecoration: 'none' }}>
-                                    Cancel Booking
-                                </Link>
-                            </TableCell>
+                
                         </TableRow>
                     </TableBody>
                 </Table>

@@ -14,6 +14,9 @@ import ProfilePage from "./pages/ProfilePage";
 import Service from "./pages/Service";
 import DashboardManagerPage from "./pages/BookingManagement";
 import BookingManagement from "./pages/BookingManagement";
+import BookingHistory from "./pages/BookingHistory";
+import ArtistSchedule from "./pages/ArtistSchedule";
+import ServiceManagement from "./pages/ServiceManagement";
 
 function App() {
   const HomePage = lazy(() => import("./pages/Home"));
@@ -43,6 +46,9 @@ function App() {
             <Route path="/StudioPage" element={<StudioPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/BookingManagement" element={<BookingManagement />} />
+            <Route path="/BookingHistory" element={<BookingHistory />} />
+            <Route path="/ArtistSchedule" element={<ArtistSchedule />} />
+            <Route path="/ServiceManagement" element={<ServiceManagement />} />
             <Route path="/StudioDetail/:studioId" element={<StudioDetail />}
             ></Route>
           </Routes>

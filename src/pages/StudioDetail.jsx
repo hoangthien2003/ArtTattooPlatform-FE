@@ -141,7 +141,7 @@ export default function StudioDetail() {
       <div className="row mt-5 mb-5">
         <div className="col-md-4">
           {/* <ProfileStudio studioData={studioData} /> */}
-          <Card sx={{ border: "1px solid", borderRadius: 1 }}>
+          <Card sx={{ border: "2px solid #322F2F", borderRadius: 1 }}>
             <Stack
               spacing={2}
               direction="column"
