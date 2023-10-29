@@ -19,7 +19,6 @@ const Booking = (props) => {
   const [activeStep, setActiveStep] = useState(0);
   const nameRef = useRef();
   const phoneRef = useRef();
-  // const datetimeRef = useRef();
   const timeRef = useRef();
   const dateRef = useRef();
   const [booking, setBooking] = useState({
@@ -32,12 +31,21 @@ const Booking = (props) => {
   const phoneRegExp = /^\d{10,12}$/;
   const nameRegExp = /^[a-zA-Z]+$/;
 
+  const formatTime = (time) => {
+    const hours = time.split(":")[0];
+    const minutes = time.split(":")[1];
+
+    const timeOfDay = hours >= 12 ? "PM" : "AM";
+
+    return `${hours}:${minutes} ${timeOfDay}`;
+  };
+
   const handleNext = () => {
     const nameValue = nameRef.current.value;
     const phoneValue = phoneRef.current.value;
     const dateValue = dateRef.current.value;
     const timeValue = timeRef.current.value;
-    const dateTimeValue = dateValue.concat(" ", timeValue);
+    const dateTimeValue = dateValue.concat(" ", formatTime(timeValue));
     if (!phoneRegExp.test(phoneValue)) {
       // Phone number must only contain numbers
       return;
@@ -49,7 +57,7 @@ const Booking = (props) => {
     }
 
     if (nameValue && phoneValue && dateValue && timeValue) {
-      console.log(nameValue, phoneValue, dateTimeValue);
+      console.log(nameValue, phoneValue, dateValue, timeValue);
       setBooking({
         name: nameValue,
         phone: phoneValue,
@@ -114,6 +122,7 @@ const Booking = (props) => {
 
         {activeStep === 0 && (
           <FormBooking
+            studioId={data.studio.studioID}
             nameRef={nameRef}
             phoneRef={phoneRef}
             dateRef={dateRef}

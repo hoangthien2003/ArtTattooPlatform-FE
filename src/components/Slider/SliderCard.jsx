@@ -11,7 +11,7 @@ const SliderCard = ({ serviceList }) => {
     infinite: true,
     centerPadding: "50px",
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 5,
     swipeToSlide: true,
     slidesToScroll: 1,
     autoplay: true,
@@ -46,31 +46,30 @@ const SliderCard = ({ serviceList }) => {
   };
 
   return (
-    <Container>
-      <Box
-        sx={{
-          paddingTop: 5,
-          paddingBottom: 5,
-          borderRadius: 5,
-        }}
-      >
-        <Slider {...settings}>
-          {serviceList.map((data, index) => {
-            return (
-              <CardService
-                key={index}
-                serviceId={data.serviceId}
-                serviceName={data.serviceName}
-                studioId={data.studioId}
-                description={data.description}
-                imageService={data.imageService}
-                price={data.price}
-              />
-            );
-          })}
-        </Slider>
-      </Box>
-    </Container>
+    <Box
+      sx={{
+        paddingTop: 5,
+        paddingBottom: 5,
+        borderRadius: 5,
+      }}
+    >
+      <Slider {...settings}>
+        {serviceList.map((data, index) => {
+          return (
+            <CardService
+              key={index}
+              serviceId={data.serviceId}
+              serviceName={data.serviceName}
+              studioId={data.studioId}
+              description={data.description}
+              rating={data.rating}
+              imageService={data.imageService}
+              price={data.price}
+            />
+          );
+        })}
+      </Slider>
+    </Box>
   );
 };
 
