@@ -157,7 +157,7 @@ export default function Navbar(props) {
 		localStorage.removeItem("token");
 		googleLogout();
 		navigate("/");
-		handleClose();
+		handleMenuClose();
 	};
 
 	const menuId = "primary-search-account-menu";
@@ -189,7 +189,7 @@ export default function Navbar(props) {
 			>
 				Profile
 			</MenuItem>
-			{role == "MN" && (
+			{role == "MN" || role == "AD" ? (
 				<MenuItem
 					onClick={() => {
 						navigate("/BookingManagement");
@@ -198,8 +198,8 @@ export default function Navbar(props) {
 				>
 					Booking Management
 				</MenuItem>
-			)}
-			{role == "AT" && (
+			) : null}
+			{role == "AT" || role == "AD" ? (
 				<MenuItem
 					onClick={() => {
 						navigate("/BookingManagement");
@@ -208,8 +208,8 @@ export default function Navbar(props) {
 				>
 					Artist Schedule
 				</MenuItem>
-			)}
-			{role == "MB" && (
+			) : null}
+			{role == "MB" || role == "AD" ? (
 				<MenuItem
 					onClick={() => {
 						navigate("/HistoryBooking");
@@ -218,11 +218,15 @@ export default function Navbar(props) {
 				>
 					History Booking
 				</MenuItem>
-			)}
+			) : null}
 			<MenuItem onClick={handleMenuClose}>My account</MenuItem>
 			<MenuItem onClick={handleLogout}>Logout</MenuItem>
 		</Menu>
 	);
+
+	React.useEffect(() => {
+		console.log(role);
+	}, []);
 
 	const renderNavMenu = (
 		<Menu
