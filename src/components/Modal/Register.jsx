@@ -25,7 +25,7 @@ function Register(props) {
   const passwordRef = useRef();
   const confirmRef = useRef();
   const [errorElement, setErrorElement] = React.useState("");
-  const passwordRegex = /^(?=.*[A-Za-z])(?=.*d)[A-Za-zd]{8,}$/;
+  const passwordRegex = /^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/;
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 

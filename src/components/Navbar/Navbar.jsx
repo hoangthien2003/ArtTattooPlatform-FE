@@ -190,19 +190,29 @@ export default function Navbar(props) {
 				Profile
 			</MenuItem>
 			{role == "MN" || role == "AD" ? (
-				<MenuItem
-					onClick={() => {
-						navigate("/BookingManagement");
-						handleMenuClose();
-					}}
-				>
-					Booking Management
-				</MenuItem>
+				<div>
+					<MenuItem
+						onClick={() => {
+							navigate("/BookingManagement");
+							handleMenuClose();
+						}}
+					>
+						Booking Management
+					</MenuItem>
+					<MenuItem
+						onClick={() => {
+							navigate("/ServiceManagement");
+							handleMenuClose();
+						}}
+					>
+						Service Management
+					</MenuItem>
+				</div>
 			) : null}
 			{role == "AT" || role == "AD" ? (
 				<MenuItem
 					onClick={() => {
-						navigate("/BookingManagement");
+						navigate("/ArtistSchedule");
 						handleMenuClose();
 					}}
 				>
@@ -212,11 +222,11 @@ export default function Navbar(props) {
 			{role == "MB" || role == "AD" ? (
 				<MenuItem
 					onClick={() => {
-						navigate("/HistoryBooking");
+						navigate("/BookingHistory");
 						handleMenuClose();
 					}}
 				>
-					History Booking
+					Booking History
 				</MenuItem>
 			) : null}
 			<MenuItem onClick={handleMenuClose}>My account</MenuItem>
