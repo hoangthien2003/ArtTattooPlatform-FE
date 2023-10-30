@@ -31,7 +31,7 @@ const Home = () => {
 	};
 
 	return (
-		<Container maxWidth="lg" sx={{ marginTop: 5, marginBottom: 5 }}>
+		<Container maxWidth="xl" sx={{ marginTop: 5, marginBottom: 5 }}>
 			<Stack
 				spacing={3}
 				direction={"column"}
@@ -43,10 +43,10 @@ const Home = () => {
 				<Typography variant="h5">NEW SERVICE</Typography>
 			</Stack>
 			<Grid container spacing={6} columns={{ xs: 4, sm: 8, md: 12 }}>
-				<Grid item xs={8}>
+				<Grid item xs={9}>
 					<PaginationCard serviceList={serviceList} />
 				</Grid>
-				<Grid item xs={4}>
+				<Grid item xs={3}>
 					<TopRateStudio />
 				</Grid>
 			</Grid>

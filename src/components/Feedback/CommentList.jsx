@@ -48,7 +48,7 @@ const CommentList = ({ serviceId }) => {
       >
         {comments &&
           comments.map((comment, index) => (
-            <Grid container spacing={2}>
+            <Grid container spacing={2} key={index}>
               <Grid item xs={2}>
                 <Avatar />
               </Grid>

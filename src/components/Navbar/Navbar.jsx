@@ -84,7 +84,7 @@ const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
 	})
 );
 
-export default function Navbar() {
+export default function Navbar(props) {
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const [anchorNavEl, setAnchorNavEl] = React.useState(null);
 	const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -95,6 +95,7 @@ export default function Navbar() {
 	const [open, setOpen] = React.useState(false);
 	const [isLogin, setIsLogin] = React.useState(true);
 	const user = useUserInfo((state) => state.user);
+	const { role } = props;
 
 	const isMenuOpen = Boolean(anchorEl);
 	const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -188,7 +189,7 @@ export default function Navbar() {
 			>
 				Profile
 			</MenuItem>
-			{user && user.role == "MN" && (
+			{role == "MN" && (
 				<MenuItem
 					onClick={() => {
 						navigate("/BookingManagement");
@@ -198,7 +199,7 @@ export default function Navbar() {
 					Booking Management
 				</MenuItem>
 			)}
-			{user && user.role == "AT" && (
+			{role == "AT" && (
 				<MenuItem
 					onClick={() => {
 						navigate("/BookingManagement");
@@ -208,7 +209,7 @@ export default function Navbar() {
 					Artist Schedule
 				</MenuItem>
 			)}
-			{user && user.role == "MB" && (
+			{role == "MB" && (
 				<MenuItem
 					onClick={() => {
 						navigate("/HistoryBooking");

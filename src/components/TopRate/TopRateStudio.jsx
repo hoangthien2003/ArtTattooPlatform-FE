@@ -50,7 +50,7 @@ const TopRateStudio = () => {
               studioId={studio.studioId}
               studioName={studio.studioName}
               logo={studio.logo}
-              rate={studio.rating}
+              rate={studio.RatingStb}
             />
           );
         })}

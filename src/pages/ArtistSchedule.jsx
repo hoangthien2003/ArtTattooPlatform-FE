@@ -16,12 +16,14 @@ import {
 import { Home } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 
-export default function BookingHistory(props) {
+export default function ArtistSchedule(props) {
 	const { role } = props;
 	const navigate = useNavigate();
 	React.useEffect(() => {
-		if (role != "MB" && role != "AD") navigate("/access-denied");
+		if (role != "AT" && role != "AD") navigate("/access-denied");
+		return;
 	}, []);
+
 	return (
 		<Container className="mt-5 mb-5">
 			<Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: 5 }}>
@@ -47,11 +49,11 @@ export default function BookingHistory(props) {
 					</Typography>
 				</Stack>
 				<Typography variant="body1" sx={{ textDecoration: "none" }}>
-					Booking History
+					Schedule
 				</Typography>
 			</Breadcrumbs>
 			<Typography variant="h5" className="mb-3">
-				Booking History
+				Artist Schedule
 			</Typography>
 			<TableContainer component={Paper}>
 				<Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -59,10 +61,10 @@ export default function BookingHistory(props) {
 						<TableRow>
 							<TableCell>Service</TableCell>
 							<TableCell align="left">Price</TableCell>
-							<TableCell align="left">Studio</TableCell>
+							<TableCell align="left">Customer</TableCell>
+							<TableCell align="left">Phone</TableCell>
 							<TableCell align="left">Time</TableCell>
 							<TableCell align="left">Status</TableCell>
-							<TableCell align="left"></TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -76,15 +78,12 @@ export default function BookingHistory(props) {
 							<TableCell component="th" scope="row">
 								Tattoo
 							</TableCell>
-							<TableCell align="left">TAINK</TableCell>
 							<TableCell align="left">100.000</TableCell>
+							<TableCell align="left"> Van A</TableCell>
+							<TableCell align="left">0987654321</TableCell>
+
 							<TableCell align="left">12:11:11</TableCell>
 							<TableCell align="left">pending</TableCell>
-							<TableCell align="left">
-								<Link sx={{ textDecoration: "none" }}>
-									Cancel Booking
-								</Link>
-							</TableCell>
 						</TableRow>
 					</TableBody>
 				</Table>

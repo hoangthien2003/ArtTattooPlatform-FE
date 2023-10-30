@@ -2,28 +2,35 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import theme from "./lib/Theme";
 import Footer from "./components/Footer/Footer";
 import React, { Suspense, lazy, useEffect, useState } from "react";
-import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import {
+	BrowserRouter,
+	Outlet,
+	Route,
+	Routes,
+	useNavigate,
+} from "react-router-dom";
 import { useGoogleOneTapLogin } from "@react-oauth/google";
 // import HomePage from "./pages/Home";
 // import Service from "./pages/Service";
-import StudioPage from "./pages/StudioPage";
+// import StudioPage from "./pages/StudioPage";
 import StudioDetail from "./pages/StudioDetail";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import ProfilePage from "./pages/ProfilePage";
-import Service from "./pages/Service";
-import DashboardManagerPage from "./pages/BookingManagement";
-import { useUserInfo } from "./stores/useUserInfo";
 import jwtDecode from "jwt-decode";
+import StudioPage from "./pages/StudioPage";
+import NotAccess from "./pages/NotAccess";
+import NotFound from "./pages/NotFound";
 
 function App() {
 	const HomePage = lazy(() => import("./pages/Home"));
 	const ServiceDetail = lazy(() => import("./pages/ServiceDetail"));
 	const Service = lazy(() => import("./pages/Service"));
 	const Navbar = lazy(() => import("./components/Navbar/Navbar"));
-	const NotAccess = lazy(() => import("./pages/NotAccess"));
 	const BookingManagement = lazy(() => import("./pages/BookingManagement"));
-	const NotFound = lazy(() => import("./pages/NotFound"));
+	const BookingHistory = lazy(() => import("./pages/BookingHistory"));
+	const ArtistSchedule = lazy(() => import("./pages/ArtistSchedule"));
+	const ServiceManagement = lazy(() => import("./pages/ServiceManagement"));
 
 	const [role, setRole] = useState();
 
@@ -50,7 +57,7 @@ function App() {
 				<CssBaseline />
 				<ToastContainer />
 				<Suspense fallback={<p>Loading...</p>}>
-					<Navbar />
+					<Navbar role={role} />
 					<Routes>
 						<Route path="*" exact={true} element={<NotFound />} />
 						<Route path="/" element={<HomePage />} />
@@ -64,6 +71,18 @@ function App() {
 						<Route
 							path="/BookingManagement"
 							element={<BookingManagement role={role} />}
+						/>
+						<Route
+							path="/BookingHistory"
+							element={<BookingHistory role={role} />}
+						/>
+						<Route
+							path="/ArtistSchedule"
+							element={<ArtistSchedule role={role} />}
+						/>
+						<Route
+							path="/ServiceManagement"
+							element={<ServiceManagement role={role} />}
 						/>
 						<Route
 							path="/StudioDetail/:studioId"

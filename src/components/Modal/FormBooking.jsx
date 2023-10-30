@@ -10,7 +10,7 @@ import { DatePicker, DateTimePicker, TimePicker } from "@mui/x-date-pickers";
 import React, { useState } from "react";
 import SliderSlotTime from "../Slider/SliderSlotTime";
 
-const FormBooking = ({ nameRef, phoneRef, dateRef, timeRef }) => {
+const FormBooking = ({ nameRef, phoneRef, dateRef, timeRef, studioId }) => {
   return (
     <Container maxWidth="sm">
       <Stack spacing={2} paddingTop={3} textAlign={"center"}>
@@ -35,7 +35,7 @@ const FormBooking = ({ nameRef, phoneRef, dateRef, timeRef }) => {
             />
             <DatePicker inputRef={dateRef} required />
             {/* <TimePicker inputRef={timeRef} required /> */}
-            <SliderSlotTime timeRef={timeRef} />
+            <SliderSlotTime studioId={studioId} timeRef={timeRef} />
           </Stack>
         </Box>
       </Stack>
