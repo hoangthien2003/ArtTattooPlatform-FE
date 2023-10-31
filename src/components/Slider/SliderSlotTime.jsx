@@ -63,7 +63,7 @@ const SliderSlotTime = ({ timeRef, studioId }) => {
           variant="contained"
           onClick={handleClick}
           style={style}
-          disabled={time.status === "inactive" ? "disabled" : ""}
+          disabled={time.status === "inactive" ? "disable" : ""}
           data-time={time.time}
           ref={timeRef}
         >

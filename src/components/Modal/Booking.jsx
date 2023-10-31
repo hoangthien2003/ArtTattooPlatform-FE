@@ -19,6 +19,7 @@ const Booking = (props) => {
   const [activeStep, setActiveStep] = useState(0);
   const nameRef = useRef();
   const phoneRef = useRef();
+  // const dateTimeRef = useRef();
   const timeRef = useRef();
   const dateRef = useRef();
   const [booking, setBooking] = useState({
@@ -46,6 +47,7 @@ const Booking = (props) => {
     const dateValue = dateRef.current.value;
     const timeValue = timeRef.current.value;
     const dateTimeValue = dateValue.concat(" ", formatTime(timeValue));
+    // const dateTimeValue = dateTimeRef.current.value;
     if (!phoneRegExp.test(phoneValue)) {
       // Phone number must only contain numbers
       return;
@@ -57,12 +59,14 @@ const Booking = (props) => {
     }
 
     if (nameValue && phoneValue && dateValue && timeValue) {
-      console.log(nameValue, phoneValue, dateValue, timeValue);
+      // console.log(nameValue, phoneValue, dateValue, timeValue);
+      // console.log(nameValue, phoneValue, dateTimeValue);
       setBooking({
         name: nameValue,
         phone: phoneValue,
         dateTime: dateTimeValue,
       });
+
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
   };
@@ -77,7 +81,7 @@ const Booking = (props) => {
       const email = jwtDecode(token).email;
       const bookingRequest = {
         PhoneNumber: booking.phone,
-        BookingDate: booking.date,
+        BookingDate: booking.dateTime,
         ServiceId: data.service.serviceId,
         StudioId: data.studio.studioID,
         Total: data.service.price,
