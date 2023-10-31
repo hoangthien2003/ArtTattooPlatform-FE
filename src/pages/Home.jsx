@@ -4,18 +4,10 @@ import SliderCard from "../components/Slider/SliderCard";
 import axios from "axios";
 import PaginationCard from "../components/Pagination/PaginationCard";
 import TopRateStudio from "../components/TopRate/TopRateStudio";
-import jwtDecode from "jwt-decode";
-import { useUserInfo } from "../stores/useUserInfo";
 
 const Home = () => {
 	const [serviceList, setServiceList] = useState([]);
-	const setUser = useUserInfo((state) => state.setUser);
 	useEffect(() => {
-		const token = localStorage.getItem("token");
-		if (token) {
-			const user = jwtDecode(token);
-			setUser(user);
-		}
 		getServiceList();
 	}, []);
 

@@ -35,12 +35,20 @@ function App() {
 	const [role, setRole] = useState();
 
 	useEffect(() => {
-		const token = localStorage.getItem("token");
-		if (token != null) {
-			const user = jwtDecode(token);
-			setRole(user.role);
-		}
+		decodeToken();
 	}, []);
+
+	const decodeToken = () => {
+		try {
+			const token = localStorage.getItem("token");
+			if (token != null) {
+				const user = jwtDecode(token);
+				setRole(user.role);
+			}
+		} catch (e) {
+			console.log(e);
+		}
+	};
 
 	useGoogleOneTapLogin({
 		onSuccess: (credentialResponse) => {
