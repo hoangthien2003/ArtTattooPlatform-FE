@@ -94,8 +94,7 @@ export default function Navbar(props) {
 	const token = localStorage.getItem("token");
 	const [open, setOpen] = React.useState(false);
 	const [isLogin, setIsLogin] = React.useState(true);
-	const user = useUserInfo((state) => state.user);
-	const { role } = props;
+	const { role, user } = props;
 
 	const isMenuOpen = Boolean(anchorEl);
 	const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -283,17 +282,22 @@ export default function Navbar(props) {
 			open={isMobileMenuOpen}
 			onClose={handleMobileMenuClose}
 		>
-			<MenuItem>
+			<MenuItem
+				sx={{
+					display: "flex",
+					alignItems: "center",
+				}}
+			>
 				<IconButton
 					size="large"
-					aria-label="show 17 new notifications"
+					aria-label="show new notifications"
 					color="inherit"
 				>
-					<Badge badgeContent={17} color="error">
+					<Badge badgeContent={1} color="error">
 						<NotificationsIcon />
 					</Badge>
 				</IconButton>
-				<p>Notifications</p>
+				<Typography>Notifications</Typography>
 			</MenuItem>
 			<MenuItem onClick={handleProfileMenuOpen}>
 				<IconButton
@@ -305,7 +309,7 @@ export default function Navbar(props) {
 				>
 					<AccountCircle />
 				</IconButton>
-				<p>Profile</p>
+				<Typography>Profile</Typography>
 			</MenuItem>
 		</Menu>
 	);
@@ -385,7 +389,7 @@ export default function Navbar(props) {
 						sx={{
 							position: "absolute",
 							left: {
-								sm: token ? "50%" : "30%",
+								sm: token ? "48%" : "23%",
 								xs: "43%",
 							},
 							transform: "translateX(-50%)",
@@ -525,6 +529,19 @@ export default function Navbar(props) {
 									<Avatar />
 									{/* <AccountCircle /> */}
 								</IconButton>
+								<Typography
+									variant="subtitle2"
+									sx={{
+										marginLeft: 1.5,
+										cursor: "pointer",
+										":hover": {
+											textDecoration: "underline",
+										},
+									}}
+									onClick={() => navigate("/profile")}
+								>
+									Hi, {user && user.UserName}
+								</Typography>
 							</Box>
 						) : (
 							<Box
