@@ -45,9 +45,27 @@ function Login(props) {
 						Authorization: `Bearer ${credentialResponse.access_token}`,
 					},
 				})
-				.then((response) => {
+				.then(async (response) => {
 					const userInfo = response.data;
-					console.log(userInfo);
+					const googleRequest = {
+						Email: userInfo.email,
+						Name: userInfo.name,
+						Image: userInfo.picture,
+					};
+					await axios
+						.post(
+							`${
+								import.meta.env.VITE_REACT_APP_API_URL
+							}/LoginGoogle`,
+							googleRequest
+						)
+						.then((res) => {
+							localStorage.setItem("token", res.data);
+							navigate(0);
+						})
+						.catch((err) => {
+							console.log(err);
+						});
 				})
 				.catch((error) => {
 					console.error(

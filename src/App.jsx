@@ -32,7 +32,7 @@ function App() {
 	const ArtistSchedule = lazy(() => import("./pages/ArtistSchedule"));
 	const ServiceManagement = lazy(() => import("./pages/ServiceManagement"));
 
-	const [role, setRole] = useState();
+	const [user, setUser] = useState();
 
 	useEffect(() => {
 		decodeToken();
@@ -43,7 +43,7 @@ function App() {
 			const token = localStorage.getItem("token");
 			if (token != null) {
 				const user = jwtDecode(token);
-				setRole(user.role);
+				setUser(user);
 			}
 		} catch (e) {
 			console.log(e);
@@ -65,7 +65,7 @@ function App() {
 				<CssBaseline />
 				<ToastContainer />
 				<Suspense fallback={<p>Loading...</p>}>
-					<Navbar role={role} />
+					<Navbar role={user && user.role} user={user} />
 					<Routes>
 						<Route path="*" exact={true} element={<NotFound />} />
 						<Route path="/" element={<HomePage />} />
@@ -78,19 +78,27 @@ function App() {
 						<Route path="/profile" element={<ProfilePage />} />
 						<Route
 							path="/BookingManagement"
-							element={<BookingManagement role={role} />}
+							element={
+								<BookingManagement role={user && user.role} />
+							}
 						/>
 						<Route
 							path="/BookingHistory"
-							element={<BookingHistory role={role} />}
+							element={
+								<BookingHistory role={user && user.role} />
+							}
 						/>
 						<Route
 							path="/ArtistSchedule"
-							element={<ArtistSchedule role={role} />}
+							element={
+								<ArtistSchedule role={user && user.role} />
+							}
 						/>
 						<Route
 							path="/ServiceManagement"
-							element={<ServiceManagement role={role} />}
+							element={
+								<ServiceManagement role={user && user.role} />
+							}
 						/>
 						<Route
 							path="/StudioDetail/:studioId"
