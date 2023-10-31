@@ -512,22 +512,13 @@ export default function Navbar(props) {
 									size="large"
 									aria-label="show 17 new notifications"
 									color="inherit"
+									sx={{
+										marginRight: 2,
+									}}
 								>
 									<Badge badgeContent={17} color="error">
 										<NotificationsIcon />
 									</Badge>
-								</IconButton>
-								<IconButton
-									size="large"
-									edge="end"
-									aria-label="account of current user"
-									aria-controls={menuId}
-									aria-haspopup="true"
-									onClick={handleProfileMenuOpen}
-									color="inherit"
-								>
-									<Avatar />
-									{/* <AccountCircle /> */}
 								</IconButton>
 								<Typography
 									variant="subtitle2"
@@ -542,6 +533,18 @@ export default function Navbar(props) {
 								>
 									Hi, {user && user.UserName}
 								</Typography>
+								<IconButton
+									size="large"
+									edge="end"
+									aria-label="account of current user"
+									aria-controls={menuId}
+									aria-haspopup="true"
+									onClick={handleProfileMenuOpen}
+									color="inherit"
+								>
+									<Avatar />
+									{/* <AccountCircle /> */}
+								</IconButton>
 							</Box>
 						) : (
 							<Box
