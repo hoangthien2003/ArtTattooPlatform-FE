@@ -234,10 +234,6 @@ export default function Navbar(props) {
 		</Menu>
 	);
 
-	React.useEffect(() => {
-		console.log(role);
-	}, []);
-
 	const renderNavMenu = (
 		<Menu
 			anchorEl={anchorNavEl}
