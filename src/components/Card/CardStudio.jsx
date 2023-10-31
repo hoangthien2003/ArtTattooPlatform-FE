@@ -11,7 +11,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const CardStudio = (props) => {
-  const { studioId, studioName, logo, rating } = props;
+  const { studioId, studioName, logo, ratingStb } = props;
   const navigate = useNavigate();
 
   const onClickStudioById = (e) => {
@@ -38,7 +38,7 @@ const CardStudio = (props) => {
               alignItems={"flex-start"}
             >
               <Typography>{studioName}</Typography>
-              <Rating size="small" value={rating} readOnly />
+              <Rating size="small" value={ratingStb} readOnly />
             </Stack>
           </Stack>
         </CardContent>

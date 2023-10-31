@@ -19,7 +19,6 @@ import Booking from "../Modal/Booking";
 
 const CardService = (props) => {
   const { serviceId, serviceName, studioId, price, imageService, rate } = props;
-
   const [open, setOpen] = useState(false);
   const [studioName, setStudioName] = useState("");
   const [studioLogo, setStudioLogo] = useState("");
@@ -112,13 +111,7 @@ const CardService = (props) => {
             >
               {serviceName}
             </Typography>
-            <Rating
-              size="small"
-              value={rate}
-              defaultValue={0}
-              precision={1}
-              readOnly
-            />
+            <Rating size="small" value={rate} readOnly />
             <Typography variant="subtitle2">Cost: {price} VNĐ</Typography>
           </Stack>
           <CardActions>

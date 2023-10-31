@@ -14,11 +14,12 @@ const TopRateStudio = () => {
     await axios
       .get(import.meta.env.VITE_REACT_APP_API_URL + "/Studio/GetAll")
       .then((res) => {
-        console.log(res.data.$values);
+        // console.log(res.data.$values);
         setData(res.data.$values);
       })
       .catch((err) => setData(err));
   };
+
   return (
     <Box
       sx={{
@@ -26,7 +27,7 @@ const TopRateStudio = () => {
         paddingBottom: 5,
         textAlign: "center",
         borderRadius: 1,
-        border:'2px solid #322F2F'
+        border: "2px solid #322F2F",
       }}
     >
       <Stack
@@ -50,7 +51,7 @@ const TopRateStudio = () => {
               studioId={studio.studioId}
               studioName={studio.studioName}
               logo={studio.logo}
-              rate={studio.RatingStb}
+              ratingStb={studio.ratingStb}
             />
           );
         })}

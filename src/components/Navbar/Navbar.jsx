@@ -369,7 +369,7 @@ export default function Navbar() {
                   <SearchIcon />
                 </SearchIconWrapper>
                 <StyledInputBase
-                  placeholder="Anime design tattoo..."
+                  placeholder="name service or studio..."
                   inputProps={{ "aria-label": "search" }}
                 />
               </Search>
