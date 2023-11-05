@@ -94,7 +94,8 @@ export default function Navbar(props) {
 	const token = localStorage.getItem("token");
 	const [open, setOpen] = React.useState(false);
 	const [isLogin, setIsLogin] = React.useState(true);
-	const { role, user } = props;
+	const user = useUserInfo((state) => state.user);
+	const role = user.role;
 
 	const isMenuOpen = Boolean(anchorEl);
 	const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -531,7 +532,7 @@ export default function Navbar(props) {
 									}}
 									onClick={() => navigate("/profile")}
 								>
-									Hi, {user && user.UserName}
+									Hi, {user && user.userName}
 								</Typography>
 								<IconButton
 									size="large"

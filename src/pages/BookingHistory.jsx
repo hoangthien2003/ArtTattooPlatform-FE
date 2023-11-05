@@ -15,13 +15,32 @@ import {
 } from "@mui/material";
 import { Home } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
+import { useUserInfo } from "../stores/useUserInfo";
+import axios from "axios";
 
 export default function BookingHistory(props) {
-	const { role } = props;
+	const user = useUserInfo((state) => state.user);
 	const navigate = useNavigate();
+	const [bookingList, setBookingList] = React.useState();
 	React.useEffect(() => {
-		if (role != "MB" && role != "AD") navigate("/access-denied");
+		if (user.role != "MB" && user.role != "AD") navigate("/access-denied");
+		getBookingList();
 	}, []);
+
+	const getBookingList = async () => {
+		await axios
+			.get(
+				`${
+					import.meta.env.VITE_REACT_APP_API_URL
+				}/Booking/GetAllByUserID/${user.userID}`
+			)
+			.then((res) => {
+				console.log(res);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 	return (
 		<Container className="mt-5 mb-5">
 			<Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: 5 }}>
