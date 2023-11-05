@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function ServiceManagement(props) {
-	const { role } = props;
+	const user = useUserInfo((state) => state.user);
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (role != "MN" && role != "AD") navigate("/access-denied");
+		if (user.role != "MN" && user.role != "AD") navigate("/access-denied");
 		return;
 	}, []);
 

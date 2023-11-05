@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import FormBooking from "./FormBooking";
 import Invoice from "./Invoice";
 import { Navigate, useNavigate } from "react-router-dom";
+import { useUserInfo } from "../../stores/useUserInfo";
 
 const steps = ["User choose", "Bill"];
 
@@ -30,6 +31,7 @@ const Booking = (props) => {
 	});
 	const { data } = props;
 	const navigate = useNavigate();
+	const userInfo = useUserInfo((state) => state.user);
 
 	const phoneRegExp = /^\d{10,12}$/;
 	const nameRegExp = /^[a-zA-Z]+$/;
@@ -79,39 +81,31 @@ const Booking = (props) => {
 
 	const handleSubmit = async () => {
 		const token = localStorage.getItem("token");
-		if (token != null) {
-			const email = jwtDecode(token).email;
-			const bookingRequest = {
-				PhoneNumber: booking.phone,
-				BookingDate: booking.dateTime,
-				ServiceId: data.service.serviceId,
-				StudioId: data.studio.studioID,
-				Total: data.service.price,
-			};
-			console.log("bookingRequest: ", bookingRequest);
-			await axios
-				.post(
-					`${
-						import.meta.env.VITE_REACT_APP_API_URL
-					}/Booking/AddBooking/${email}`,
-					bookingRequest,
-					{
-						headers: {
-							Authorization: "Bearer " + token,
-						},
-					}
-				)
-				.then((res) => {
-					toast.success("Booking saved successfully");
-					// console.log(token);
-					console.log(res);
-					navigate(0);
-				})
-				.catch((err) => {
-					toast.error("Error saving booking!!!!!");
-					console.log(err);
-				});
-		}
+		const bookingRequest = {
+			PhoneNumber: booking.phone,
+			BookingDate: booking.dateTime,
+			ServiceId: data.service.serviceId,
+			StudioId: data.studio.studioID,
+			Total: data.service.price,
+		};
+		console.log(booking.phone);
+		await axios
+			.post(
+				`${import.meta.env.VITE_REACT_APP_API_URL}/Booking/AddBooking/${
+					booking.phone
+				}`,
+				bookingRequest
+			)
+			.then((res) => {
+				toast.success("Booking saved successfully");
+				// console.log(token);
+				console.log(res);
+				navigate(0);
+			})
+			.catch((err) => {
+				toast.error("Error saving booking!!!!!");
+				console.log(err);
+			});
 	};
 
 	return (

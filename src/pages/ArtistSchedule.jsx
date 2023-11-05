@@ -17,10 +17,10 @@ import { Home } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function ArtistSchedule(props) {
-	const { role } = props;
+	const user = useUserInfo((state) => state.user);
 	const navigate = useNavigate();
 	React.useEffect(() => {
-		if (role != "AT" && role != "AD") navigate("/access-denied");
+		if (user.role != "AT" && user.role != "AD") navigate("/access-denied");
 		return;
 	}, []);
 
