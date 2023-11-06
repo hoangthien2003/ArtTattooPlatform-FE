@@ -24,7 +24,7 @@ const Home = () => {
 	};
 
 	return (
-		<Container maxWidth="xl" sx={{ marginTop: 5, marginBottom: 5 }}>
+		<Container>
 			<Stack
 				spacing={3}
 				direction={"column"}

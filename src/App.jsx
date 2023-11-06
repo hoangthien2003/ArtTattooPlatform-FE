@@ -21,6 +21,7 @@ import jwtDecode from "jwt-decode";
 import StudioPage from "./pages/StudioPage";
 import NotAccess from "./pages/NotAccess";
 import NotFound from "./pages/NotFound";
+import StudioManagement from "./pages/StudioManagement";
 
 function App() {
 	const HomePage = lazy(() => import("./pages/Home"));
@@ -31,7 +32,7 @@ function App() {
 	const BookingHistory = lazy(() => import("./pages/BookingHistory"));
 	const ArtistSchedule = lazy(() => import("./pages/ArtistSchedule"));
 	const ServiceManagement = lazy(() => import("./pages/ServiceManagement"));
-
+	const StudioManagement = lazy(() => import ("./pages/StudioManagement"))
 	const [user, setUser] = useState();
 
 	useEffect(() => {
@@ -49,7 +50,6 @@ function App() {
 			console.log(e);
 		}
 	};
-
 	useGoogleOneTapLogin({
 		onSuccess: (credentialResponse) => {
 			console.log(credentialResponse);
@@ -105,6 +105,10 @@ function App() {
 							element={<StudioDetail />}
 						></Route>
 						<Route path="/access-denied" element={<NotAccess />} />
+						<Route
+							path="/StudioManagement"
+							element={<StudioManagement UserID = {user && user.UserID}  />}
+						></Route>
 					</Routes>
 					<Footer />
 				</Suspense>

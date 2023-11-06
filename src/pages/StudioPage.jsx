@@ -33,7 +33,7 @@ export default function StudioPage() {
             .catch((err) => {
                 console.log(err);
             });
-
+console.log(studio)
 
     };
     //sort
