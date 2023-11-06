@@ -20,14 +20,15 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { Home } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
+import { useUserInfo } from "../stores/useUserInfo";
 
 export default function BookingManagement(props) {
 	const [artist, setArtist] = React.useState("");
-	const { role } = props;
+	const user = useUserInfo((state) => state.user);
 	const navigate = useNavigate();
 
 	React.useEffect(() => {
-		if (role != "MN" && role != "AD") navigate("/access-denied");
+		if (user.role != "MN" && user.role != "AD") navigate("/access-denied");
 		return;
 	}, []);
 

@@ -25,11 +25,11 @@ import { useEffect } from "react";
 import axios from "axios";
 
 export default function ServiceManagement(props) {
-	const { role } = props;
+	const user = useUserInfo((state) => state.user);
 	const navigate = useNavigate();
 
-	React.useEffect(() => {
-		if (role != "MN" && role != "AD") navigate("/access-denied");
+	useEffect(() => {
+		if (user.role != "MN" && user.role != "AD") navigate("/access-denied");
 		return;
 	}, []);
 

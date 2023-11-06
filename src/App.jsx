@@ -21,6 +21,7 @@ import jwtDecode from "jwt-decode";
 import StudioPage from "./pages/StudioPage";
 import NotAccess from "./pages/NotAccess";
 import NotFound from "./pages/NotFound";
+import { useUserInfo } from "./stores/useUserInfo";
 import StudioManagement from "./pages/StudioManagement";
 
 function App() {
@@ -33,7 +34,7 @@ function App() {
 	const ArtistSchedule = lazy(() => import("./pages/ArtistSchedule"));
 	const ServiceManagement = lazy(() => import("./pages/ServiceManagement"));
 	const StudioManagement = lazy(() => import ("./pages/StudioManagement"))
-	const [user, setUser] = useState();
+	const setUserZustand = useUserInfo((state) => state.setUser);
 
 	useEffect(() => {
 		decodeToken();
@@ -44,7 +45,12 @@ function App() {
 			const token = localStorage.getItem("token");
 			if (token != null) {
 				const user = jwtDecode(token);
-				setUser(user);
+				setUserZustand({
+					userID: user.UserID,
+					email: user.Email,
+					role: user.role,
+					userName: user.UserName,
+				});
 			}
 		} catch (e) {
 			console.log(e);
@@ -65,7 +71,7 @@ function App() {
 				<CssBaseline />
 				<ToastContainer />
 				<Suspense fallback={<p>Loading...</p>}>
-					<Navbar role={user && user.role} user={user} />
+					<Navbar />
 					<Routes>
 						<Route path="*" exact={true} element={<NotFound />} />
 						<Route path="/" element={<HomePage />} />
@@ -78,27 +84,19 @@ function App() {
 						<Route path="/profile" element={<ProfilePage />} />
 						<Route
 							path="/BookingManagement"
-							element={
-								<BookingManagement role={user && user.role} />
-							}
+							element={<BookingManagement />}
 						/>
 						<Route
 							path="/BookingHistory"
-							element={
-								<BookingHistory role={user && user.role} />
-							}
+							element={<BookingHistory />}
 						/>
 						<Route
 							path="/ArtistSchedule"
-							element={
-								<ArtistSchedule role={user && user.role} />
-							}
+							element={<ArtistSchedule />}
 						/>
 						<Route
 							path="/ServiceManagement"
-							element={
-								<ServiceManagement role={user && user.role} />
-							}
+							element={<ServiceManagement />}
 						/>
 						<Route
 							path="/StudioDetail/:studioId"
