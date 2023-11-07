@@ -88,13 +88,17 @@ const Booking = (props) => {
 			StudioId: data.studio.studioID,
 			Total: data.service.price,
 		};
-		console.log(booking.phone);
 		await axios
 			.post(
 				`${import.meta.env.VITE_REACT_APP_API_URL}/Booking/AddBooking/${
-					booking.phone
+					userInfo.email
 				}`,
-				bookingRequest
+				bookingRequest,
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
 			)
 			.then((res) => {
 				toast.success("Booking saved successfully");
