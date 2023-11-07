@@ -37,7 +37,7 @@ const CardStudio = (props) => {
               justifyContent={"flex-start"}
               alignItems={"flex-start"}
             >
-              <Typography>{studioName}</Typography>
+              <Typography sx={{ fontSize:'small'}}>{studioName}</Typography>
               <Rating size="small" value={ratingStb} readOnly />
             </Stack>
           </Stack>

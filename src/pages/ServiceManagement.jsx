@@ -23,8 +23,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
+import { useUserInfo } from "../stores/useUserInfo";
 
-export default function ServiceManagement(props) {
+export default function ServiceManagement() {
 	const user = useUserInfo((state) => state.user);
 	const navigate = useNavigate();
 

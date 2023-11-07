@@ -57,7 +57,6 @@ function App() {
     }
   };
 
-  console.log();
   useGoogleOneTapLogin({
     onSuccess: (credentialResponse) => {
       console.log(credentialResponse);
@@ -66,40 +65,55 @@ function App() {
       console.log("Login failed!");
     },
   });
-
-  return (
-    <BrowserRouter basename="/">
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <ToastContainer />
-        <Suspense fallback={<p>Loading...</p>}>
-          <Navbar />
-          <Routes>
-            <Route path="*" exact={true} element={<NotFound />} />
-            <Route path="/" element={<HomePage />} />
-            <Route path="/services" element={<Service />} />
-            <Route path="/services/:serviceId" element={<ServiceDetail />} />
-            <Route path="/StudioPage" element={<StudioPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/BookingManagement" element={<BookingManagement />} />
-            <Route path="/BookingHistory" element={<BookingHistory />} />
-            <Route path="/ArtistSchedule" element={<ArtistSchedule />} />
-            <Route path="/ServiceManagement" element={<ServiceManagement />} />
-            <Route
-              path="/StudioDetail/:studioId"
-              element={<StudioDetail />}
-            ></Route>
-            <Route path="/access-denied" element={<NotAccess />} />
-            <Route
-              path="/StudioManagement"
-              element={<StudioManagement />}
-            ></Route>
-          </Routes>
-          <Footer />
-        </Suspense>
-      </ThemeProvider>
-    </BrowserRouter>
-  );
+  
+	return (
+		<BrowserRouter basename="/">
+			<ThemeProvider theme={theme}>
+				<CssBaseline />
+				<ToastContainer />
+				<Suspense fallback={<p>Loading...</p>}>
+					<Navbar />
+					<Routes>
+						<Route path="*" exact={true} element={<NotFound />} />
+						<Route path="/" element={<HomePage />} />
+						<Route path="/services" element={<Service />} />
+						<Route
+							path="/services/:serviceId"
+							element={<ServiceDetail />}
+						/>
+						<Route path="/StudioPage" element={<StudioPage />} />
+						<Route path="/profile" element={<ProfilePage />} />
+						<Route
+							path="/BookingManagement"
+							element={<BookingManagement />}
+						/>
+						<Route
+							path="/BookingHistory"
+							element={<BookingHistory />}
+						/>
+						<Route
+							path="/ArtistSchedule"
+							element={<ArtistSchedule />}
+						/>
+						<Route
+							path="/ServiceManagement"
+							element={<ServiceManagement />}
+						/>
+						<Route
+							path="/StudioDetail/:studioId"
+							element={<StudioDetail />}
+						></Route>
+						<Route path="/access-denied" element={<NotAccess />} />
+						<Route
+							path="/StudioManagement"
+							element={<StudioManagement/>}
+						></Route>
+					</Routes>
+					<Footer />
+				</Suspense>
+			</ThemeProvider>
+		</BrowserRouter>
+	);
 }
 
 export default App;
