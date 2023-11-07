@@ -21,36 +21,15 @@ import Select from "@mui/material/Select";
 import { Home } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserInfo } from "../stores/useUserInfo";
-import * as signalR from "@microsoft/signalr";
 
 export default function BookingManagement(props) {
 	const [artist, setArtist] = React.useState("");
 	const user = useUserInfo((state) => state.user);
 	const navigate = useNavigate();
-	const [bookings, setBookings] = React.useState([]);
 
 	React.useEffect(() => {
-		if (user.role != "MN" && user.role != "AD") {
-			navigate("/access-denied");
-			return;
-		}
-		const connection = new signalR.HubConnectionBuilder()
-			.withUrl(import.meta.env.VITE_REACT_APP_SIGNALR_URL)
-			.configureLogging(signalR.LogLevel.Information)
-			.withAutomaticReconnect()
-			.build();
-		connection
-			.start()
-			.then(() => {
-				console.log("SignalR connected");
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-		connection.on("BookingService", (data) => {
-			console.log(data);
-			setBookings((prevBookings) => [...prevBookings, data]);
-		});
+		if (user.role != "MN" && user.role != "AD") navigate("/access-denied");
+		return;
 	}, []);
 
 	const handleChange = (event) => {
@@ -101,66 +80,53 @@ export default function BookingManagement(props) {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{bookings.map((booking, index) => {
-							return (
-								<TableRow
-									key={index}
-									sx={{
-										"&:last-child td, &:last-child th": {
-											border: 0,
-										},
-									}}
-								>
-									<TableCell component="th" scope="row">
-										{booking.serviceId}
-									</TableCell>
-									<TableCell align="left">
-										{booking.fullName}
-									</TableCell>
-									<TableCell align="left">
-										{booking.phoneNumber}
-									</TableCell>
-									<TableCell align="left">
-										{booking.bookingDate}
-									</TableCell>
-									<TableCell align="left">
-										{booking.total}
-									</TableCell>
-									<TableCell align="left">
-										<Box sx={{ maxWidth: 50 }}>
-											<FormControl>
-												<InputLabel id="demo-simple-select-label">
-													{" "}
-													Choose
-												</InputLabel>
-												<Select
-													labelId="demo-simple-select-label"
-													id="demo-simple-select"
-													value={1}
-													label="Artist"
-													onChange={handleChange}
-												>
-													<MenuItem value={1}>
-														TheAnh
-													</MenuItem>
-													<MenuItem value={2}>
-														TrungAnh
-													</MenuItem>
-													<MenuItem value={3}>
-														TuanTr
-													</MenuItem>
-												</Select>
-											</FormControl>
-										</Box>
-									</TableCell>
-									<TableCell align="left">
-										<Link sx={{ textDecoration: "none" }}>
-											Confirm
-										</Link>
-									</TableCell>
-								</TableRow>
-							);
-						})}
+						<TableRow
+							sx={{
+								"&:last-child td, &:last-child th": {
+									border: 0,
+								},
+							}}
+						>
+							<TableCell component="th" scope="row">
+								aaa
+							</TableCell>
+							<TableCell align="left">aaa</TableCell>
+							<TableCell align="left">aaa</TableCell>
+							<TableCell align="left">aaa</TableCell>
+							<TableCell align="left">aaa</TableCell>
+							<TableCell align="left">
+								<Box sx={{ maxWidth: 50 }}>
+									<FormControl>
+										<InputLabel id="demo-simple-select-label">
+											{" "}
+											Choose
+										</InputLabel>
+										<Select
+											labelId="demo-simple-select-label"
+											id="demo-simple-select"
+											value={1}
+											label="Artist"
+											onChange={handleChange}
+										>
+											<MenuItem value={1}>
+												TheAnh
+											</MenuItem>
+											<MenuItem value={2}>
+												TrungAnh
+											</MenuItem>
+											<MenuItem value={3}>
+												TuanTr
+											</MenuItem>
+										</Select>
+									</FormControl>
+								</Box>
+							</TableCell>
+							<TableCell align="left">
+								<Link sx={{ textDecoration: "none" }}>
+									Confirm
+								</Link>
+							</TableCell>
+						</TableRow>
 					</TableBody>
 				</Table>
 			</TableContainer>

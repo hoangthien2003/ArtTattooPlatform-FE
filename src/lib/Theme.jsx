@@ -21,7 +21,7 @@ const theme = createTheme({
     h1: { color: "#FFFFFF" },
     h2: { color: "#FFFFFF" },
     h3: { color: "#FFFFFF" },
-    h4: { color: "#FFFFFF" },
+    h4: { color: "#FF7F22" },
     h5: { color: "#FF7F22" },
     h6: { color: "#FFFFFF" },
     subtitle1: { color: "#FFFFFF" },
