@@ -84,6 +84,7 @@ const Booking = (props) => {
 		const bookingRequest = {
 			PhoneNumber: booking.phone,
 			BookingDate: booking.dateTime,
+			FullName: booking.name,
 			ServiceId: data.service.serviceId,
 			StudioId: data.studio.studioID,
 			Total: data.service.price,
