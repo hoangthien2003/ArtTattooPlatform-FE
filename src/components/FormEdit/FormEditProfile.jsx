@@ -31,7 +31,8 @@ const FormEditProfile = (props) => {
 
     await axios
       .put(
-        import.meta.env.VITE_REACT_APP_API_URL + `/User/UpdateUser/${userId}`,
+        import.meta.env.VITE_REACT_APP_API_URL +
+          `/User/UpdateProfileUser/${userId}`,
         data,
         {
           headers: {
