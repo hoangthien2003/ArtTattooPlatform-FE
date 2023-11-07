@@ -100,7 +100,7 @@ const CardService = (props) => {
 					alignItems={"center"}
 				>
 					<Avatar alt={studioName} src={studioLogo} />
-					<Typography>{studioName}</Typography>
+					<Typography sx={{fontSize:'13px'}}>{studioName}</Typography>
 				</Stack>
 			</CardContent>
 			<CardContent>

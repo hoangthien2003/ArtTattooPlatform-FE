@@ -105,7 +105,7 @@ function App() {
 						<Route path="/access-denied" element={<NotAccess />} />
 						<Route
 							path="/StudioManagement"
-							element={<StudioManagement UserID = {user && user.UserID}  />}
+							element={<StudioManagement/>}
 						></Route>
 					</Routes>
 					<Footer />
