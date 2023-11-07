@@ -17,6 +17,8 @@ import React, { forwardRef, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../../styles/CardService.css";
 import Booking from "../Modal/Booking";
+import { useUserInfo } from "../../stores/useUserInfo";
+import { toast } from "react-toastify";
 
 const CardService = (props) => {
 	const { serviceId, serviceName, studioId, price, imageService, rate } =
@@ -71,8 +73,12 @@ const CardService = (props) => {
 	};
 
 	const handleOnClickBooking = (event) => {
+		const token = localStorage.getItem("token");
+		if (token == null) {
+			toast.error("Please login to continue!!!");
+			return;
+		}
 		setOpen(true);
-		console.log(2);
 	};
 
 	const handleClose = () => {
