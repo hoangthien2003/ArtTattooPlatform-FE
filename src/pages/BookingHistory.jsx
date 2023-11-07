@@ -20,6 +20,7 @@ import axios from "axios";
 
 export default function BookingHistory(props) {
 	const user = useUserInfo((state) => state.user);
+	//user = {userID, name,...}
 	const navigate = useNavigate();
 	const [bookingList, setBookingList] = React.useState();
 	React.useEffect(() => {
