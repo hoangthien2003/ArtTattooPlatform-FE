@@ -85,6 +85,7 @@ const CardService = (props) => {
     setOpen(false);
   };
 
+
   return (
     <Card sx={{ width: "95%", paddingBottom: 2 }} key={serviceId}>
       <CardMedia
@@ -142,6 +143,7 @@ const CardService = (props) => {
       </CardActions>
     </Card>
   );
+
 };
 
 export default CardService;

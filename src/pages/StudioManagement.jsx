@@ -5,10 +5,12 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useUserInfo } from '../stores/useUserInfo';
 
 
-export default function StudioManagement({ UserID }) {
+export default function StudioManagement() {
+	const user = useUserInfo((state) => state.user);
 
     // api call
     const [studio, setStudio] = useState([]);
@@ -19,15 +21,14 @@ export default function StudioManagement({ UserID }) {
 
     const getStudio = async () => {
         await axios
-            .get(import.meta.env.VITE_REACT_APP_API_URL + `/Studio/GetStudioByManager/${UserID}`)
+            .get(import.meta.env.VITE_REACT_APP_API_URL + `/Studio/GetStudioByManager/${user.userID}`)
             .then((res) => {
-                setStudio(res.data.$values);
+                setStudio(res.data.studio);
+                console.log(res)
             })
             .catch((err) => {
                 console.log(err);
             });
-        console.log(UserID)
-
     };
     // const [profile, setProfile] = useState([]);
 
@@ -37,6 +38,7 @@ export default function StudioManagement({ UserID }) {
             <div className=' row mt-5 mb-5'>
 
                 <div className='col-md-4'>
+                    
                     <Card sx={{ border: "2px solid #322F2F", borderRadius: 1 }}>
                         <Stack
                             spacing={2}
@@ -47,7 +49,7 @@ export default function StudioManagement({ UserID }) {
                             <Avatar
                                 sx={{ width: 100, height: 100, borderColor: "white" }}
                                 className="mt-5 mb-4"
-                            // src={studioData && studioData.logo}
+                            src={studio.logo}
                             />
                             <Typography
                                 gutterBottom
@@ -56,7 +58,7 @@ export default function StudioManagement({ UserID }) {
                                 sx={{ textAlign: "center" }}
                                 className="mb-1"
                             >
-                                {/* {studioData && studioData.studioName} */}
+                                {studio.studioName} 
                             </Typography>
                             <Typography
                                 gutterBottom
@@ -64,11 +66,11 @@ export default function StudioManagement({ UserID }) {
                                 sx={{ textAlign: "center" }}
                                 className="mb-1"
                             >
-                                {/* {studioData && studioData.description} */}
+                                {studio.description}
                             </Typography>
                             <Rating
                                 name="size-small"
-                                // value={studioData && studioData.RatingStb}
+                                value={studio.RatingStb}
                                 size="small"
                                 readOnly
                             />
@@ -79,7 +81,7 @@ export default function StudioManagement({ UserID }) {
                                 sx={{ textAlign: "center" }}
                                 className="mb-1"
                             >
-                                {/* {studioData && studioData.studioEmail} */}
+                                {studio.studioEmail}
                             </Typography>
                             <Typography
                                 gutterBottom
@@ -88,7 +90,7 @@ export default function StudioManagement({ UserID }) {
                                 sx={{ textAlign: "center" }}
                                 className="mb-1"
                             >
-                                {/* {studioData && studioData.studioPhone} */}
+                                {studio.studioPhone}
                             </Typography>
                             <Typography
                                 gutterBottom
@@ -97,11 +99,10 @@ export default function StudioManagement({ UserID }) {
                                 sx={{ textAlign: "center" }}
                                 className="mb-5"
                             >
-                                {/* {studioData && studioData.address} */}
+                                {studio.address}
                             </Typography>
                         </Stack>
                     </Card>
-                    {/* give reviews and write review content */}
                 </div>
             </div>
         </Container>
