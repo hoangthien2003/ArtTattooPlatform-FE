@@ -31,6 +31,7 @@ import { googleLogout } from "@react-oauth/google";
 import Register from "../Modal/Register";
 import Login from "../Modal/Login";
 import { useUserInfo } from "../../stores/useUserInfo";
+import { ShoppingCart } from "@mui/icons-material";
 
 const Search = styled("div")(({ theme }) => ({
 	position: "relative",
@@ -509,18 +510,6 @@ export default function Navbar(props) {
 									},
 								}}
 							>
-								<IconButton
-									size="large"
-									aria-label="show 17 new notifications"
-									color="inherit"
-									sx={{
-										marginRight: 2,
-									}}
-								>
-									<Badge badgeContent={17} color="error">
-										<NotificationsIcon />
-									</Badge>
-								</IconButton>
 								<Typography
 									variant="subtitle2"
 									sx={{

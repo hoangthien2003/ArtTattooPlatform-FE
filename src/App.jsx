@@ -3,11 +3,11 @@ import theme from "./lib/Theme";
 import Footer from "./components/Footer/Footer";
 import React, { Suspense, lazy, useEffect, useState } from "react";
 import {
-  BrowserRouter,
-  Outlet,
-  Route,
-  Routes,
-  useNavigate,
+	BrowserRouter,
+	Outlet,
+	Route,
+	Routes,
+	useNavigate,
 } from "react-router-dom";
 import { useGoogleOneTapLogin } from "@react-oauth/google";
 // import HomePage from "./pages/Home";
@@ -22,50 +22,49 @@ import StudioPage from "./pages/StudioPage";
 import NotAccess from "./pages/NotAccess";
 import NotFound from "./pages/NotFound";
 import { useUserInfo } from "./stores/useUserInfo";
-import StudioManagement from "./pages/StudioManagement";
 
 function App() {
-  const HomePage = lazy(() => import("./pages/Home"));
-  const ServiceDetail = lazy(() => import("./pages/ServiceDetail"));
-  const Service = lazy(() => import("./pages/Service"));
-  const Navbar = lazy(() => import("./components/Navbar/Navbar"));
-  const BookingManagement = lazy(() => import("./pages/BookingManagement"));
-  const BookingHistory = lazy(() => import("./pages/BookingHistory"));
-  const ArtistSchedule = lazy(() => import("./pages/ArtistSchedule"));
-  const ServiceManagement = lazy(() => import("./pages/ServiceManagement"));
-  const StudioManagement = lazy(() => import("./pages/StudioManagement"));
-  const setUserZustand = useUserInfo((state) => state.setUser);
+	const HomePage = lazy(() => import("./pages/Home"));
+	const ServiceDetail = lazy(() => import("./pages/ServiceDetail"));
+	const Service = lazy(() => import("./pages/Service"));
+	const Navbar = lazy(() => import("./components/Navbar/Navbar"));
+	const BookingManagement = lazy(() => import("./pages/BookingManagement"));
+	const BookingHistory = lazy(() => import("./pages/BookingHistory"));
+	const ArtistSchedule = lazy(() => import("./pages/ArtistSchedule"));
+	const ServiceManagement = lazy(() => import("./pages/ServiceManagement"));
+	const StudioManagement = lazy(() => import("./pages/StudioManagement"));
+	const setUserZustand = useUserInfo((state) => state.setUser);
 
-  useEffect(() => {
-    decodeToken();
-  }, []);
+	useEffect(() => {
+		decodeToken();
+	}, []);
 
-  const decodeToken = () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (token != null) {
-        const user = jwtDecode(token);
-        setUserZustand({
-          userID: user.UserID,
-          email: user.Email,
-          role: user.role,
-          userName: user.UserName,
-        });
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+	const decodeToken = () => {
+		try {
+			const token = localStorage.getItem("token");
+			if (token != null) {
+				const user = jwtDecode(token);
+				setUserZustand({
+					userID: user.UserID,
+					email: user.Email,
+					role: user.role,
+					userName: user.UserName,
+				});
+			}
+		} catch (e) {
+			console.log(e);
+		}
+	};
 
-  useGoogleOneTapLogin({
-    onSuccess: (credentialResponse) => {
-      console.log(credentialResponse);
-    },
-    onError: () => {
-      console.log("Login failed!");
-    },
-  });
-  
+	useGoogleOneTapLogin({
+		onSuccess: (credentialResponse) => {
+			console.log(credentialResponse);
+		},
+		onError: () => {
+			console.log("Login failed!");
+		},
+	});
+
 	return (
 		<BrowserRouter basename="/">
 			<ThemeProvider theme={theme}>
@@ -106,7 +105,7 @@ function App() {
 						<Route path="/access-denied" element={<NotAccess />} />
 						<Route
 							path="/StudioManagement"
-							element={<StudioManagement/>}
+							element={<StudioManagement />}
 						></Route>
 					</Routes>
 					<Footer />
