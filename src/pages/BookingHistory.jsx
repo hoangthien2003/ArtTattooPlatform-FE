@@ -1,77 +1,37 @@
 import * as React from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+
 import {
   Breadcrumbs,
   Button,
   Container,
+  IconButton,
   Stack,
+  TableContainer,
   Typography,
-  gridClasses,
+  Paper,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
 } from "@mui/material";
-import { Home } from "@mui/icons-material";
+import { Delete, Home } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserInfo } from "../stores/useUserInfo";
 import axios from "axios";
-import { DataGrid } from "@mui/x-data-grid";
-import { grey } from "@mui/material/colors";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
 
 export default function BookingHistory() {
   const user = useUserInfo((state) => state.user);
-  console.log(user);
+  // console.log(user);
   const navigate = useNavigate();
-  const [bookingList, setBookingList] = React.useState([]);
-  React.useEffect(() => {
+  const [bookingList, setBookingList] = useState([]);
+  useEffect(() => {
     if (user.role != "MB" && user.role != "AD") navigate("/access-denied");
     getBookingList();
   }, []);
-
-  const columns = [
-    {
-      field: "delete",
-      headerName: "Action",
-      renderCell: (cellData) => (
-        <>
-          <Button variant="contained">Delete</Button>
-        </>
-      ),
-    },
-    {
-      field: "service",
-      headerName: "Service",
-      width: 200,
-    },
-    {
-      field: "studio",
-      headerName: "Studio",
-      width: 200,
-    },
-    {
-      field: "bookingDate",
-      headerName: "Date",
-      width: 200,
-    },
-    {
-      field: "phoneNumber",
-      headerName: "PhoneNumber",
-      width: 200,
-    },
-    {
-      field: "price",
-      headerName: "Total",
-      width: 200,
-    },
-    {
-      field: "status",
-      headerName: "Status",
-      width: 200,
-    },
-  ];
 
   const getBookingList = async () => {
     await axios
@@ -81,12 +41,84 @@ export default function BookingHistory() {
         }`
       )
       .then((res) => {
-        console.log(res);
+        setBookingList(res.data.$values);
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
+  const deleteBooking = async (id) => {
+    console.log(id);
+    const token = localStorage.getItem("token");
+    if (
+      window.confirm(
+        `Are you sure that you want to delete a booking with ID: ${id}`
+      )
+    ) {
+      await axios
+        .delete(
+          `${
+            import.meta.env.VITE_REACT_APP_API_URL
+          }/Booking/DeleteBooking/${id}`,
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        )
+        .then((res) => {
+          getBookingList();
+          toast.success("Deleted booking history successfully");
+        })
+        .catch((err) => {
+          toast.error("Deleted booking history failed");
+        });
+    }
+  };
+
+  const renderFormat = (date) => {
+    const dated = new Date(date);
+    const formatDate = dated.toLocaleString();
+    return formatDate;
+  };
+
+  const renderStatusBooking = (status) => {
+    switch (status) {
+      case "Pending":
+        return (
+          <Typography variant="text" color="lightblue">
+            PENDING
+          </Typography>
+        );
+      case "Completed":
+        return (
+          <Typography variant="text" color="lightgreen">
+            COMPLETED
+          </Typography>
+        );
+      case "Cancelled":
+        return (
+          <Typography variant="text" color="red">
+            PENDING
+          </Typography>
+        );
+      case "Doing":
+        return (
+          <Typography variant="text" color="primary">
+            DOING
+          </Typography>
+        );
+      case "Confirm":
+        return (
+          <Typography variant="text" color="lightgreen">
+            CONFIRM
+          </Typography>
+        );
+    }
+  };
+
   return (
     <Container className="mt-5 mb-5">
       <Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: 5 }}>
@@ -118,63 +150,54 @@ export default function BookingHistory() {
       <Typography variant="h5" className="mb-3">
         Booking History
       </Typography>
-      <DataGrid
-        rows={bookingList}
-        columns={columns}
-        allowColumnResizing
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
-            },
-          },
-        }}
-        pageSizeOptions={[5]}
-        getRowSpacing={(params) => ({
-          top: params.isFirstVisible ? 0 : 5,
-          bottom: params.isLastVisible ? 0 : 5,
-        })}
-        sx={{
-          [`& .${gridClasses.row}`]: {
-            bgcolor: (theme) =>
-              theme.palette.mode === "light" ? grey[200] : grey[900],
-          },
-        }}
-      />
-      {/* <TableContainer component={Paper}>
+      <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Service</TableCell>
-              <TableCell align="left">Price</TableCell>
+              <TableCell>ID</TableCell>
+              <TableCell align="left">Service</TableCell>
               <TableCell align="left">Studio</TableCell>
-              <TableCell align="left">Time</TableCell>
+              <TableCell align="left">Price</TableCell>
+              <TableCell align="left">Date</TableCell>
               <TableCell align="left">Status</TableCell>
-              <TableCell align="left"></TableCell>
+              <TableCell align="left">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow
-              sx={{
-                "&:last-child td, &:last-child th": {
-                  border: 0,
-                },
-              }}
-            >
-              <TableCell component="th" scope="row">
-                Tattoo
-              </TableCell>
-              <TableCell align="left">TAINK</TableCell>
-              <TableCell align="left">100.000</TableCell>
-              <TableCell align="left">12:11:11</TableCell>
-              <TableCell align="left">pending</TableCell>
-              <TableCell align="left">
-                <Link sx={{ textDecoration: "none" }}>Cancel Booking</Link>
-              </TableCell>
-            </TableRow>
+            {bookingList.map((booking, index) => (
+              <TableRow
+                key={index}
+                sx={{
+                  "&:last-child td, &:last-child th": {
+                    border: 0,
+                  },
+                }}
+              >
+                <TableCell component="th" scope="row">
+                  {booking.$id}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {booking.serviceName}
+                </TableCell>
+                <TableCell align="left">{booking.studioName}</TableCell>
+                <TableCell align="left">{booking.total}</TableCell>
+                <TableCell align="left">
+                  {renderFormat(booking.bookingDate)}
+                  {/* {booking.bookingDate} */}
+                </TableCell>
+                <TableCell align="left">
+                  {renderStatusBooking(booking.status)}
+                </TableCell>
+                <TableCell align="left">
+                  <IconButton onClick={() => deleteBooking(booking.$id)}>
+                    <Delete />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
-      </TableContainer> */}
+      </TableContainer>
     </Container>
   );
 }

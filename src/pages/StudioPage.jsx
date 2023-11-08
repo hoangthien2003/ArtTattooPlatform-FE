@@ -101,7 +101,7 @@ console.log(studio)
                                         <Avatar
                                             alt="Remy Sharp"
                                             src={studio.logo}
-                                            sx={{ width: 100, height: 'auto' }}
+                                            sx={{ width: 100, height: '100px' }}
                                             className='mt-3 mb-3'
                                         />
                                     </Box>

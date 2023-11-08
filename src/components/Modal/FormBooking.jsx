@@ -11,8 +11,6 @@ import React, { useState } from "react";
 import SliderSlotTime from "../Slider/SliderSlotTime";
 
 const FormBooking = ({
-	nameRef,
-	phoneRef,
 	dateTimeRef,
 	dateRef,
 	timeRef,
@@ -24,22 +22,7 @@ const FormBooking = ({
 				<Typography variant="h5">Contact Info</Typography>
 				<Box>
 					<Stack spacing={4}>
-						<TextField
-							id="user"
-							label="Username"
-							variant="outlined"
-							inputRef={nameRef}
-							required
-						/>
-						<TextField
-							id="phone"
-							label="PhoneNumber"
-							variant="outlined"
-							inputRef={phoneRef}
-							type="tel"
-							pattern="[0-9]{10}"
-							required
-						/>
+						
 						{/* <DateTimePicker inputRef={dateTimeRef} required /> */}
 						<DatePicker inputRef={dateRef} required />
 						{/* <TimePicker inputRef={timeRef} required /> */}
