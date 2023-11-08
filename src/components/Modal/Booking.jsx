@@ -19,22 +19,15 @@ const steps = ["User choose", "Bill"];
 
 const Booking = (props) => {
   const [activeStep, setActiveStep] = useState(0);
-  const nameRef = useRef();
-  const phoneRef = useRef();
-  // const dateTimeRef = useRef();
+
   const timeRef = useRef();
   const dateRef = useRef();
   const [booking, setBooking] = useState({
-    name: "",
-    phone: "",
     dateTime: "",
   });
   const { data } = props;
   const navigate = useNavigate();
   const userInfo = useUserInfo((state) => state.user);
-
-  const phoneRegExp = /^\d{10,12}$/;
-  const nameRegExp = /^[a-zA-Z]+$/;
 
   const formatTime = (time) => {
     const hours = time.split(":")[0];
@@ -46,28 +39,14 @@ const Booking = (props) => {
   };
 
   const handleNext = () => {
-    const nameValue = nameRef.current.value;
-    const phoneValue = phoneRef.current.value;
     const dateValue = dateRef.current.value;
     const timeValue = timeRef.current.value;
     const dateTimeValue = dateValue.concat(" ", formatTime(timeValue));
-    // const dateTimeValue = dateTimeRef.current.value;
-    if (!phoneRegExp.test(phoneValue)) {
-      // Phone number must only contain numbers
-      return;
-    }
 
-    if (!nameRegExp.test(nameValue)) {
-      // Name must only contain letters
-      return;
-    }
-
-    if (nameValue && phoneValue && dateValue && timeValue) {
+    if (dateValue && timeValue) {
       // console.log(nameValue, phoneValue, dateValue, timeValue);
       // console.log(nameValue, phoneValue, dateTimeValue);
       setBooking({
-        name: nameValue,
-        phone: phoneValue,
         dateTime: dateTimeValue,
       });
 
@@ -82,9 +61,7 @@ const Booking = (props) => {
   const handleSubmit = async () => {
     const token = localStorage.getItem("token");
     const bookingRequest = {
-      PhoneNumber: booking.phone,
       BookingDate: booking.dateTime,
-      FullName: booking.name,
       ServiceId: data.service.serviceId,
       StudioId: data.studio.studioID,
       Total: data.service.price,
@@ -129,8 +106,6 @@ const Booking = (props) => {
         {activeStep === 0 && (
           <FormBooking
             studioId={data.studio.studioID}
-            nameRef={nameRef}
-            phoneRef={phoneRef}
             dateRef={dateRef}
             timeRef={timeRef}
           />
