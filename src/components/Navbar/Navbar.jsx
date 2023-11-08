@@ -510,20 +510,6 @@ export default function Navbar(props) {
 									},
 								}}
 							>
-								<IconButton
-									size="large"
-									aria-label="show 17 new notifications"
-									color="inherit"
-									sx={{
-										marginRight: 2,
-									}}
-									onClick={() => navigate("/cart")}
-								>
-									{/* <Badge badgeContent={17} color="error">
-										<NotificationsIcon />
-									</Badge> */}
-									<ShoppingCart />
-								</IconButton>
 								<Typography
 									variant="subtitle2"
 									sx={{

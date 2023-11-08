@@ -22,7 +22,6 @@ import StudioPage from "./pages/StudioPage";
 import NotAccess from "./pages/NotAccess";
 import NotFound from "./pages/NotFound";
 import { useUserInfo } from "./stores/useUserInfo";
-import StudioManagement from "./pages/StudioManagement";
 
 function App() {
 	const HomePage = lazy(() => import("./pages/Home"));
@@ -35,7 +34,6 @@ function App() {
 	const ServiceManagement = lazy(() => import("./pages/ServiceManagement"));
 	const StudioManagement = lazy(() => import("./pages/StudioManagement"));
 	const setUserZustand = useUserInfo((state) => state.setUser);
-	const ShopCart = lazy(() => import("./pages/ShopCart"));
 
 	useEffect(() => {
 		decodeToken();
@@ -109,7 +107,6 @@ function App() {
 							path="/StudioManagement"
 							element={<StudioManagement />}
 						></Route>
-						<Route path="/cart" element={<ShopCart />} />
 					</Routes>
 					<Footer />
 				</Suspense>
