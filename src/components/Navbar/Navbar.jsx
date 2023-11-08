@@ -31,6 +31,7 @@ import { googleLogout } from "@react-oauth/google";
 import Register from "../Modal/Register";
 import Login from "../Modal/Login";
 import { useUserInfo } from "../../stores/useUserInfo";
+import { ShoppingCart } from "@mui/icons-material";
 
 const Search = styled("div")(({ theme }) => ({
 	position: "relative",
@@ -516,10 +517,12 @@ export default function Navbar(props) {
 									sx={{
 										marginRight: 2,
 									}}
+									onClick={() => navigate("/cart")}
 								>
-									<Badge badgeContent={17} color="error">
+									{/* <Badge badgeContent={17} color="error">
 										<NotificationsIcon />
-									</Badge>
+									</Badge> */}
+									<ShoppingCart />
 								</IconButton>
 								<Typography
 									variant="subtitle2"
