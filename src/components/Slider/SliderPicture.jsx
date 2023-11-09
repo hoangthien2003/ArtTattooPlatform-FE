@@ -18,9 +18,14 @@ const SliderPicture = ({ image }) => {
     autoplay: true,
     autoplaySpeed: 2500,
     pauseOnHover: true,
+    maxWidth: '100%',
+    maxHeight: '100%',
+    width: 'auto',
+    height: 'auto'
+
   };
   return (
-    <Box>
+    <Box style={{ width: '500px', height: '300px' }}>
       <img className="box-slider" src={image} />
     </Box>
   );
