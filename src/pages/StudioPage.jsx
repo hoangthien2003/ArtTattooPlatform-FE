@@ -68,15 +68,17 @@ console.log(studio)
                         variant="body1"
                         component={Link}
                         to="/"
-                        sx={{ textDecoration: "none" }}
-                    >
+                        sx={{
+							textDecoration: "none",
+							"&:hover": {
+								color: "#FF7F22",
+							},
+						}}                    >
                         Home
                     </Typography>
                 </Stack>
                 <Typography
                     variant="body1"
-                    component={Link}
-                    to="/StudioPage"
                     sx={{ textDecoration: "none" }}
                 >
                     Studio

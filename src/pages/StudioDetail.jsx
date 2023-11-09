@@ -121,8 +121,12 @@ export default function StudioDetail() {
             variant="body1"
             component={Link}
             to="/"
-            sx={{ textDecoration: "none" }}
-          >
+            sx={{
+							textDecoration: "none",
+							"&:hover": {
+								color: "#FF7F22",
+							},
+						}}          >
             Home
           </Typography>
         </Stack>
@@ -130,8 +134,12 @@ export default function StudioDetail() {
           variant="body1"
           component={Link}
           to="/StudioPage"
-          sx={{ textDecoration: "none" }}
-        >
+          sx={{
+            textDecoration: "none",
+            "&:hover": {
+              color: "#FF7F22",
+            },
+          }}        >
           Studio
         </Typography>
         <Typography variant="body1" sx={{ textDecoration: "none" }}>
