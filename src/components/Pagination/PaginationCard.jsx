@@ -1,8 +1,8 @@
-import { Box, Grid, Pagination, Stack } from "@mui/material";
+import { Box, Grid, Pagination, Stack, Typography } from "@mui/material";
 import React, { useState } from "react";
 import CardService from "../Card/CardService";
 
-const PaginationCard = ({ serviceList }) => {
+const PaginationCard = ({ serviceList, searchQuery  }) => {
   const itemsPerPage = 9;
   const [page, setPage] = useState(1);
 
@@ -12,7 +12,15 @@ const PaginationCard = ({ serviceList }) => {
 
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const displayedServices = serviceList.slice(startIndex, endIndex);
+  const displayedServices = searchQuery
+    ? serviceList
+        .filter(service =>
+          service && service.serviceName &&
+          typeof service.serviceName === "string" &&
+          service.serviceName.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+        .slice(startIndex, endIndex)
+    : serviceList.slice(startIndex, endIndex);
 
   return (
     <Stack
@@ -31,10 +39,8 @@ const PaginationCard = ({ serviceList }) => {
         justifyContent={"center"}
         alignItems={"center"}
       >
-        {displayedServices.map((service, index) => {
-          // console.log("service:", displayedServices);
-
-          return (
+        {displayedServices.length > 0 ? (
+          displayedServices.map((service, index) => (
             <Grid item xs={4} sm={4} md={4} key={index}>
               <CardService
                 serviceId={service.serviceId}
@@ -46,8 +52,14 @@ const PaginationCard = ({ serviceList }) => {
                 price={service.price}
               />
             </Grid>
-          );
-        })}
+          ))
+        ) : (
+          <Box className="mt-5 mb-5">
+            <Typography variant="h5">
+            No services found
+            </Typography>
+            </Box>
+        )}
       </Grid>
       <Pagination
         count={Math.ceil(serviceList.length / itemsPerPage)}
