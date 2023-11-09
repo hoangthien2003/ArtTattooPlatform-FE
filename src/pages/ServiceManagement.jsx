@@ -34,26 +34,60 @@ export default function ServiceManagement() {
 		return;
 	}, []);
 
-	const handleChange = (event) => {
-		setArtist(event.target.value);
-	};
-	//Api
-	const [studioService, setStudioService] = useState([]);
-	useEffect(() => {
-		getStudioService();
-	}, []);
 
-	const getStudioService = async () => {
-		await axios
-			.get(import.meta.env.VITE_REACT_APP_API_URL + "/Service/GetAll")
-			.then((res) => {
-				setStudioService(res.data.$values);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-		console.log(studioService)
-	};
+	//Api
+	const [studio, setStudio] = useState([]);
+    const [studioService, setServiceData] = useState([]);
+
+    useEffect(() => {
+        getStudio();
+        getServiceByStudioId();
+    }, []);
+
+    const getStudio = async () => {
+        try {
+            const response = await axios.get(import.meta.env.VITE_REACT_APP_API_URL + `/Studio/GetStudioByManager/${user.userID}`);
+            const studioData = response.data.studio;
+            console.log("Studio Data:", studioData);
+
+            if (studioData) {
+                const studioId = studioData.studioId;
+                setStudio(studioData);
+                getServiceByStudioId(studioId);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const getServiceByStudioId = async (studioId) => {
+        try {
+            const response = await axios.get(
+                import.meta.env.VITE_REACT_APP_API_URL +
+                `/Service/GetServiceByStudio/${studioId}`
+            );
+            setServiceData(response.data.$values);
+            console.log(response)
+        } catch (error) {
+            console.log(error);
+        }
+    };
+	// const [studioService, setStudioService] = useState([]);
+	// useEffect(() => {
+	// 	getStudioService();
+	// }, []);
+
+	// const getStudioService = async () => {
+	// 	await axios
+	// 		.get(import.meta.env.VITE_REACT_APP_API_URL + "/Service/GetAll")
+	// 		.then((res) => {
+	// 			setStudioService(res.data.$values);
+	// 		})
+	// 		.catch((err) => {
+	// 			console.log(err);
+	// 		});
+	// 	console.log(studioService)
+	// };
 	return (
 		<Container className="mt-5 mb-5">
 			<Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: 5 }}>
@@ -89,15 +123,11 @@ export default function ServiceManagement() {
 				<Table sx={{ minWidth: 650 }} aria-label="simple table">
 					<TableHead>
 						<TableRow>
+						<TableCell>serviceId</TableCell>
 							<TableCell>serviceName</TableCell>
 							<TableCell align="left">price</TableCell>
 							<TableCell align="left">description</TableCell>
 							<TableCell align="left">imageService</TableCell>
-							<TableCell align="left">imageService</TableCell>
-							<TableCell align="left">imageService</TableCell>
-							<TableCell align="left">imageService</TableCell>
-
-							<TableCell align="left"></TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -110,15 +140,14 @@ export default function ServiceManagement() {
 								}}
 							>
 								<TableCell component="th" scope="row">
+									{service.serviceId}
+								</TableCell>
+								<TableCell component="th" scope="row">
 									{service.serviceName}
 								</TableCell>
 								<TableCell align="left">{service.price}</TableCell>
 								<TableCell align="left" className="ellipsis" sx={{ maxWidth: '200px' }}>{service.description}</TableCell>
 								<TableCell align="left" className="ellipsis" sx={{ maxWidth: '200px' }}>{service.imageService}</TableCell>
-								<TableCell align="left" className="ellipsis" sx={{ maxWidth: '200px' }}>{service.imageService}</TableCell>
-								<TableCell align="left" className="ellipsis" sx={{ maxWidth: '200px' }}>{service.imageService}</TableCell>
-								<TableCell align="left" className="ellipsis" sx={{ maxWidth: '200px' }}>{service.imageService}</TableCell>
-								<TableCell align="left">edit</TableCell>
 							</TableRow>
 						))}
 
