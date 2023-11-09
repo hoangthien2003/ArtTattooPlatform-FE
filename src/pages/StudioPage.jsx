@@ -46,10 +46,10 @@ console.log(studio)
     const sortStudios = (a, b) => {
         if (sortType === "name") {
             return a.studioName.localeCompare(b.studioName);
-        } else {
-            // Add more sorting options if needed
-            return 0;
+        } else if (sortType === "rating") {
+            return b.ratingStb - a.ratingStb; // Compare ratings in descending order
         }
+        return 0;
     };
 
     const sortedStudios = [...studio].sort(sortStudios);
@@ -112,7 +112,7 @@ console.log(studio)
                                         <Typography variant="subtitle1" color="text.secondary" component="div" className='ellipsis'>
                                             {studio.description}
                                         </Typography>
-                                        <Rating name="size-small" readOnly defaultValue={4} size="small" className='mt-1' />
+                                        <Rating size="small" value={studio.ratingStb} readOnly />
                                     </CardContent>
                                 </Box>
                             </CardActionArea>
