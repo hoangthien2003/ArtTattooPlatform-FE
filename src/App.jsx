@@ -45,6 +45,7 @@ function App() {
       const token = localStorage.getItem("token");
       if (token != null) {
         const user = jwtDecode(token);
+        // console.log(user);
         setUserZustand({
           userID: user.UserID,
           email: user.Email,

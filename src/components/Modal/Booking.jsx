@@ -18,11 +18,14 @@ import { useUserInfo } from "../../stores/useUserInfo";
 const steps = ["User choose", "Bill"];
 
 const Booking = (props) => {
+  const user = useUserInfo((state) => state.user);
   const [activeStep, setActiveStep] = useState(0);
-
+  const phoneRef = useRef();
   const timeRef = useRef();
   const dateRef = useRef();
   const [booking, setBooking] = useState({
+    name: "",
+    phoneNumber: "",
     dateTime: "",
   });
   const { data } = props;
@@ -39,6 +42,7 @@ const Booking = (props) => {
   };
 
   const handleNext = () => {
+    const phoneValue = phoneRef.current.value;
     const dateValue = dateRef.current.value;
     const timeValue = timeRef.current.value;
     const dateTimeValue = dateValue.concat(" ", formatTime(timeValue));
@@ -47,6 +51,8 @@ const Booking = (props) => {
       // console.log(nameValue, phoneValue, dateValue, timeValue);
       // console.log(nameValue, phoneValue, dateTimeValue);
       setBooking({
+        name: user.userName,
+        phoneNumber: phoneValue,
         dateTime: dateTimeValue,
       });
 
@@ -61,10 +67,12 @@ const Booking = (props) => {
   const handleSubmit = async () => {
     const token = localStorage.getItem("token");
     const bookingRequest = {
-      BookingDate: booking.dateTime,
-      ServiceId: data.service.serviceId,
-      StudioId: data.studio.studioID,
-      Total: data.service.price,
+      fullName: user.userName,
+      phoneNumber: booking.phoneNumber,
+      bookingDate: booking.dateTime,
+      serviceId: data.service.serviceId,
+      studioId: data.studio.studioID,
+      total: data.service.price,
     };
     await axios
       .post(
@@ -106,6 +114,7 @@ const Booking = (props) => {
         {activeStep === 0 && (
           <FormBooking
             studioId={data.studio.studioID}
+            phoneRef={phoneRef}
             dateRef={dateRef}
             timeRef={timeRef}
           />

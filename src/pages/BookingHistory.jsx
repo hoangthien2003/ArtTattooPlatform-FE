@@ -15,7 +15,7 @@ import {
   TableCell,
   TableBody,
 } from "@mui/material";
-import { Delete, Home } from "@mui/icons-material";
+import { Book, Delete, Home } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserInfo } from "../stores/useUserInfo";
 import axios from "axios";
@@ -32,7 +32,6 @@ export default function BookingHistory() {
     if (user.role != "MB" && user.role != "AD") navigate("/access-denied");
     getBookingList();
   }, []);
-
   const getBookingList = async () => {
     await axios
       .get(
@@ -92,22 +91,10 @@ export default function BookingHistory() {
             PENDING
           </Typography>
         );
-      case "Completed":
-        return (
-          <Typography variant="text" color="lightgreen">
-            COMPLETED
-          </Typography>
-        );
       case "Cancelled":
         return (
           <Typography variant="text" color="red">
             PENDING
-          </Typography>
-        );
-      case "Doing":
-        return (
-          <Typography variant="text" color="primary">
-            DOING
           </Typography>
         );
       case "Confirm":
@@ -150,54 +137,60 @@ export default function BookingHistory() {
       <Typography variant="h5" className="mb-3">
         Booking History
       </Typography>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell align="left">Service</TableCell>
-              <TableCell align="left">Studio</TableCell>
-              <TableCell align="left">Price</TableCell>
-              <TableCell align="left">Date</TableCell>
-              <TableCell align="left">Status</TableCell>
-              <TableCell align="left">Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {bookingList.map((booking, index) => (
-              <TableRow
-                key={index}
-                sx={{
-                  "&:last-child td, &:last-child th": {
-                    border: 0,
-                  },
-                }}
-              >
-                <TableCell component="th" scope="row">
-                  {booking.$id}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {booking.serviceName}
-                </TableCell>
-                <TableCell align="left">{booking.studioName}</TableCell>
-                <TableCell align="left">{booking.total}</TableCell>
-                <TableCell align="left">
-                  {renderFormat(booking.bookingDate)}
-                  {/* {booking.bookingDate} */}
-                </TableCell>
-                <TableCell align="left">
-                  {renderStatusBooking(booking.status)}
-                </TableCell>
-                <TableCell align="left">
-                  <IconButton onClick={() => deleteBooking(booking.$id)}>
-                    <Delete />
-                  </IconButton>
-                </TableCell>
+      {bookingList === undefined ? (
+        <Stack direction="row" justifyContent="center" spacing={2}>
+          <Book fontSize="large" />
+          <h2>You have no booking !!!</h2>
+        </Stack>
+      ) : (
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="left">Service</TableCell>
+                <TableCell align="left">Studio</TableCell>
+                <TableCell align="left">Address</TableCell>
+                <TableCell align="left">Price</TableCell>
+                <TableCell align="left">Date</TableCell>
+                <TableCell align="left">Status</TableCell>
+                <TableCell align="left">Action</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {bookingList.map((booking, index) => (
+                <TableRow
+                  key={booking.bookingId}
+                  sx={{
+                    "&:last-child td, &:last-child th": {
+                      border: 0,
+                    },
+                  }}
+                >
+                  <TableCell component="th" scope="row">
+                    {booking.serviceName}
+                  </TableCell>
+                  <TableCell align="left">{booking.studioName}</TableCell>
+                  <TableCell align="left">{booking.address}</TableCell>
+                  <TableCell align="left">{booking.total}</TableCell>
+                  <TableCell align="left">
+                    {renderFormat(booking.bookingDate)}
+                  </TableCell>
+                  <TableCell align="left">
+                    {renderStatusBooking(booking.status)}
+                  </TableCell>
+                  <TableCell align="left">
+                    <IconButton
+                      onClick={() => deleteBooking(booking.bookingId)}
+                    >
+                      <Delete />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
     </Container>
   );
 }
