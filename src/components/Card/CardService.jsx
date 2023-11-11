@@ -126,9 +126,6 @@ const CardService = (props) => {
         </Stack>
       </CardContent>
       <CardActions sx={{ justifyContent: "space-between" }}>
-        <Button size="small" variant="outlined">
-          Add
-        </Button>
         <Button size="small" variant="outlined" onClick={handleOnClickBooking}>
           Booking
         </Button>
