@@ -11,6 +11,16 @@ import React, { useState } from "react";
 import SliderSlotTime from "../Slider/SliderSlotTime";
 
 const FormBooking = ({ phoneRef, dateRef, timeRef, studioId }) => {
+  const [data, setData] = useState({
+    
+  })
+  const handleOnChange = (event) => {
+    const name = event.target.value;
+    let value = event.target.value;
+
+
+  };
+
   return (
     <Container maxWidth="sm">
       <Stack spacing={2} paddingTop={3} textAlign={"center"}>
@@ -20,6 +30,8 @@ const FormBooking = ({ phoneRef, dateRef, timeRef, studioId }) => {
             <TextField
               variant="outlined"
               inputRef={phoneRef}
+              onChange={handleOnChange}
+              name="phoneNumber"
               placeholder="PhoneNumber"
               required
             />

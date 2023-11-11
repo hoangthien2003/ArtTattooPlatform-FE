@@ -31,6 +31,7 @@ import { googleLogout } from "@react-oauth/google";
 import Register from "../Modal/Register";
 import Login from "../Modal/Login";
 import { useUserInfo } from "../../stores/useUserInfo";
+import { ShoppingCart } from "@mui/icons-material";
 
 const Search = styled("div")(({ theme }) => ({
 	position: "relative",
@@ -318,7 +319,7 @@ export default function Navbar(props) {
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
-
+	
 	return (
 		<Box sx={{ flexGrow: 1 }}>
 			<AppBar
@@ -413,6 +414,7 @@ export default function Navbar(props) {
 									display: "flex",
 									alignItems: "center",
 								}}
+
 							>
 								<SearchIconWrapper>
 									<SearchIcon />
@@ -420,6 +422,7 @@ export default function Navbar(props) {
 								<StyledInputBase
 									placeholder="Anime design tattoo..."
 									inputProps={{ "aria-label": "search" }}
+							
 								/>
 							</Search>
 						</Slide>
@@ -483,7 +486,7 @@ export default function Navbar(props) {
 							alignItems: "center",
 						}}
 					>
-						<IconButton
+						{/* <IconButton
 							size="large"
 							color="inherit"
 							onClick={() => {
@@ -497,7 +500,7 @@ export default function Navbar(props) {
 							}}
 						>
 							<SearchIcon />
-						</IconButton>
+						</IconButton> */}
 						{token ? (
 							<Box
 								sx={{
@@ -509,18 +512,6 @@ export default function Navbar(props) {
 									},
 								}}
 							>
-								<IconButton
-									size="large"
-									aria-label="show 17 new notifications"
-									color="inherit"
-									sx={{
-										marginRight: 2,
-									}}
-								>
-									<Badge badgeContent={17} color="error">
-										<NotificationsIcon />
-									</Badge>
-								</IconButton>
 								<Typography
 									variant="subtitle2"
 									sx={{

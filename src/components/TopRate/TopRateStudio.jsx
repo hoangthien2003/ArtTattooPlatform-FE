@@ -29,6 +29,7 @@ const TopRateStudio = () => {
         borderRadius: 1,
         border: "2px solid #322F2F",
       }}
+      className="mb-5"
     >
       <Stack
         spacing={2}

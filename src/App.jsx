@@ -22,7 +22,6 @@ import StudioPage from "./pages/StudioPage";
 import NotAccess from "./pages/NotAccess";
 import NotFound from "./pages/NotFound";
 import { useUserInfo } from "./stores/useUserInfo";
-import StudioManagement from "./pages/StudioManagement";
 
 function App() {
   const HomePage = lazy(() => import("./pages/Home"));
@@ -45,7 +44,7 @@ function App() {
       const token = localStorage.getItem("token");
       if (token != null) {
         const user = jwtDecode(token);
-        // console.log(user);
+        console.log(user);
         setUserZustand({
           userID: user.UserID,
           email: user.Email,

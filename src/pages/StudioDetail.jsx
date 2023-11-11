@@ -38,7 +38,7 @@ export default function StudioDetail() {
     try {
       const response = await axios.get(
         import.meta.env.VITE_REACT_APP_API_URL +
-          `/Studio/GetStudioByID/${studioId}`
+        `/Studio/GetStudioByID/${studioId}`
       );
       // console.log(response.data);
       setStudioData(response.data);
@@ -51,7 +51,7 @@ export default function StudioDetail() {
     try {
       const response = await axios.get(
         import.meta.env.VITE_REACT_APP_API_URL +
-          `/Service/GetServiceByStudio/${studioId}`
+        `/Service/GetServiceByStudio/${studioId}`
       );
       setServiceData(response.data.$values);
     } catch (error) {
@@ -121,8 +121,12 @@ export default function StudioDetail() {
             variant="body1"
             component={Link}
             to="/"
-            sx={{ textDecoration: "none" }}
-          >
+            sx={{
+							textDecoration: "none",
+							"&:hover": {
+								color: "#FF7F22",
+							},
+						}}          >
             Home
           </Typography>
         </Stack>
@@ -130,8 +134,12 @@ export default function StudioDetail() {
           variant="body1"
           component={Link}
           to="/StudioPage"
-          sx={{ textDecoration: "none" }}
-        >
+          sx={{
+            textDecoration: "none",
+            "&:hover": {
+              color: "#FF7F22",
+            },
+          }}        >
           Studio
         </Typography>
         <Typography variant="body1" sx={{ textDecoration: "none" }}>
@@ -172,7 +180,7 @@ export default function StudioDetail() {
               </Typography>
               <Rating
                 name="size-small"
-                value={studioData && studioData.RatingStb}
+                value={studioData && studioData.ratingStb}
                 size="small"
                 readOnly
               />
