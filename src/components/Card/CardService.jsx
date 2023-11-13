@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import React, { forwardRef, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "../../styles/CardService.css";
 import Booking from "../Modal/Booking";
 import { useUserInfo } from "../../stores/useUserInfo";
@@ -69,7 +69,11 @@ const CardService = (props) => {
   };
 
   const handleOnClickService = (event) => {
-    navigate(`/services/${serviceId}`);
+    navigate(`/StudioDetail/${studioId}`);
+  };
+
+  const handeleOnClickStudio = (event) => {
+    navigate(`/`);
   };
 
   const handleOnClickBooking = (event) => {
