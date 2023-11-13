@@ -18,17 +18,19 @@ import { useUserInfo } from "../../stores/useUserInfo";
 const steps = ["User choose", "Bill"];
 
 const Booking = (props) => {
-  const user = useUserInfo((state) => state.user);
   const [activeStep, setActiveStep] = useState(0);
   const phoneRef = useRef();
   const timeRef = useRef();
   const dateRef = useRef();
+  const countRef = useRef();
   const [booking, setBooking] = useState({
     name: "",
     phoneNumber: "",
     dateTime: "",
+    count: 0,
   });
   const { data } = props;
+  console.log(data);
   const navigate = useNavigate();
   const userInfo = useUserInfo((state) => state.user);
 
@@ -38,6 +40,9 @@ const Booking = (props) => {
 
     const timeOfDay = hours >= 12 ? "PM" : "AM";
 
+    if (hours >= 12) {
+      return `${hours - 12}:${minutes} ${timeOfDay}`;
+    }
     return `${hours}:${minutes} ${timeOfDay}`;
   };
 
@@ -45,15 +50,32 @@ const Booking = (props) => {
     const phoneValue = phoneRef.current.value;
     const dateValue = dateRef.current.value;
     const timeValue = timeRef.current.value;
-    const dateTimeValue = dateValue.concat(" ", formatTime(timeValue));
+    const countValue = countRef.current.value;
+    const dateTimeValue = dateValue.concat(", ", formatTime(timeValue));
+    let today = new Date();
+    let currentDay = today.toLocaleDateString();
+    let currentTime = today.toLocaleString();
+    // console.log("currentTime: " + currentTime);
+    // console.log("dateTimeValue: " + dateTimeValue);
 
-    if (dateValue && timeValue) {
-      // console.log(nameValue, phoneValue, dateValue, timeValue);
-      // console.log(nameValue, phoneValue, dateTimeValue);
+    console.log(countValue);
+
+    if (!dateValue && !timeValue && !phoneValue && countValue === undefined) {
+      toast.error("Please input form booking!");
+    } else if (phoneValue.trim() === "") {
+      toast.error("Must be input phoneNumber!");
+    } else if (countValue === undefined) {
+      toast.error("Must be selectable participants!");
+    } else if (dateValue < currentDay) {
+      toast.error("Please don't select a pass date!");
+    } else if (dateTimeValue < currentTime) {
+      toast.error("Please don't select a pass time!");
+    } else {
       setBooking({
-        name: user.userName,
+        name: userInfo.userName,
         phoneNumber: phoneValue,
         dateTime: dateTimeValue,
+        count: countValue,
       });
 
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -67,13 +89,14 @@ const Booking = (props) => {
   const handleSubmit = async () => {
     const token = localStorage.getItem("token");
     const bookingRequest = {
-      fullName: user.userName,
+      fullName: userInfo.userName,
       phoneNumber: booking.phoneNumber,
       bookingDate: booking.dateTime,
       serviceId: data.service.serviceId,
       studioId: data.studio.studioID,
-      total: data.service.price,
+      total: data.service.price * booking.count,
     };
+    console.log(bookingRequest);
     await axios
       .post(
         `${import.meta.env.VITE_REACT_APP_API_URL}/Booking/AddBooking/${
@@ -88,9 +111,7 @@ const Booking = (props) => {
       )
       .then((res) => {
         toast.success("Booking saved successfully");
-        // console.log(token);
-        console.log(res);
-        navigate(0);
+        navigate("/");
       })
       .catch((err) => {
         toast.error("Error saving booking!!!!!");
@@ -117,6 +138,7 @@ const Booking = (props) => {
             phoneRef={phoneRef}
             dateRef={dateRef}
             timeRef={timeRef}
+            countRef={countRef}
           />
         )}
         {activeStep === 1 && <Invoice booking={booking} data={data} />}

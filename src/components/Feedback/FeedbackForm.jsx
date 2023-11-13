@@ -12,8 +12,10 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import { useUserInfo } from "../../stores/useUserInfo";
 
 export default function FeedbackForm({ serviceId }) {
+  const user = useUserInfo((state) => state.user);
   const [title, setTitle] = React.useState("");
   const [rating, setRating] = React.useState(0);
   const [open, setOpen] = React.useState(false);
@@ -39,23 +41,19 @@ export default function FeedbackForm({ serviceId }) {
     // Lấy giá trị đầu vào của người dùng
     const titleValue = title;
     const ratingValue = rating;
-    const date = new Date(Date.now());
-    const DateFormat = date.toLocaleString();
 
     if (token != null) {
       const email = jwtDecode(token).email;
       const feedbackRequest = {
         FeedbackDetail: titleValue,
-        Rating: ratingValue,
+        UserID: user.userID,
         ServiceID: serviceId,
-        FeedbackDate: DateFormat,
+        Rating: ratingValue,
       };
 
       await axios
         .post(
-          `${
-            import.meta.env.VITE_REACT_APP_API_URL
-          }/Feedback/AddFeedback${email}`,
+          `${import.meta.env.VITE_REACT_APP_API_URL}/Feedback/AddFeedback`,
           feedbackRequest,
           {
             headers: {
@@ -66,6 +64,7 @@ export default function FeedbackForm({ serviceId }) {
         .then((res) => {
           toast.success("Feedback saved successfully");
           console.log(res);
+          handleClickClose();
         })
         .catch((err) => {
           toast.error("Feedback saved failed");

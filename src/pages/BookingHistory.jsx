@@ -107,7 +107,7 @@ export default function BookingHistory() {
   };
 
   return (
-    <Container className="mt-5 mb-5">
+    <Container className="mt-5 mb-5" sx={{ paddingBottom: 50 }}>
       <Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: 5 }}>
         <Stack
           spacing={1}
