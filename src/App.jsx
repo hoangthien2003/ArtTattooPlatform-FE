@@ -47,7 +47,7 @@ function App() {
         setUserZustand({
           userID: user.UserID,
           email: user.Email,
-          role: user.Role,
+          role: user.role,
           userName: user.UserName,
         });
       }
