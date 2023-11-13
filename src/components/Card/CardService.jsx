@@ -85,7 +85,6 @@ const CardService = (props) => {
     setOpen(false);
   };
 
-
   return (
     <Card sx={{ width: "95%", paddingBottom: 2 }} key={serviceId}>
       <CardMedia
@@ -121,7 +120,7 @@ const CardService = (props) => {
               {serviceName}
             </Typography>
             <Rating size="small" value={rate} readOnly />
-            <Typography variant="subtitle2">Cost: {price} VNĐ</Typography>
+            <Typography variant="subtitle2">Cost: {price} $</Typography>
           </Stack>
         </Stack>
       </CardContent>
@@ -132,6 +131,11 @@ const CardService = (props) => {
         <Modal
           open={open}
           onClose={handleClose}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
@@ -140,7 +144,6 @@ const CardService = (props) => {
       </CardActions>
     </Card>
   );
-
 };
 
 export default CardService;

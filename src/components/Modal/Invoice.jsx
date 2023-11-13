@@ -16,6 +16,7 @@ const Invoice = (props) => {
               <Typography variant="subtitle2">Name:</Typography>
               <Typography variant="subtitle2">PhoneNumber:</Typography>
               <Typography variant="subtitle2">Date & time:</Typography>
+              <Typography variant="subtitle2">Amount of people:</Typography>
               <Typography variant="subtitle2">Service:</Typography>
               <Typography variant="subtitle2">Studio:</Typography>
               <Typography variant="subtitle2">Price:</Typography>
@@ -26,15 +27,15 @@ const Invoice = (props) => {
               <Typography variant="subtitle2">{booking.name}</Typography>
               <Typography variant="subtitle2">{booking.phoneNumber}</Typography>
               <Typography variant="subtitle2">{booking.dateTime}</Typography>
+              <Typography variant="subtitle2">{booking.count}</Typography>
               <Typography variant="subtitle2">
                 {data && data.service && data.service.serviceName}
               </Typography>
               <Typography variant="subtitle2">
-                {console.log(data && data.studio && data.studio.studioName)}
                 {data && data.studio && data.studio.studioName}
               </Typography>
               <Typography variant="subtitle2">
-                {data && data.service && data.service.price}.000 VND
+                {data && data.service && data.service.price * booking.count} $
               </Typography>
             </Stack>
           </Grid>
