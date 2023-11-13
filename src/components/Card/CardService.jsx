@@ -69,12 +69,12 @@ const CardService = (props) => {
   };
 
   const handleOnClickService = (event) => {
-    navigate(`/StudioDetail/${studioId}`);
+    navigate(`/services/${serviceId}`);
   };
 
-  const handeleOnClickStudio = (event) => {
-    navigate(`/`);
-  };
+  // const handeleOnClickStudio = (event) => {
+  //   navigate(`/`);
+  // };
 
   const handleOnClickBooking = (event) => {
     const token = localStorage.getItem("token");
