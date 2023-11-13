@@ -79,6 +79,7 @@ const FormBooking = ({ phoneRef, dateRef, timeRef, countRef, studioId }) => {
                 variant="outlined"
                 inputRef={phoneRef}
                 onChange={onChange}
+                // defaultValue={phoneNumber}
                 placeholder="PhoneNumber"
                 required
               />
