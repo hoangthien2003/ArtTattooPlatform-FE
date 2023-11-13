@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import React, { forwardRef, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "../../styles/CardService.css";
 import Booking from "../Modal/Booking";
 import { useUserInfo } from "../../stores/useUserInfo";
@@ -69,7 +69,11 @@ const CardService = (props) => {
   };
 
   const handleOnClickService = (event) => {
-    navigate(`/services/${serviceId}`);
+    navigate(`/StudioDetail/${studioId}`);
+  };
+
+  const handeleOnClickStudio = (event) => {
+    navigate(`/`);
   };
 
   const handleOnClickBooking = (event) => {
@@ -84,7 +88,6 @@ const CardService = (props) => {
   const handleClose = () => {
     setOpen(false);
   };
-
 
   return (
     <Card sx={{ width: "95%", paddingBottom: 2 }} key={serviceId}>
@@ -121,18 +124,22 @@ const CardService = (props) => {
               {serviceName}
             </Typography>
             <Rating size="small" value={rate} readOnly />
-            <Typography variant="subtitle2">Cost: {price} VNĐ</Typography>
+            <Typography variant="subtitle2">Cost: {price} $</Typography>
           </Stack>
         </Stack>
       </CardContent>
       <CardActions sx={{ justifyContent: "space-between" }}>
-       
         <Button size="small" variant="outlined" onClick={handleOnClickBooking}>
           Booking
         </Button>
         <Modal
           open={open}
           onClose={handleClose}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
@@ -141,7 +148,6 @@ const CardService = (props) => {
       </CardActions>
     </Card>
   );
-
 };
 
 export default CardService;

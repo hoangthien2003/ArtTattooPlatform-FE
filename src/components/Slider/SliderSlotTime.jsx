@@ -74,11 +74,16 @@ const SliderSlotTime = ({ timeRef, studioId }) => {
   };
 
   return (
-    <Box>
-      <Stack spacing={3} direction={"row"} justifyContent={"flex-start"}>
-        <Typography color="#FF7F22">Studio Working:</Typography>
-        <Typography>
-          {startTime} - {endTime}
+    <Box sx={{ width: "100%" }}>
+      <Stack spacing={1}>
+        <Stack spacing={3} direction={"row"} justifyContent={"flex-start"}>
+          <Typography color="#FF7F22">Studio Working:</Typography>
+          <Typography>
+            {startTime} - {endTime}
+          </Typography>
+        </Stack>
+        <Typography variant="body2" textAlign="left" sx={{ color: "gray" }}>
+          Note: Please make an appointment 1 hour before the current time{" "}
         </Typography>
       </Stack>
       <Grid
