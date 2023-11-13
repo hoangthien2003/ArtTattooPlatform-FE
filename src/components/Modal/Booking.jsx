@@ -92,6 +92,7 @@ const Booking = (props) => {
       fullName: userInfo.userName,
       phoneNumber: booking.phoneNumber,
       bookingDate: booking.dateTime,
+      quantity: booking.count,
       serviceId: data.service.serviceId,
       studioId: data.studio.studioID,
       total: data.service.price * booking.count,
