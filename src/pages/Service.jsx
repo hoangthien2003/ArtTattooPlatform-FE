@@ -16,7 +16,7 @@ const Search = styled("div")(({ theme }) => ({
 	},
 	marginRight: theme.spacing(2),
 	marginLeft: 0,
-	width: "100%",
+	width: "30%",
 	[theme.breakpoints.up("sm")]: {
 		marginLeft: theme.spacing(3),
 		width: "auto",
@@ -40,86 +40,89 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 		// vertical padding + font size from searchIcon
 		paddingLeft: `calc(1em + ${theme.spacing(4)})`,
 		transition: theme.transitions.create("width"),
-		width: "100%",
+		width: "30%",
 		[theme.breakpoints.up("md")]: {
-			width: "66rem",
+			width: "16rem",
 		},
 	},
 }));
 const Service = () => {
-  const [serviceList, setServiceList] = useState([]);
+	const [serviceList, setServiceList] = useState([]);
 
-  useEffect(() => {
-    getServiceList();
-  }, []);
+	useEffect(() => {
+		getServiceList();
+	}, []);
 
-  const getServiceList = async () => {
-    await axios
-      .get(import.meta.env.VITE_REACT_APP_API_URL + "/Service/GetAll")
-      .then((res) => {
-        setServiceList(res.data.$values);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  //search
-  const [searchQuery, setSearchQuery] = useState("");
+	const getServiceList = async () => {
+		await axios
+			.get(import.meta.env.VITE_REACT_APP_API_URL + "/Service/GetAll")
+			.then((res) => {
+				setServiceList(res.data.$values);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+	//search
+	const [searchQuery, setSearchQuery] = useState("");
 
 
-  return (
-    <Container maxWidth="lg" sx={{ paddingTop: 5, paddingBottom: 5 }}>
-      <Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: 5 }}>
-        <Stack
-          spacing={1}
-          direction={"row"}
-          justifyContent={"center"}
-          alignItems={"center"}
-        >
-          <Home fontSize="inherit" />
-          <Typography
-            variant="body1"
-            component={Link}
-            to="/"
-            sx={{
+	return (
+		<Container maxWidth="lg" sx={{ paddingTop: 5, paddingBottom: 5 }}>
+			<Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
+			<Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: 5 }}>
+				<Stack
+					spacing={1}
+					direction={"row"}
+					justifyContent={"center"}
+					alignItems={"center"}
+				>
+					<Home fontSize="inherit" />
+					<Typography
+						variant="body1"
+						component={Link}
+						to="/"
+						sx={{
 							textDecoration: "none",
 							"&:hover": {
 								color: "#FF7F22",
 							},
 						}}          >
-            Home
-          </Typography>
-        </Stack>
-        <Typography
-          variant="body1"
-          sx={{ textDecoration: "none" }}
-        >
-          Service
-        </Typography>
-      </Breadcrumbs>
-      <Search
-								sx={{
-									display: "flex",
-									alignItems: "center",
-								}}
+						Home
+					</Typography>
+				</Stack>
+				<Typography
+					variant="body1"
+					sx={{ textDecoration: "none" }}
+				>
+					Service
+				</Typography>
+			</Breadcrumbs>
+			
+			<Search
+				sx={{
+					display: "flex",
+					alignItems: "center",
+				}}
 
-							>
-								<SearchIconWrapper>
-									<SearchIcon />
-								</SearchIconWrapper>
-								<StyledInputBase
-									placeholder="search services by name"
-									inputProps={{ "aria-label": "search" }}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                
-								/>
-							</Search>
-              <PaginationCard serviceList={serviceList} searchQuery={searchQuery} />
+			>
+				<SearchIconWrapper>
+					<SearchIcon />
+				</SearchIconWrapper>
+				<StyledInputBase
+					placeholder="search services by name"
+					inputProps={{ "aria-label": "search" }}
+					value={searchQuery}
+					onChange={(e) => setSearchQuery(e.target.value)}
 
-      {/* <PaginationCard serviceList={serviceList} /> */}
-    </Container>
-  );
+				/>
+			</Search>
+			</Stack>
+			<PaginationCard serviceList={serviceList} searchQuery={searchQuery} />
+
+			{/* <PaginationCard serviceList={serviceList} /> */}
+		</Container>
+	);
 };
 
 export default Service;

@@ -20,6 +20,10 @@ const TopRateStudio = () => {
       .catch((err) => setData(err));
   };
 
+  data.sort((studioA, studioB) => {
+    return studioB.ratingStb - studioA.ratingStb;
+  });
+
   return (
     <Box
       sx={{

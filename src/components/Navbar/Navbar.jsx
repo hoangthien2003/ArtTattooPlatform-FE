@@ -186,7 +186,7 @@ export default function Navbar(props) {
 			<MenuItem
 				onClick={() => {
 					navigate("/profile");
-					handleMenuClose();
+					z;
 				}}
 			>
 				Profile
@@ -232,14 +232,7 @@ export default function Navbar(props) {
 				</MenuItem>
 			) : null}
 			<MenuItem onClick={handleMenuClose}>My account</MenuItem>
-			<MenuItem
-				onClick={() => {
-					handleLogout();
-					handleMenuClose();
-				}}
-			>
-				Logout
-			</MenuItem>
+			<MenuItem onClick={handleLogout}>Logout</MenuItem>
 		</Menu>
 	);
 
