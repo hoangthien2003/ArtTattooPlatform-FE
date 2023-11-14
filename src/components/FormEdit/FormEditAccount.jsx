@@ -48,6 +48,7 @@ const FormEditAccount = (props) => {
     event.preventDefault();
   };
 
+
   const validateInputs = () => {
     // Implement your validation logic here
     // For example, you can check if the passwords match

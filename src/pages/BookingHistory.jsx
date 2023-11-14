@@ -156,7 +156,7 @@ export default function BookingHistory() {
                 <TableCell align="left">Service</TableCell>
                 <TableCell align="left">Studio</TableCell>
                 <TableCell align="left">Address</TableCell>
-                <TableCell align="left">Price</TableCell>
+                <TableCell align="left">Price ($)</TableCell>
                 <TableCell align="left">Date</TableCell>
                 <TableCell align="left">Status</TableCell>
                 <TableCell align="left">Action</TableCell>
