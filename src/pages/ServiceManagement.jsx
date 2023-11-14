@@ -96,65 +96,102 @@ export default function ServiceManagement() {
 		setOpenDialog(false);
 	};
 
+	// ... (existing imports and code)
+
 	const addService = async () => {
 		try {
-			// Validate that all necessary fields are filled
-			if (!newServiceName || !newImageService || !newDescription || !studio || !newPrice) {
-				// Handle validation error, show a message, or prevent the addition
-				console.error("All fields are required.");
-				return;
+		  // Validate that all necessary fields are filled
+		  if (!newServiceName || !newImageService || !newDescription || !studio || !newPrice) {
+			console.error("All fields are required.");
+			return;
+		  }
+	  
+		  // Extract studioId and ensure it is a number
+		  const studioId = typeof studio.studioId === "object" ? studio.studioId.studioId : studio.studioId;
+	  
+		  // Convert newPrice to a number
+		  const priceAsDouble = parseFloat(newPrice);
+	  
+		  // Validate data types
+		  if (
+			typeof newServiceName !== "string" ||
+			typeof newImageService !== "string" ||
+			typeof newDescription !== "string" ||
+			isNaN(priceAsDouble) || // Check if priceAsDouble is a valid number
+			isNaN(studioId)         // Check if studioId is a valid number
+		  ) {
+			console.error("Invalid data types. Check the data types for each field.");
+			console.log("Data types:", {
+			  newServiceName: typeof newServiceName,
+			  newImageService: typeof newImageService,
+			  newDescription: typeof newDescription,
+			  studioId: typeof studioId,
+			  newPrice: typeof newPrice,
+			  priceAsDouble: typeof priceAsDouble,
+			});
+			return;
+		  }
+	  
+		  // Log data types and request payload
+		  console.log("Data types:", {
+			newServiceName: typeof newServiceName,
+			newImageService: typeof newImageService,
+			newDescription: typeof newDescription,
+			studioId: typeof studioId,
+			newPrice: typeof newPrice,
+			priceAsDouble: typeof priceAsDouble,
+		  });
+	  
+		  const payload = {
+			ServiceName: newServiceName,
+			Description: newDescription,
+			StudioID: studioId,
+			Price: priceAsDouble,
+			Image: newImageService,
+		  };
+		  console.log("Request Payload:", payload);
+	  
+		  // Make an API call to add the new service
+		  const token = localStorage.getItem("token");
+		  const response = await axios.post(
+			`${import.meta.env.VITE_REACT_APP_API_URL}/Service/Add`,
+			payload,
+			{
+			  headers: {
+				Authorization: `Bearer ${token}`,
+				"Content-Type": "application/json",
+			  },
 			}
-
-			// Extract studioId and ensure it is a number
-			const studioId = typeof studio.studioId === "object" ? studio.studioId.studioId : studio.studioId;
-
-			// Validate data types
-			if (
-				typeof newServiceName !== "string" ||
-				typeof newImageService !== "string" ||
-				typeof newDescription !== "string" ||
-				typeof studioId !== "number" ||
-				typeof newPrice !== "number"
-			) {
-				console.error("Invalid data types. Check the data types for each field.");
-				return;
-			}
-
-			const token = localStorage.getItem("token");
-
-			// Make an API call to add the new service
-			const response = await axios.post(
-				`${import.meta.env.VITE_REACT_APP_API_URL}/Service/Add`,
-				{
-					ServiceName: newServiceName,
-					Description: newDescription,
-					StudioID: studioId, // Ensure it's an integer
-					Price: parseFloat(newPrice),
-					Image: newImageService,
-				},
-				{
-					headers: {
-						Authorization: `Bearer ${token}`,
-						"Content-Type": "application/json",
-					},
-				}
-			);
-
-			const addedService = response.data;
-			setServiceData((prevData) => [...prevData, addedService]);
-
-			// Reset the input fields and close the dialog
-			setNewServiceName('');
-			setNewImageService('');
-			setNewDescription('');
-			setNewPrice('');
-			handleCloseDialog();
+		  );
+		  // Update the service data in the state
+		  const addedService = response.data;
+		  setServiceData((prevData) => [...prevData, addedService]);
+	  
+		  // Reset the input fields and close the dialog
+		  setNewServiceName('');
+		  setNewImageService('');
+		  setNewDescription('');
+		  setNewPrice('');
+		  handleCloseDialog();
 		} catch (error) {
-			// Handle errors as before
-			console.error("Error adding service:", error);
+		  console.error("Error adding service:", error);
+	  
+		  if (error.response) {
+			// The request was made and the server responded with a status code
+			// that falls out of the range of 2xx
+			console.error("Response data:", error.response.data);
+			console.error("Response status:", error.response.status);
+			console.error("Response headers:", error.response.headers);
+		  } else if (error.request) {
+			// The request was made but no response was received
+			console.error("No response received. Request details:", error.request);
+		  } else {
+			// Something happened in setting up the request that triggered an Error
+			console.error("Error setting up the request:", error.message);
+		  }
 		}
-	};
-
+	  };
+	  
 
 
 	//Edit service
@@ -182,26 +219,34 @@ export default function ServiceManagement() {
 
 	const updateService = async () => {
 		try {
+			const token = localStorage.getItem("token");
 
-			// Make an API call to update the service
-			const response = await axios.put(
-				import.meta.env.VITE_REACT_APP_API_URL + `/Service/UpdateService/${editServiceId}`,
-				{
-					serviceName: editServiceName,
-					imageService: editImageService,
-					description: editDescription,
-					price: parseFloat(editPrice),
-				}
-			);
-
+		  const response = await axios.put(
+			`${import.meta.env.VITE_REACT_APP_API_URL}/Service/UpdateService/${editServiceId}`,
+			{
+			  serviceName: editServiceName,
+			  imageService: editImageService,
+			  description: editDescription,
+			  price: parseFloat(editPrice),
+			},
+			{
+				headers: {
+				  Authorization: `Bearer ${token}`,
+				  'Content-Type': 'application/json',
+				},
+			  }
+		  );
+	  
+		  // Check if the response status is 200 (OK)
+		  if (response.status === 200) {
 			// Update the service data in the state
 			const updatedService = response.data;
 			setServiceData((prevData) =>
-				prevData.map((service) =>
-					service.serviceId === editServiceId ? updatedService : service
-				)
+			  prevData.map((service) =>
+				service.serviceId === editServiceId ? updatedService : service
+			  )
 			);
-
+	  
 			// Reset the input fields and close the dialog
 			setEditServiceId('');
 			setEditServiceName('');
@@ -209,10 +254,22 @@ export default function ServiceManagement() {
 			setEditDescription('');
 			setEditPrice('');
 			handleEditDialogClose();
+		  } else {
+			console.error('Update service failed. Unexpected response status:', response.status);
+		  }
 		} catch (error) {
-			console.error("Error updating service:", error);
+		  console.error('Error updating service:', error);
+		  if (error.response) {
+			console.error('Response data:', error.response.data);
+			console.error('Response status:', error.response.status);
+		  } else if (error.request) {
+			console.error('No response received. Request details:', error.request);
+		  } else {
+			console.error('Error setting up the request:', error.message);
+		  }
 		}
-	};
+	  };
+	  
 	//Delete service
 	const deleteService = async (serviceId) => {
 		try {
@@ -462,7 +519,6 @@ export default function ServiceManagement() {
 					<Button onClick={() => setDeleteSuccessDialog(false)}>OK</Button>
 				</DialogActions>
 			</Dialog>
-
 		</Container>
 	);
 }

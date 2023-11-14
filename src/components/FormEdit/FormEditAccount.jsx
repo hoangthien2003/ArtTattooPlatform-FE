@@ -1,55 +1,63 @@
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import React, { useState } from "react";
 import {
   Button,
   Container,
-  FilledInput,
   IconButton,
   InputAdornment,
   InputLabel,
   OutlinedInput,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import axios from "axios";
-import React, { useMemo, useState } from "react";
 
 const FormEditAccount = (props) => {
   const { userId, password } = props.data;
-  // console.log(password);
 
-  const memorizePassword = useMemo(() => password, password);
-
-  const [showPassword, setShowPassword] = useState(true);
-  const [showNewPassword, setShowNewPassword] = useState(true);
-  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
   const [errors, setErrors] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const OnClickShowPassword = () => {
-    setShowPassword(true);
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
   };
-  const OnClickShowNewPassword = () => {
-    setShowNewPassword(true);
+  const handleClickShowNewPassword = () => {
+    setShowNewPassword(!showNewPassword);
   };
-  const OnClickShowConfirmPassword = () => {
-    setShowConfirmNewPassword(true);
-  };
-
-  const OnClickClosePassword = () => {
-    setShowPassword(false);
-  };
-  const OnClickCloseNewPassword = () => {
-    setShowNewPassword(false);
-  };
-  const OnClickCloseConfirmPassword = () => {
-    setShowConfirmNewPassword(false);
+  const handleClickShowConfirmPassword = () => {
+    setShowConfirmNewPassword(!showConfirmNewPassword);
   };
 
-  // const putNewPassword = async () => {
-  //   const token = localStorage.getItem("token");
-  //   await axios.put(import.meta.env.VITE_REACT_APP_API_URL + `/User/UpdateUser/${userId}`, con);
-  // };
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
+  const putNewPassword = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
+      const newPass = "your_new_password_here";
+      await axios.put(
+        `${import.meta.env.VITE_REACT_APP_API_URL}/User/UpdateProfileUser/${userId}`,
+        { newPassword: newPass },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Password updated successfully!");
+    } catch (error) {
+      setErrors(["Error updating password. Please try again."]);
+      console.error("Error updating password:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   return (
     <Container
       maxWidth="sm"
@@ -64,58 +72,55 @@ const FormEditAccount = (props) => {
       <Stack spacing={3}>
         <Typography variant="h4">Account Setting</Typography>
         <Stack spacing={2}>
+          {password && (
+            <Stack
+              direction="row"
+              spacing={2}
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <InputLabel htmlFor="outlined-adornment-password">
+                Password
+              </InputLabel>
+              <OutlinedInput
+                sx={{ width: "60%" }}
+                id="outlined-adornment-password"
+                type={showPassword ? "text" : "password"}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </Stack>
+          )}
+
           <Stack
             direction="row"
             spacing={2}
             justifyContent="space-between"
             alignItems="center"
           >
-            {password == null ? (
-              <></>
-            ) : (
-              <>
-                <InputLabel htmlFor="filled-adornment-password">
-                  Password
-                </InputLabel>
-                <OutlinedInput
-                  sx={{ width: "60%" }}
-                  id="filled-adornment-password"
-                  type={showPassword ? "text" : "password"}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={OnClickShowPassword}
-                        onMouseDown={OnClickClosePassword}
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                />
-              </>
-            )}
-          </Stack>
-          <Stack
-            direction="row"
-            spacing={2}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <InputLabel htmlFor="filled-adornment-showNewPassword">
+            <InputLabel htmlFor="outlined-adornment-newPassword">
               New Password
             </InputLabel>
             <OutlinedInput
               sx={{ width: "60%" }}
-              id="filled-adornment-showNewPassword"
+              id="outlined-adornment-newPassword"
               type={showNewPassword ? "text" : "password"}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
-                    aria-label="toggle showNewPassword visibility"
-                    onClick={OnClickShowNewPassword}
-                    onMouseDown={OnClickCloseNewPassword}
+                    aria-label="toggle new password visibility"
+                    onClick={handleClickShowNewPassword}
+                    onMouseDown={handleMouseDownPassword}
                     edge="end"
                   >
                     {showNewPassword ? <VisibilityOff /> : <Visibility />}
@@ -124,25 +129,26 @@ const FormEditAccount = (props) => {
               }
             />
           </Stack>
+
           <Stack
             direction="row"
             spacing={2}
             justifyContent="space-between"
             alignItems="center"
           >
-            <InputLabel htmlFor="filled-adornment-new-confirm-password">
+            <InputLabel htmlFor="outlined-adornment-confirmNewPassword">
               Confirm New Password
             </InputLabel>
             <OutlinedInput
               sx={{ width: "60%" }}
-              id="filled-adornment-new-confirm-password"
+              id="outlined-adornment-confirmNewPassword"
               type={showConfirmNewPassword ? "text" : "password"}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={OnClickShowConfirmPassword}
-                    onMouseDown={OnClickCloseConfirmPassword}
+                    aria-label="toggle confirm new password visibility"
+                    onClick={handleClickShowConfirmPassword}
+                    onMouseDown={handleMouseDownPassword}
                     edge="end"
                   >
                     {showConfirmNewPassword ? (
@@ -155,12 +161,21 @@ const FormEditAccount = (props) => {
               }
             />
           </Stack>
+
+          {errors.map((error, index) => (
+            <Typography key={index} color="error">
+              {error}
+            </Typography>
+          ))}
+
           <Button
-            type="submit"
+            type="button"
             variant="outlined"
             sx={{ width: "20%", placeSelf: "end" }}
+            onClick={putNewPassword}
+            disabled={loading}
           >
-            Submit
+            {loading ? "Submitting..." : "Submit"}
           </Button>
         </Stack>
       </Stack>
