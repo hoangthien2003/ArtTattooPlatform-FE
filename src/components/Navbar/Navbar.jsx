@@ -186,6 +186,7 @@ export default function Navbar(props) {
 			<MenuItem
 				onClick={() => {
 					navigate("/profile");
+					handleMenuClose();
 				}}
 			>
 				Profile
@@ -231,7 +232,14 @@ export default function Navbar(props) {
 				</MenuItem>
 			) : null}
 			<MenuItem onClick={handleMenuClose}>My account</MenuItem>
-			<MenuItem onClick={handleLogout}>Logout</MenuItem>
+			<MenuItem
+				onClick={() => {
+					handleLogout();
+					handleMenuClose();
+				}}
+			>
+				Logout
+			</MenuItem>
 		</Menu>
 	);
 
@@ -319,7 +327,7 @@ export default function Navbar(props) {
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
-	
+
 	return (
 		<Box sx={{ flexGrow: 1 }}>
 			<AppBar
@@ -414,7 +422,6 @@ export default function Navbar(props) {
 									display: "flex",
 									alignItems: "center",
 								}}
-
 							>
 								<SearchIconWrapper>
 									<SearchIcon />
@@ -422,7 +429,6 @@ export default function Navbar(props) {
 								<StyledInputBase
 									placeholder="Anime design tattoo..."
 									inputProps={{ "aria-label": "search" }}
-							
 								/>
 							</Search>
 						</Slide>
