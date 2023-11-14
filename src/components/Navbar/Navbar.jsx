@@ -554,7 +554,7 @@ export default function Navbar(props) {
                   }}
                   onClick={() => navigate("/profile")}
                 >
-                  Hi, {user && user.userName}
+                  Hi, {data && data.userName}
                 </Typography>
                 <IconButton
                   size="large"
