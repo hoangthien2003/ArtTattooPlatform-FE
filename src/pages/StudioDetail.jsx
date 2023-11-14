@@ -17,28 +17,49 @@ import { Avatar, Card, Rating, Typography } from "@mui/material";
 import Booking from "../components/Modal/Booking";
 import CardService from "../components/Card/CardService";
 import Slider from "react-slick";
-import { Home } from "@mui/icons-material";
+import { Home, LocationOn } from "@mui/icons-material";
 import { StarList } from "../components/Feedback/StarList";
 import FeedbackForm from "../components/Feedback/FeedbackForm";
 import CommentList from "../components/Feedback/CommentList";
 import ProfileStudio from "../components/Box/ProfileStudio";
+import { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
+import GoogleMapReact from "google-map-react";
+
+const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 export default function StudioDetail() {
   const { studioId } = useParams();
-
+  const [coords, setCoords] = useState(null);
+  const [places, setPlaces] = useState("");
   const [studioData, setStudioData] = useState(null);
   const [serviceData, setServiceData] = useState(null);
+
+  console.log(coords);
 
   useEffect(() => {
     getStudioID();
     getServiceByStudioId();
   }, []);
 
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      ({ coords: { latitude, longitude } }) => {
+        setCoords({ lat: latitude, lng: longitude });
+      }
+    );
+  }, []);
+
+  const fn = async () => {
+    const result = await geocodeByAddress(places);
+    const lnglat = await getLatLng(result[0]);
+    setCoords(lnglat);
+  };
+
   const getStudioID = async () => {
     try {
       const response = await axios.get(
         import.meta.env.VITE_REACT_APP_API_URL +
-        `/Studio/GetStudioByID/${studioId}`
+          `/Studio/GetStudioByID/${studioId}`
       );
       // console.log(response.data);
       setStudioData(response.data);
@@ -51,7 +72,7 @@ export default function StudioDetail() {
     try {
       const response = await axios.get(
         import.meta.env.VITE_REACT_APP_API_URL +
-        `/Service/GetServiceByStudio/${studioId}`
+          `/Service/GetServiceByStudio/${studioId}`
       );
       setServiceData(response.data.$values);
     } catch (error) {
@@ -99,6 +120,14 @@ export default function StudioDetail() {
     ],
   };
 
+  const defaultProps = {
+    center: {
+      lat: 10.99835602,
+      lng: 77.01502627,
+    },
+    zoom: 1,
+  };
+
   const ratings = [
     { rate: 5, count: 100 },
     { rate: 4, count: 50 },
@@ -122,11 +151,12 @@ export default function StudioDetail() {
             component={Link}
             to="/"
             sx={{
-							textDecoration: "none",
-							"&:hover": {
-								color: "#FF7F22",
-							},
-						}}          >
+              textDecoration: "none",
+              "&:hover": {
+                color: "#FF7F22",
+              },
+            }}
+          >
             Home
           </Typography>
         </Stack>
@@ -139,17 +169,24 @@ export default function StudioDetail() {
             "&:hover": {
               color: "#FF7F22",
             },
-          }}        >
+          }}
+        >
           Studio
         </Typography>
         <Typography variant="body1" sx={{ textDecoration: "none" }}>
           {studioData && studioData.studioName}
         </Typography>
       </Breadcrumbs>
-      <div className="row mt-5 mb-5">
-        <div className="col-md-4">
+      <Grid container spacing={2} paddingTop={10}>
+        <Grid item xs={4}>
           {/* <ProfileStudio studioData={studioData} /> */}
-          <Card sx={{ border: "2px solid #322F2F", borderRadius: 1 }}>
+          <Card
+            sx={{
+              border: "2px solid #322F2F",
+              borderRadius: 1,
+              marginBottom: 5,
+            }}
+          >
             <Stack
               spacing={2}
               direction="column"
@@ -213,13 +250,31 @@ export default function StudioDetail() {
               </Typography>
             </Stack>
           </Card>
+
+          <div style={{ height: 300, width: "100%", marginTop: 10 }}>
+            <GoogleMapReact
+              bootstrapURLKeys={{
+                key: import.meta.env.VITE_REACT_APP_REACT_MAP,
+              }}
+              defaultCenter={coords}
+              defaultZoom={18}
+              center={coords}
+            >
+              <AnyReactComponent
+                lat={coords && coords.lat}
+                lng={coords && coords.lng}
+              >
+                <LocationOn color="red" />
+              </AnyReactComponent>
+            </GoogleMapReact>
+          </div>
           <Typography variant="h5" className="mt-5">
             Our ratings
           </Typography>
           {/* give reviews and write review content */}
           <StarList ratings={ratings} />
-        </div>
-        <div className="col-md-8">
+        </Grid>
+        <Grid item xs={8}>
           <Container>
             <Typography
               gutterBottom
@@ -248,8 +303,8 @@ export default function StudioDetail() {
                 })}
             </Slider>
           </Container>
-        </div>
-      </div>
+        </Grid>
+      </Grid>
     </Container>
   );
 }

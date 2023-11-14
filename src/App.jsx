@@ -58,6 +58,7 @@ function App() {
 		}
 	};
 
+	console.log();
 	useGoogleOneTapLogin({
 		onSuccess: (credentialResponse) => {
 			console.log(credentialResponse);
