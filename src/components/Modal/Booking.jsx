@@ -30,7 +30,7 @@ const Booking = (props) => {
     count: 0,
   });
   const { data } = props;
-  console.log(data);
+  // console.log(data);
   const navigate = useNavigate();
   const userInfo = useUserInfo((state) => state.user);
 
@@ -53,13 +53,8 @@ const Booking = (props) => {
     const countValue = countRef.current.value;
     const dateTimeValue = dateValue.concat(", ", formatTime(timeValue));
     let today = new Date();
-    let currentDay = today.toLocaleDateString();
-    let currentTime = today.toLocaleString();
-    // console.log("currentTime: " + currentTime);
-    // console.log("dateTimeValue: " + dateTimeValue);
-
-
-    console.log(countValue);
+    let currentDay = today.toLocaleDateString("en-US");
+    let currentTime = today.toLocaleString("en-US");
 
     if (!dateValue && !timeValue && !phoneValue && countValue === undefined) {
       toast.error("Please input form booking!");
@@ -81,6 +76,16 @@ const Booking = (props) => {
 
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
+
+    // if (!dateValue && !timeValue && !phoneValue && countValue === 0) {
+    //   toast.error("Please input form booking!");
+    // }
+    // if (phoneValue.trim() === "") {
+    //   toast.error("Must be input phoneNumber!");
+    // }
+    // if (condition) {
+
+    // }
   };
 
   const handleBack = () => {
