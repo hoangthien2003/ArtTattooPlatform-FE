@@ -560,10 +560,9 @@ export default function ServiceManagement() {
 				</DialogActions>
 			</Dialog>
 		</Container >
-	);
+)};
 
 
 
-       
 
   
