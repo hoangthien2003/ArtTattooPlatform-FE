@@ -73,6 +73,33 @@ export default function BookingManagement(props) {
 	const handleChange = (event) => {
 		setArtist(event.target.value);
 	};
+
+	const fetchConfirmBooking = async (bookingId, status) => {
+		const token = localStorage.getItem("token");
+		await axios
+			.put(
+				`${
+					import.meta.env.VITE_REACT_APP_API_URL
+				}/Booking/UpdateStatus/${bookingId}`,
+				status,
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+						"Content-Type": "application/json",
+					},
+				}
+			)
+			.then((res) => {
+				toast.success("Update status booking successfully!");
+				console.log(res);
+				fetchBooking();
+			})
+			.catch((err) => {
+				toast.error("Update status booking failed!");
+				console.log(err);
+			});
+	};
+
 	return (
 		<Container className="mt-5 mb-5" sx={{ height: "25rem" }}>
 			<Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: 5 }}>
@@ -104,7 +131,7 @@ export default function BookingManagement(props) {
 			{bookings.length != 0 ? (
 				<Box>
 					<Typography variant="h5" className="mb-3">
-						Booking Dashboard
+						Booking Management
 					</Typography>
 					<TableContainer component={Paper}>
 						<Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -121,6 +148,7 @@ export default function BookingManagement(props) {
 									</TableCell>
 									<TableCell align="center">Price</TableCell>
 									<TableCell align="center">Status</TableCell>
+									<TableCell align="center"></TableCell>
 									<TableCell align="center"></TableCell>
 								</TableRow>
 							</TableHead>
@@ -161,13 +189,57 @@ export default function BookingManagement(props) {
 												{booking.status}
 											</TableCell>
 											<TableCell align="center">
-												<Link
-													sx={{
-														textDecoration: "none",
-													}}
-												>
-													Confirm
-												</Link>
+												{booking.status !==
+													"Canceled" &&
+												booking.status !==
+													"Completed" ? (
+													<Button
+														variant="contained"
+														onClick={() => {
+															if (
+																booking.status ===
+																"Pending"
+															)
+																fetchConfirmBooking(
+																	booking.bookingId,
+																	"Confirmed"
+																);
+															else if (
+																booking.status ===
+																"Confirmed"
+															)
+																fetchConfirmBooking(
+																	booking.bookingId,
+																	"Completed"
+																);
+														}}
+													>
+														{booking.status ===
+														"Pending"
+															? "Confirm"
+															: booking.status ===
+																	"Confirmed" &&
+															  "Complete"}
+													</Button>
+												) : null}
+											</TableCell>
+											<TableCell align="center">
+												{booking.status !==
+													"Canceled" &&
+												booking.status !==
+													"Completed" ? (
+													<Button
+														variant="outlined"
+														onClick={() => {
+															fetchConfirmBooking(
+																booking.bookingId,
+																"Canceled"
+															);
+														}}
+													>
+														Cancel
+													</Button>
+												) : null}
 											</TableCell>
 										</TableRow>
 									);

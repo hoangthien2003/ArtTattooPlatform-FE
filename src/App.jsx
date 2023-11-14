@@ -25,16 +25,17 @@ import NotFound from "./pages/NotFound";
 import { useUserInfo } from "./stores/useUserInfo";
 import HomePage from "./pages/Home";
 import Service from "./pages/Service";
+import { useOpenDashboard } from "./stores/useOpenDashboard";
 
 function App() {
 	const ServiceDetail = lazy(() => import("./pages/ServiceDetail"));
 	const Navbar = lazy(() => import("./components/Navbar/Navbar"));
-	const BookingManagement = lazy(() => import("./pages/BookingManagement"));
 	const BookingHistory = lazy(() => import("./pages/BookingHistory"));
 	const ArtistSchedule = lazy(() => import("./pages/ArtistSchedule"));
-	const ServiceManagement = lazy(() => import("./pages/ServiceManagement"));
 	const StudioManagement = lazy(() => import("./pages/StudioManagement"));
 	const Dashboard = lazy(() => import("./pages/Dashboard"));
+	const BookingManagement = lazy(() => import("./pages/BookingManagement"));
+	const ServiceManagement = lazy(() => import("./pages/ServiceManagement"));
 	const setUserZustand = useUserInfo((state) => state.setUser);
 
 	useEffect(() => {
@@ -68,6 +69,8 @@ function App() {
 		},
 	});
 
+	const isOpenDashboard = useOpenDashboard((state) => state.isOpen);
+
 	return (
 		<BrowserRouter basename="/">
 			<ThemeProvider theme={theme}>
@@ -99,10 +102,6 @@ function App() {
 						<Route path="/StudioPage" element={<StudioPage />} />
 						<Route path="/profile" element={<ProfilePage />} />
 						<Route
-							path="/BookingManagement"
-							element={<BookingManagement />}
-						/>
-						<Route
 							path="/BookingHistory"
 							element={<BookingHistory />}
 						/>
@@ -110,10 +109,7 @@ function App() {
 							path="/ArtistSchedule"
 							element={<ArtistSchedule />}
 						/>
-						<Route
-							path="/ServiceManagement"
-							element={<ServiceManagement />}
-						/>
+
 						<Route
 							path="/StudioDetail/:studioId"
 							element={<StudioDetail />}
@@ -123,7 +119,17 @@ function App() {
 							path="/StudioManagement"
 							element={<StudioManagement />}
 						></Route>
-						<Route path="/dashboard" element={<Dashboard />} />
+						<Route path="/dashboard" element={<Dashboard />}>
+							<Route index element={<BookingManagement />} />
+							<Route
+								path="/dashboard/ServiceManagement"
+								element={<ServiceManagement />}
+							/>
+							<Route
+								path="/dashboard/profile"
+								element={<ProfilePage />}
+							/>
+						</Route>
 					</Routes>
 					<Footer />
 				</Suspense>

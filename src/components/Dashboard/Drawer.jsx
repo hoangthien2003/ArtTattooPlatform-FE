@@ -20,14 +20,11 @@ import {
 	VerifiedUser,
 } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useOpenDashboard } from "../../stores/useOpenDashboard";
 
 function Drawer() {
 	const nav = [
-		{
-			icon: <StackedBarChart />,
-			name: "Overview",
-			path: "./",
-		},
 		{
 			icon: <ShoppingCartCheckout />,
 			name: "Booking Management",
@@ -36,16 +33,17 @@ function Drawer() {
 		{
 			icon: <DesignServices />,
 			name: "Service Management",
-			path: "./",
+			path: "./ServiceManagement",
 		},
 		{
 			icon: <Person />,
 			name: "Account",
-			path: "./",
+			path: "./profile",
 		},
 	];
 	const [choosedBtn, setChoosedBtn] = useState(0);
 	const navigate = useNavigate();
+	const setOpenDashboard = useOpenDashboard((state) => state.setOpen);
 
 	return (
 		<Box
@@ -69,7 +67,7 @@ function Drawer() {
 				<Typography variant="h6">
 					VNINK
 					<br />
-					DASHBOARD
+					MANAGEMENT
 				</Typography>
 			</Box>
 			<div
@@ -126,7 +124,8 @@ function Drawer() {
 				}}
 				onClick={() => {
 					localStorage.removeItem("token");
-					navigate(0);
+					setOpenDashboard(false);
+					navigate("/");
 				}}
 			>
 				<ListItemIcon>

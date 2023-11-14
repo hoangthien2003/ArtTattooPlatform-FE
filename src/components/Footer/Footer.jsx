@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import LOGO from "../../assets/images/Logo.png";
+import { useOpenDashboard } from "../../stores/useOpenDashboard";
 const IconList = [
 	{ icon: <Facebook /> },
 	{ icon: <Pinterest /> },
@@ -19,13 +20,13 @@ const IconList = [
 ];
 
 const Footer = () => {
+	const isOpenDashboard = useOpenDashboard((state) => state.isOpen);
 	return (
 		<AppBar
 			position="static"
 			sx={{
 				bottom: 0,
-				display:
-					window.location.pathname === "/dashboard" ? "none" : "flex",
+				display: isOpenDashboard ? "none" : "flex",
 			}}
 		>
 			<Toolbar>

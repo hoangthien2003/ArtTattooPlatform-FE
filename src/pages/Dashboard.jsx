@@ -1,10 +1,11 @@
 import { Box } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, lazy } from "react";
 import BookingChart from "../components/Dashboard/BookingChart";
 import Drawer from "../components/Dashboard/Drawer";
 import Navbar from "../components/Dashboard/Navbar";
-import { Route, Routes } from "react-router-dom";
-import Overview from "../components/Dashboard/Overview";
+import { Outlet, Route, Routes } from "react-router-dom";
+import BookingManagement from "./BookingManagement";
+import ServiceManagement from "./ServiceManagement";
 
 function Dashboard() {
 	return (
@@ -22,9 +23,7 @@ function Dashboard() {
 				}}
 			>
 				<Navbar />
-				<Routes>
-					<Route index element={<Overview />} />
-				</Routes>
+				<Outlet />
 			</Box>
 		</Box>
 	);

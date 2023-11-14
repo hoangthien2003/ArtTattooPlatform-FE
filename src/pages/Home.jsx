@@ -6,17 +6,20 @@ import PaginationCard from "../components/Pagination/PaginationCard";
 import TopRateStudio from "../components/TopRate/TopRateStudio";
 import { useUserInfo } from "../stores/useUserInfo";
 import { useNavigate } from "react-router-dom";
+import { useOpenDashboard } from "../stores/useOpenDashboard";
 
 const Home = () => {
 	const [serviceList, setServiceList] = useState([]);
 	const userInfo = useUserInfo((state) => state.user);
 	const navigate = useNavigate();
+	const setOpenDashboard = useOpenDashboard((state) => state.setOpen);
 
 	useEffect(() => {
 		getServiceList();
 		const token = localStorage.getItem("token");
 		if (token != null) {
 			if (userInfo.role === "MN" || userInfo.role === "AD") {
+				setOpenDashboard(true);
 				navigate("dashboard");
 			}
 		}
