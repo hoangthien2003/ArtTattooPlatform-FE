@@ -21,16 +21,49 @@ import Select from "@mui/material/Select";
 import { Home } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserInfo } from "../stores/useUserInfo";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function BookingManagement(props) {
 	const [artist, setArtist] = React.useState("");
 	const user = useUserInfo((state) => state.user);
 	const navigate = useNavigate();
+	const [bookings, setBookings] = React.useState([]);
 
 	React.useEffect(() => {
-		if (user.role != "MN" && user.role != "AD") navigate("/access-denied");
-		return;
+		if (user.role != "MN" && user.role != "AD") {
+			navigate("/access-denied");
+			return;
+		}
+		fetchBooking();
 	}, []);
+
+	const fetchBooking = async () => {
+		const token = localStorage.getItem("token");
+		if (token != null) {
+			await axios
+				.get(
+					`${
+						import.meta.env.VITE_REACT_APP_API_URL
+					}/Booking/GetBookingByManager/${user.userID}`,
+					{
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					}
+				)
+				.then((res) => {
+					console.log(res);
+					setBookings(res.data.$values);
+				})
+				.catch((err) => {
+					console.log(err);
+					toast.error(err);
+				});
+		} else {
+			toast.error("Cannot get booking because token is empty!");
+		}
+	};
 
 	const handleChange = (event) => {
 		setArtist(event.target.value);
@@ -70,63 +103,56 @@ export default function BookingManagement(props) {
 				<Table sx={{ minWidth: 650 }} aria-label="simple table">
 					<TableHead>
 						<TableRow>
-							<TableCell>Service</TableCell>
-							<TableCell align="left">Customer</TableCell>
-							<TableCell align="left">Phone</TableCell>
-							<TableCell align="left">Time</TableCell>
-							<TableCell align="left">Price</TableCell>
-							<TableCell align="left">Artist</TableCell>
-							<TableCell align="left"></TableCell>
+							<TableCell>Service Name</TableCell>
+							<TableCell align="center">Username</TableCell>
+							<TableCell align="center">Phone</TableCell>
+							<TableCell align="center">Time</TableCell>
+							<TableCell align="center">Quantity</TableCell>
+							<TableCell align="center">Price</TableCell>
+							<TableCell align="center">Status</TableCell>
+							<TableCell align="center"></TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						<TableRow
-							sx={{
-								"&:last-child td, &:last-child th": {
-									border: 0,
-								},
-							}}
-						>
-							<TableCell component="th" scope="row">
-								aaa
-							</TableCell>
-							<TableCell align="left">aaa</TableCell>
-							<TableCell align="left">aaa</TableCell>
-							<TableCell align="left">aaa</TableCell>
-							<TableCell align="left">aaa</TableCell>
-							<TableCell align="left">
-								<Box sx={{ maxWidth: 50 }}>
-									<FormControl>
-										<InputLabel id="demo-simple-select-label">
-											{" "}
-											Choose
-										</InputLabel>
-										<Select
-											labelId="demo-simple-select-label"
-											id="demo-simple-select"
-											value={1}
-											label="Artist"
-											onChange={handleChange}
-										>
-											<MenuItem value={1}>
-												TheAnh
-											</MenuItem>
-											<MenuItem value={2}>
-												TrungAnh
-											</MenuItem>
-											<MenuItem value={3}>
-												TuanTr
-											</MenuItem>
-										</Select>
-									</FormControl>
-								</Box>
-							</TableCell>
-							<TableCell align="left">
-								<Link sx={{ textDecoration: "none" }}>
-									Confirm
-								</Link>
-							</TableCell>
-						</TableRow>
+						{bookings.map((booking, index) => {
+							return (
+								<TableRow
+									sx={{
+										"&:last-child td, &:last-child th": {
+											border: 0,
+										},
+									}}
+									key={index}
+								>
+									<TableCell component="th" scope="row">
+										{booking.serviceName}
+									</TableCell>
+									<TableCell align="center">
+										{booking.userName}
+									</TableCell>
+									<TableCell align="center">
+										{booking.phoneNumber}
+									</TableCell>
+									<TableCell align="center">
+										{booking.bookingDate}
+									</TableCell>
+									<TableCell align="center">
+										{booking.quantity}
+									</TableCell>
+									<TableCell align="center">
+										{booking.total}
+									</TableCell>
+									<TableCell align="center">
+										{booking.status}
+									</TableCell>
+									<TableCell align="center">
+										<Link sx={{ textDecoration: "none" }}>
+											Confirm
+										</Link>
+									</TableCell>
+								</TableRow>
+							);
+						})}
 					</TableBody>
 				</Table>
 			</TableContainer>
