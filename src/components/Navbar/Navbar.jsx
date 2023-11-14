@@ -218,8 +218,8 @@ export default function Navbar(props) {
 		>
 			<MenuItem
 				onClick={() => {
-					navigate("/profile");
 					handleMenuClose();
+					navigate("/profile");
 				}}
 			>
 				Profile
@@ -228,16 +228,16 @@ export default function Navbar(props) {
 				<div>
 					<MenuItem
 						onClick={() => {
-							navigate("/BookingManagement");
 							handleMenuClose();
+							navigate("/BookingManagement");
 						}}
 					>
 						Booking Management
 					</MenuItem>
 					<MenuItem
 						onClick={() => {
-							navigate("/ServiceManagement");
 							handleMenuClose();
+							navigate("/ServiceManagement");
 						}}
 					>
 						Service Management
@@ -247,8 +247,8 @@ export default function Navbar(props) {
 			{role == "AT" || role == "AD" ? (
 				<MenuItem
 					onClick={() => {
-						navigate("/ArtistSchedule");
 						handleMenuClose();
+						navigate("/ArtistSchedule");
 					}}
 				>
 					Artist Schedule
@@ -257,8 +257,8 @@ export default function Navbar(props) {
 			{role == "MB" || role == "AD" ? (
 				<MenuItem
 					onClick={() => {
-						navigate("/BookingHistory");
 						handleMenuClose();
+						navigate("/BookingHistory");
 					}}
 				>
 					Booking History
@@ -267,8 +267,8 @@ export default function Navbar(props) {
 			<MenuItem onClick={handleMenuClose}>My account</MenuItem>
 			<MenuItem
 				onClick={() => {
-					handleLogout();
 					handleMenuClose();
+					handleLogout();
 				}}
 			>
 				Logout
