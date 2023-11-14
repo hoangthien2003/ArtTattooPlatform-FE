@@ -1,23 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Button,
   Container,
+  FormControl,
+  FormHelperText,
   IconButton,
   InputAdornment,
   InputLabel,
   OutlinedInput,
   Stack,
   Typography,
+  useFormControl,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const FormEditAccount = (props) => {
   const { userId, password } = props.data;
 
+  const [pass, setPass] = useState("");
+  const [newPass, setNewPass] = useState("");
+  const [confirmPass, setConfirmPass] = useState("");
+
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
+
+  const [passError, setPassError] = useState(null);
+  const [newPassError, setNewPassError] = useState(null);
+  const [confirmPassError, setConfirmPassError] = useState(null);
+
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -35,29 +48,71 @@ const FormEditAccount = (props) => {
     event.preventDefault();
   };
 
-  const putNewPassword = async () => {
-    try {
-      setLoading(true);
-      const token = localStorage.getItem("token");
-      const newPass = "your_new_password_here";
-      await axios.put(
-        `${import.meta.env.VITE_REACT_APP_API_URL}/User/UpdatePassword/${userId}`,
-        { newPassword: newPass },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log("Password updated successfully!");
-    } catch (error) {
-      setErrors(["Error updating password. Please try again."]);
-      console.error("Error updating password:", error);
-    } finally {
-      setLoading(false);
+
+  const validateInputs = () => {
+    // Implement your validation logic here
+    // For example, you can check if the passwords match
+    if (pass !== password) {
+      setPassError("Incorrect password");
+    } else {
+      setPassError(null);
+    }
+
+    if (newPass.length < 8) {
+      setNewPassError("Password must be at least 8 characters");
+    } else {
+      setNewPassError(null);
+    }
+
+    if (confirmPass !== newPass) {
+      setConfirmPassError("Passwords do not match");
+    } else {
+      setConfirmPassError(null);
     }
   };
-  
+
+  const MyFormHelperText = ({ error }) => {
+    const { focused } = useFormControl() || {};
+
+    const helperText = React.useMemo(() => {
+      if (focused) {
+        return "This field is being focused";
+      }
+
+      return error || "Input text";
+    }, [focused, error]);
+
+    return <FormHelperText>{helperText}</FormHelperText>;
+  };
+
+  const handleSubmit = async () => {
+    validateInputs();
+    const token = localStorage.getItem("token");
+    const ChangePasswordRequest = {
+      oldPassword: pass,
+      newPassword: confirmPass,
+    };
+
+    console.log(ChangePasswordRequest);
+    await axios
+      .put(
+        `${
+          import.meta.env.VITE_REACT_APP_API_URL
+        }/User/UpdatePassword/${userId}`,
+        ChangePasswordRequest,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
+      .then(() => {
+        toast.success("Password updated successfully!");
+        window.location.reload();
+      })
+      .catch(() => toast.error("Couldn't update password!"));
+  };
+
   return (
     <Container
       maxWidth="sm"
@@ -72,48 +127,30 @@ const FormEditAccount = (props) => {
       <Stack spacing={3}>
         <Typography variant="h4">Account Setting</Typography>
         <Stack spacing={2}>
-          {password && (
-            <Stack
-              direction="row"
-              spacing={2}
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <InputLabel htmlFor="outlined-adornment-password">
-                Password
-              </InputLabel>
-              <OutlinedInput
-                sx={{ width: "60%" }}
-                id="outlined-adornment-password"
-                type={showPassword ? "text" : "password"}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-            </Stack>
-          )}
-
-          <Stack
-            direction="row"
-            spacing={2}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <InputLabel htmlFor="outlined-adornment-newPassword">
-              New Password
-            </InputLabel>
+          <FormControl error={!!passError}>
             <OutlinedInput
-              sx={{ width: "60%" }}
-              id="outlined-adornment-newPassword"
+              onChange={(e) => setPass(e.target.value)}
+              placeholder="Enter your password"
+              type={showPassword ? "text" : "password"}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+            <MyFormHelperText error={passError} />
+          </FormControl>
+          <FormControl error={!!newPassError}>
+            <OutlinedInput
+              onChange={(e) => setNewPass(e.target.value)}
+              placeholder="Enter new password"
               type={showNewPassword ? "text" : "password"}
               endAdornment={
                 <InputAdornment position="end">
@@ -128,20 +165,12 @@ const FormEditAccount = (props) => {
                 </InputAdornment>
               }
             />
-          </Stack>
-
-          <Stack
-            direction="row"
-            spacing={2}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <InputLabel htmlFor="outlined-adornment-confirmNewPassword">
-              Confirm New Password
-            </InputLabel>
+            <MyFormHelperText error={newPassError} />
+          </FormControl>
+          <FormControl error={!!confirmPassError}>
             <OutlinedInput
-              sx={{ width: "60%" }}
-              id="outlined-adornment-confirmNewPassword"
+              onChange={(e) => setConfirmPass(e.target.value)}
+              placeholder="Confirm your password"
               type={showConfirmNewPassword ? "text" : "password"}
               endAdornment={
                 <InputAdornment position="end">
@@ -160,19 +189,14 @@ const FormEditAccount = (props) => {
                 </InputAdornment>
               }
             />
-          </Stack>
-
-          {errors.map((error, index) => (
-            <Typography key={index} color="error">
-              {error}
-            </Typography>
-          ))}
+            <MyFormHelperText error={confirmPassError} />
+          </FormControl>
 
           <Button
             type="button"
             variant="outlined"
             sx={{ width: "20%", placeSelf: "end" }}
-            onClick={putNewPassword}
+            onClick={handleSubmit}
             disabled={loading}
           >
             {loading ? "Submitting..." : "Submit"}

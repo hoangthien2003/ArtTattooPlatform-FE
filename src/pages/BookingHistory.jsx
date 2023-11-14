@@ -91,16 +91,22 @@ export default function BookingHistory() {
             PENDING
           </Typography>
         );
-      case "Cancelled":
+      case "Canceled":
         return (
           <Typography variant="text" color="red">
-            PENDING
+            CANCELED
           </Typography>
         );
-      case "Confirm":
+      case "Confirmed":
         return (
           <Typography variant="text" color="lightgreen">
-            CONFIRM
+            CONFIRMED
+          </Typography>
+        );
+      case "Complete":
+        return (
+          <Typography variant="text" color="lightgreen">
+            COMPLETED
           </Typography>
         );
     }
@@ -131,11 +137,11 @@ export default function BookingHistory() {
           </Typography>
         </Stack>
         <Typography variant="body1" sx={{ textDecoration: "none" }}>
-          Booking History
+          My Booking
         </Typography>
       </Breadcrumbs>
       <Typography variant="h5" className="mb-3">
-        Booking History
+        My Booking
       </Typography>
       {bookingList === undefined ? (
         <Stack direction="row" justifyContent="center" spacing={2}>
@@ -179,11 +185,15 @@ export default function BookingHistory() {
                     {renderStatusBooking(booking.status)}
                   </TableCell>
                   <TableCell align="left">
-                    <IconButton
-                      onClick={() => deleteBooking(booking.bookingId)}
-                    >
-                      <Delete />
-                    </IconButton>
+                    {booking.status === "Confirmed" ? (
+                      <></>
+                    ) : (
+                      <IconButton
+                        onClick={() => deleteBooking(booking.bookingId)}
+                      >
+                        <Delete />
+                      </IconButton>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}

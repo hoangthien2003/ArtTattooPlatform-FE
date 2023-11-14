@@ -30,11 +30,11 @@ const Booking = (props) => {
     count: 0,
   });
   const { data } = props;
-  console.log(data);
+  // console.log(data);
   const navigate = useNavigate();
   const userInfo = useUserInfo((state) => state.user);
 
-  const formatTime = (time) => {
+  const setTimeOfDay = (time) => {
     const hours = time.split(":")[0];
     const minutes = time.split(":")[1];
 
@@ -53,7 +53,7 @@ const Booking = (props) => {
     const timeValue = timeRef.current.value;
     const countValue = countRef.current.value;
     const dateTimeValue = dateValue.concat(", ", setTimeOfDay(timeValue));
-    const dayValue = new Date(dateTimeValue);
+
 
     // Get dateTime now
     const today = new Date();
@@ -65,7 +65,7 @@ const Booking = (props) => {
     // Format
     const time = `${hour}:${minute}`;
     const day = `${month}/${date}/${year}`;
-    
+
 
     //Validate
     if (!dateValue && !timeValue && !phoneValue && countValue === undefined) {
@@ -76,8 +76,10 @@ const Booking = (props) => {
       toast.error("Must be selectable participants!");
     } else if (dateValue < day) {
       toast.error("Please don't select a pass date!");
-    } else if (dayValue < today) {
-      toast.error("Please don't select a pass time!");
+
+
+    } else if (dateValue === day) {
+      toast.error("Please don't booking today!");
     } else {
       setBooking({
         name: userInfo.userName,
