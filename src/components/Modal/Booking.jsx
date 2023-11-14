@@ -58,8 +58,9 @@ const Booking = (props) => {
     // console.log("currentTime: " + currentTime);
     // console.log("dateTimeValue: " + dateTimeValue);
 
+
     console.log(countValue);
-    
+
     if (!dateValue && !timeValue && !phoneValue && countValue === undefined) {
       toast.error("Please input form booking!");
     } else if (phoneValue.trim() === "") {

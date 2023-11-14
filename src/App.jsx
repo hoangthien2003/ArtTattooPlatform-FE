@@ -39,23 +39,24 @@ function App() {
 		decodeToken();
 	}, []);
 
-	const decodeToken = () => {
-		try {
-			const token = localStorage.getItem("token");
-			if (token != null) {
-				const user = jwtDecode(token);
-				console.log(user);
-				setUserZustand({
-					userID: user.UserID,
-					email: user.Email,
-					role: user.role,
-					userName: user.UserName,
-				});
-			}
-		} catch (e) {
-			console.log(e);
-		}
-	};
+  const decodeToken = () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (token != null) {
+        const user = jwtDecode(token);
+        // console.log(user);
+        setUserZustand({
+          userID: user.UserID,
+          email: user.Email,
+          role: user.role,
+          userName: user.UserName,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
 
 	console.log();
 	useGoogleOneTapLogin({

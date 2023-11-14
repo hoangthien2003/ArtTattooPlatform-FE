@@ -540,117 +540,119 @@ export default function Navbar(props) {
 						>
 							<SearchIcon />
 						</IconButton> */}
-						{token ? (
-							<Box
-								sx={{
-									display: "flex",
-									alignItems: "center",
-									display: {
-										xs: "none",
-										sm: "flex",
-									},
-								}}
-							>
-								<Typography
-									variant="subtitle2"
-									sx={{
-										marginLeft: 1.5,
-										cursor: "pointer",
-										":hover": {
-											textDecoration: "underline",
-										},
-									}}
-									onClick={() => navigate("/profile")}
-								>
-									Hi, {data && data.userName}
-								</Typography>
-								<IconButton
-									size="large"
-									edge="end"
-									aria-label="account of current user"
-									aria-controls={menuId}
-									aria-haspopup="true"
-									onClick={handleProfileMenuOpen}
-									color="inherit"
-								>
-									<Avatar
-										src={data && data.image}
-										alt={data && data.userName}
-									/>
-									{/* <AccountCircle /> */}
-								</IconButton>
-							</Box>
-						) : (
-							<Box
-								sx={{
-									display: "flex",
-									alignItems: "center",
-								}}
-							>
-								<Typography
-									sx={{
-										":hover": {
-											textDecoration: "underline",
-										},
-										cursor: "pointer",
-										paddingLeft: 2,
-										paddingRight: 4,
-										paddingTop: 1,
-										paddingBottom: 1,
-										display: {
-											sm: "flex",
-											xs: "none",
-										},
-									}}
-									onClick={() => {
-										setIsLogin(true);
-										handleOpen();
-									}}
-								>
-									Login
-								</Typography>
-								<Button
-									variant="outlined"
-									onClick={() => {
-										setIsLogin(false);
-										handleOpen();
-									}}
-									sx={{
-										display: {
-											xs: showSearchBar ? "none" : "flex",
-											sm: "flex",
-										},
-									}}
-								>
-									Signup
-								</Button>
-							</Box>
-						)}
-					</Box>
-					<Box
-						sx={{
-							display: {
-								xs: token ? "flex" : "none",
-								sm: "none",
-							},
-						}}
-					>
-						<IconButton
-							size="large"
-							aria-label="show more"
-							aria-controls={mobileMenuId}
-							aria-haspopup="true"
-							onClick={handleMobileMenuOpen}
-							color="inherit"
-						>
-							<MoreIcon />
-						</IconButton>
-					</Box>
-				</Toolbar>
-			</AppBar>
-			{renderMobileMenu}
-			{renderMenu}
-			{renderNavMenu}
+
+            {token ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  display: {
+                    xs: "none",
+                    sm: "flex",
+                  },
+                }}
+              >
+                <Typography
+                  variant="subtitle2"
+                  sx={{
+                    marginLeft: 1.5,
+                    cursor: "pointer",
+                    ":hover": {
+                      textDecoration: "underline",
+                    },
+                  }}
+                  onClick={() => navigate("/profile")}
+                >
+                  Hi, {data && data.userName}
+                </Typography>
+                <IconButton
+                  size="large"
+                  edge="end"
+                  aria-label="account of current user"
+                  aria-controls={menuId}
+                  aria-haspopup="true"
+                  onClick={handleProfileMenuOpen}
+                  color="inherit"
+                >
+                  <Avatar
+                    src={data && data.image}
+                    alt={data && data.userName}
+                  />
+                  {/* <AccountCircle /> */}
+                </IconButton>
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Typography
+                  sx={{
+                    ":hover": {
+                      textDecoration: "underline",
+                    },
+                    cursor: "pointer",
+                    paddingLeft: 2,
+                    paddingRight: 4,
+                    paddingTop: 1,
+                    paddingBottom: 1,
+                    display: {
+                      sm: "flex",
+                      xs: "none",
+                    },
+                  }}
+                  onClick={() => {
+                    setIsLogin(true);
+                    handleOpen();
+                  }}
+                >
+                  Login
+                </Typography>
+                <Button
+                  variant="outlined"
+                  onClick={() => {
+                    setIsLogin(false);
+                    handleOpen();
+                  }}
+                  sx={{
+                    display: {
+                      xs: showSearchBar ? "none" : "flex",
+                      sm: "flex",
+                    },
+                  }}
+                >
+                  Signup
+                </Button>
+              </Box>
+            )}
+          </Box>
+          <Box
+            sx={{
+              display: {
+                xs: token ? "flex" : "none",
+                sm: "none",
+              },
+            }}
+          >
+            <IconButton
+              size="large"
+              aria-label="show more"
+              aria-controls={mobileMenuId}
+              aria-haspopup="true"
+              onClick={handleMobileMenuOpen}
+              color="inherit"
+            >
+              <MoreIcon />
+            </IconButton>
+          </Box>
+        </Toolbar>
+      </AppBar>
+      {renderMobileMenu}
+      {renderMenu}
+      {renderNavMenu}
+
 
 			<Modal
 				open={open}
