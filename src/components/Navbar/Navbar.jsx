@@ -102,7 +102,7 @@ export default function Navbar(props) {
 	const user = useUserInfo((state) => state.user);
 	const role = user.role;
 
-	const isMenuOpen = Boolean(anchorEl);
+	const [isMenuOpen, setIsMenuOpen] = useState(anchorEl);
 	const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 	const isNavMenuOpen = Boolean(anchorNavEl);
 
@@ -131,14 +131,17 @@ export default function Navbar(props) {
 
 	const handleProfileMenuOpen = (event) => {
 		setAnchorEl(event.currentTarget);
+		setIsMenuOpen(true);
 	};
 
 	const handleMobileMenuClose = () => {
 		setMobileMoreAnchorEl(null);
+		setIsMenuOpen(false);
 	};
 
 	const handleMenuClose = () => {
 		setAnchorEl(null);
+		setIsMenuOpen(false);
 		handleMobileMenuClose();
 	};
 
@@ -168,8 +171,6 @@ export default function Navbar(props) {
 	useEffect(() => {
 		getData();
 	}, []);
-
-	console.log(data);
 
 	async function getData() {
 		const token = localStorage.getItem("token");
@@ -362,7 +363,16 @@ export default function Navbar(props) {
 	};
 
 	return (
-		<Box sx={{ flexGrow: 1 }}>
+		<Box
+			sx={{
+				flexGrow: 1,
+				display:
+					window.location.pathname === "/dashboard" ||
+					window.location.pathname === "/dashboard/"
+						? "none"
+						: "flex",
+			}}
+		>
 			<AppBar
 				position="sticky"
 				sx={{
