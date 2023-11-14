@@ -41,7 +41,7 @@ const FormEditAccount = (props) => {
       const token = localStorage.getItem("token");
       const newPass = "your_new_password_here";
       await axios.put(
-        `${import.meta.env.VITE_REACT_APP_API_URL}/User/UpdateProfileUser/${userId}`,
+        `${import.meta.env.VITE_REACT_APP_API_URL}/User/UpdatePassword/${userId}`,
         { newPassword: newPass },
         {
           headers: {

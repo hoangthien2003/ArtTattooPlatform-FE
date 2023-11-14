@@ -46,30 +46,37 @@ const Booking = (props) => {
     return `${hours}:${minutes} ${timeOfDay}`;
   };
 
+
   const handleNext = () => {
     const phoneValue = phoneRef.current.value;
     const dateValue = dateRef.current.value;
     const timeValue = timeRef.current.value;
     const countValue = countRef.current.value;
-    const dateTimeValue = dateValue.concat(", ", formatTime(timeValue));
-    let today = new Date();
-    let currentDay = today.toLocaleDateString();
-    let currentTime = today.toLocaleString();
-    // console.log("currentTime: " + currentTime);
-    // console.log("dateTimeValue: " + dateTimeValue);
+    const dateTimeValue = dateValue.concat(", ", setTimeOfDay(timeValue));
+    const dayValue = new Date(dateTimeValue);
 
+    // Get dateTime now
+    const today = new Date();
+    const date = today.getDate();
+    const month = today.getMonth() + 1;
+    const year = today.getFullYear();
+    const hour = today.getHours();
+    const minute = today.getMinutes();
+    // Format
+    const time = `${hour}:${minute}`;
+    const day = `${month}/${date}/${year}`;
+    
 
-    console.log(countValue);
-
+    //Validate
     if (!dateValue && !timeValue && !phoneValue && countValue === undefined) {
       toast.error("Please input form booking!");
     } else if (phoneValue.trim() === "") {
       toast.error("Must be input phoneNumber!");
     } else if (countValue === undefined) {
       toast.error("Must be selectable participants!");
-    } else if (dateValue < currentDay) {
+    } else if (dateValue < day) {
       toast.error("Please don't select a pass date!");
-    } else if (dateTimeValue < currentTime) {
+    } else if (dayValue < today) {
       toast.error("Please don't select a pass time!");
     } else {
       setBooking({
@@ -101,8 +108,7 @@ const Booking = (props) => {
     console.log(bookingRequest);
     await axios
       .post(
-        `${import.meta.env.VITE_REACT_APP_API_URL}/Booking/AddBooking/${
-          userInfo.email
+        `${import.meta.env.VITE_REACT_APP_API_URL}/Booking/AddBooking/${userInfo.email
         }`,
         bookingRequest,
         {
