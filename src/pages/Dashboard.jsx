@@ -8,25 +8,25 @@ import BookingManagement from "./BookingManagement";
 import ServiceManagement from "./ServiceManagement";
 
 function Dashboard() {
-	return (
-		<Box
-			className="app"
-			sx={{
-				display: "flex",
-				height: "100vh",
-			}}
-		>
-			<Drawer />
-			<Box
-				sx={{
-					width: "100vw",
-				}}
-			>
-				<Navbar />
-				<Outlet />
-			</Box>
-		</Box>
-	);
+  return (
+    <Box
+      className="app"
+      sx={{
+        display: "flex",
+        height: "100vh",
+      }}
+    >
+      <Drawer />
+      <Box
+        sx={{
+          width: "100vw",
+        }}
+      >
+        <Navbar />
+        <Outlet />
+      </Box>
+    </Box>
+  );
 }
 
 export default Dashboard;
