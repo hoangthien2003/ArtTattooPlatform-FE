@@ -32,6 +32,9 @@ import Register from "../Modal/Register";
 import Login from "../Modal/Login";
 import { useUserInfo } from "../../stores/useUserInfo";
 import { ShoppingCart } from "@mui/icons-material";
+import axios from "axios";
+import { useState } from "react";
+import { useEffect } from "react";
 
 const Search = styled("div")(({ theme }) => ({
 	position: "relative",
@@ -95,6 +98,7 @@ export default function Navbar(props) {
 	const token = localStorage.getItem("token");
 	const [open, setOpen] = React.useState(false);
 	const [isLogin, setIsLogin] = React.useState(true);
+	const [data, setData] = useState({});
 	const user = useUserInfo((state) => state.user);
 	const role = user.role;
 
@@ -161,6 +165,35 @@ export default function Navbar(props) {
 		handleMenuClose();
 	};
 
+	useEffect(() => {
+		getData();
+	}, []);
+
+	console.log(data);
+
+	async function getData() {
+		const token = localStorage.getItem("token");
+		await axios
+			.get(
+				`${
+					import.meta.env.VITE_REACT_APP_API_URL
+				}/User/GetUserInfoByUserID/${user.userID}`,
+				{
+					headers: {
+						Authorization: "Bearer " + token,
+					},
+				}
+			)
+
+			.then(function (response) {
+				setData(response.data);
+				// console.log(response.data);
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
+	}
+
 	const menuId = "primary-search-account-menu";
 	const navMenus = [
 		{ name: "Home", path: "/" },
@@ -186,7 +219,7 @@ export default function Navbar(props) {
 			<MenuItem
 				onClick={() => {
 					navigate("/profile");
-					z;
+					handleMenuClose();
 				}}
 			>
 				Profile
@@ -232,7 +265,14 @@ export default function Navbar(props) {
 				</MenuItem>
 			) : null}
 			<MenuItem onClick={handleMenuClose}>My account</MenuItem>
-			<MenuItem onClick={handleLogout}>Logout</MenuItem>
+			<MenuItem
+				onClick={() => {
+					handleLogout();
+					handleMenuClose();
+				}}
+			>
+				Logout
+			</MenuItem>
 		</Menu>
 	);
 
@@ -522,7 +562,7 @@ export default function Navbar(props) {
 									}}
 									onClick={() => navigate("/profile")}
 								>
-									Hi, {user && user.userName}
+									Hi, {data && data.userName}
 								</Typography>
 								<IconButton
 									size="large"
@@ -533,7 +573,10 @@ export default function Navbar(props) {
 									onClick={handleProfileMenuOpen}
 									color="inherit"
 								>
-									<Avatar />
+									<Avatar
+										src={data && data.image}
+										alt={data && data.userName}
+									/>
 									{/* <AccountCircle /> */}
 								</IconButton>
 							</Box>
