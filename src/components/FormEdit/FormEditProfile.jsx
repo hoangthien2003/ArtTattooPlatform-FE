@@ -7,7 +7,7 @@ const phoneRegExp = /^\d{10,12}$/;
 const nameRegExp = /^[a-zA-Z]+$/;
 
 const FormEditProfile = (props) => {
-  const { userId, password } = props.data;
+  const { userId } = props.data;
   const [data, setData] = useState({
     userName: props.data.userName,
     fullName: props.data.fullName,
