@@ -131,11 +131,11 @@ export default function BookingHistory() {
           </Typography>
         </Stack>
         <Typography variant="body1" sx={{ textDecoration: "none" }}>
-          Booking History
+          My Booking
         </Typography>
       </Breadcrumbs>
       <Typography variant="h5" className="mb-3">
-        Booking History
+        My Booking
       </Typography>
       {bookingList === undefined ? (
         <Stack direction="row" justifyContent="center" spacing={2}>

@@ -96,10 +96,11 @@ export default function ProfilePage() {
         );
     }
   };
+
   return (
     <Container maxWidth="lg" sx={{ paddingTop: 5, paddingBottom: 5 }}>
-      <Grid container spacing={2}>
-        <Grid item xs={4.5}>
+      {formType === null ? (
+        <Container maxWidth="xs">
           <Box border="2px solid #322F2F" borderRadius={5} paddingBottom={5}>
             <Stack
               direction="column"
@@ -170,44 +171,178 @@ export default function ProfilePage() {
               gap: 3,
             }}
           >
-            <Button
-              onClick={handleClickOpenProfile}
-              variant="outlined"
-              sx={{
-                backgroundColor: "#1E1E1E",
-                color: "white",
-                border: "none",
-                width: "200px",
-              }}
-            >
-              Edit Profile
-            </Button>
-            <Button
-              onClick={handleClickOpenAccount}
-              variant="outlined"
-              sx={{
-                backgroundColor: "#1E1E1E",
-                color: "white",
-                border: "none",
-                width: "200px",
-              }}
-            >
-              Account Setting
-            </Button>
+            {data && data.password === null ? (
+              <Button
+                onClick={handleClickOpenProfile}
+                variant="outlined"
+                sx={{
+                  backgroundColor: "#1E1E1E",
+                  color: "white",
+                  border: "none",
+                  width: "200px",
+                }}
+              >
+                Edit Profile
+              </Button>
+            ) : (
+              <>
+                <Button
+                  onClick={handleClickOpenProfile}
+                  variant="outlined"
+                  sx={{
+                    backgroundColor: "#1E1E1E",
+                    color: "white",
+                    border: "none",
+                    width: "200px",
+                  }}
+                >
+                  Edit Profile
+                </Button>
+                <Button
+                  onClick={handleClickOpenAccount}
+                  variant="outlined"
+                  sx={{
+                    backgroundColor: "#1E1E1E",
+                    color: "white",
+                    border: "none",
+                    width: "200px",
+                  }}
+                >
+                  Account Setting
+                </Button>
+              </>
+            )}
           </ButtonGroup>
+        </Container>
+      ) : (
+        <Grid container spacing={2}>
+          <Grid item xs={4.5}>
+            <Box border="2px solid #322F2F" borderRadius={5} paddingBottom={5}>
+              <Stack
+                direction="column"
+                justifyContent={"center"}
+                alignItems={"center"}
+                spacing={4}
+              >
+                <Avatar
+                  sx={{ width: 100, height: 100 }}
+                  className="mt-5 mb-4"
+                  src={data && data.image}
+                  alt={data && data.userName}
+                />
+                <Stack textAlign="center">
+                  <Typography
+                    gutterBottom
+                    variant="h5"
+                    component="div"
+                    sx={{ textAlign: "center" }}
+                  >
+                    {data && data.userName}
+                  </Typography>
+
+                  {renderUserProfile()}
+                </Stack>
+
+                <Container>
+                  <Grid container spacing={3}>
+                    <Grid item xs="3" textAlign="left">
+                      <Stack direction="row" spacing={1}>
+                        <Email fontSize="small" />
+                        <Typography>Email:</Typography>
+                      </Stack>
+                    </Grid>
+                    <Grid item xs="9" textAlign="right">
+                      {data && data.email}
+                    </Grid>
+                    <Grid item xs="3" textAlign="left">
+                      <Stack direction="row" spacing={1}>
+                        <Phone fontSize="small" />
+                        <Typography>Phone:</Typography>
+                      </Stack>
+                    </Grid>
+                    <Grid item xs="9" textAlign="right">
+                      {data && data.phoneNumber}
+                    </Grid>
+                    <Grid item xs="3" textAlign="left">
+                      <Stack direction="row" spacing={1}>
+                        <Person fontSize="small" />
+                        <Typography>FullName:</Typography>
+                      </Stack>
+                    </Grid>
+                    <Grid item xs="9" textAlign="right">
+                      {data && data.fullName}
+                    </Grid>
+                  </Grid>
+                </Container>
+              </Stack>
+            </Box>
+
+            <ButtonGroup
+              sx={{
+                paddingTop: 5,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 3,
+              }}
+            >
+              {data && data.password === null ? (
+                <Button
+                  onClick={handleClickOpenProfile}
+                  variant="outlined"
+                  sx={{
+                    backgroundColor: "#1E1E1E",
+                    color: "white",
+                    border: "none",
+                    width: "200px",
+                  }}
+                >
+                  Edit Profile
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    onClick={handleClickOpenProfile}
+                    variant="outlined"
+                    sx={{
+                      backgroundColor: "#1E1E1E",
+                      color: "white",
+                      border: "none",
+                      width: "200px",
+                    }}
+                  >
+                    Edit Profile
+                  </Button>
+                  <Button
+                    onClick={handleClickOpenAccount}
+                    variant="outlined"
+                    sx={{
+                      backgroundColor: "#1E1E1E",
+                      color: "white",
+                      border: "none",
+                      width: "200px",
+                    }}
+                  >
+                    Account Setting
+                  </Button>
+                </>
+              )}
+            </ButtonGroup>
+          </Grid>
+          <Grid
+            item
+            xs={7.5}
+            display={"flex"}
+            justifyContent="center"
+            alignItems="flex-start"
+            // sx={{ backgroundColor: "blue" }}
+          >
+            {formType === "profile" && <FormEditProfile data={data} />}
+            {formType === "account" && <FormEditAccount data={data} />}
+          </Grid>
         </Grid>
-        <Grid
-          item
-          xs={7.5}
-          display={"flex"}
-          justifyContent="center"
-          alignItems="flex-start"
-          // sx={{ backgroundColor: "blue" }}
-        >
-          {formType === "profile" && <FormEditProfile data={data} />}
-          {formType === "account" && <FormEditAccount data={data} />}
-        </Grid>
-      </Grid>
+      )}
     </Container>
   );
 }
