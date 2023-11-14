@@ -34,7 +34,7 @@ const Booking = (props) => {
   const navigate = useNavigate();
   const userInfo = useUserInfo((state) => state.user);
 
-  const formatTime = (time) => {
+  const setTimeOfDay = (time) => {
     const hours = time.split(":")[0];
     const minutes = time.split(":")[1];
 
@@ -51,23 +51,30 @@ const Booking = (props) => {
     const dateValue = dateRef.current.value;
     const timeValue = timeRef.current.value;
     const countValue = countRef.current.value;
-    const dateTimeValue = dateValue.concat(", ", formatTime(timeValue));
-    let today = new Date();
-    let currentDayVN = today.toLocaleDateString("vi-VN");
-    let currentDayUS = today.toLocaleDateString("en-US");
-    let currentTime = today.toLocaleString("en-US");
+    const dateTimeValue = dateValue.concat(", ", setTimeOfDay(timeValue));
+    const dayValue = new Date(dateTimeValue);
 
-    console.log(dateValue < currentDayVN || dateValue < currentDayUS);
+    // Get dateTime now
+    const today = new Date();
+    const date = today.getDate();
+    const month = today.getMonth() + 1;
+    const year = today.getFullYear();
+    const hour = today.getHours();
+    const minute = today.getMinutes();
+    // Format
+    const time = `${hour}:${minute}`;
+    const day = `${month}/${date}/${year}`;
 
+    //Validate
     if (!dateValue && !timeValue && !phoneValue && countValue === undefined) {
       toast.error("Please input form booking!");
     } else if (phoneValue.trim() === "") {
       toast.error("Must be input phoneNumber!");
     } else if (countValue === undefined) {
       toast.error("Must be selectable participants!");
-    } else if (!(dateValue < currentDayVN || dateValue < currentDayUS)) {
+    } else if (dateValue < day) {
       toast.error("Please don't select a pass date!");
-    } else if (dateTimeValue < currentTime) {
+    } else if (dayValue < today) {
       toast.error("Please don't select a pass time!");
     } else {
       setBooking({
@@ -79,16 +86,6 @@ const Booking = (props) => {
 
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
-
-    // if (!dateValue && !timeValue && !phoneValue && countValue === 0) {
-    //   toast.error("Please input form booking!");
-    // }
-    // if (phoneValue.trim() === "") {
-    //   toast.error("Must be input phoneNumber!");
-    // }
-    // if (condition) {
-
-    // }
   };
 
   const handleBack = () => {
