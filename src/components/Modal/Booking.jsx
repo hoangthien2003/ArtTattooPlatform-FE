@@ -53,7 +53,8 @@ const Booking = (props) => {
     const countValue = countRef.current.value;
     const dateTimeValue = dateValue.concat(", ", formatTime(timeValue));
     let today = new Date();
-    let currentDay = today.toLocaleDateString("en-US");
+    let currentDayVN = today.toLocaleDateString("vi-VN");
+    // let currentDayUS = today.toLocaleDateString("en-US");
     let currentTime = today.toLocaleString("en-US");
 
     if (!dateValue && !timeValue && !phoneValue && countValue === undefined) {
@@ -62,7 +63,7 @@ const Booking = (props) => {
       toast.error("Must be input phoneNumber!");
     } else if (countValue === undefined) {
       toast.error("Must be selectable participants!");
-    } else if (dateValue < currentDay) {
+    } else if (dateValue < currentDayVN) {
       toast.error("Please don't select a pass date!");
     } else if (dateTimeValue < currentTime) {
       toast.error("Please don't select a pass time!");
