@@ -54,8 +54,10 @@ const Booking = (props) => {
     const dateTimeValue = dateValue.concat(", ", formatTime(timeValue));
     let today = new Date();
     let currentDayVN = today.toLocaleDateString("vi-VN");
-    // let currentDayUS = today.toLocaleDateString("en-US");
+    let currentDayUS = today.toLocaleDateString("en-US");
     let currentTime = today.toLocaleString("en-US");
+
+    console.log(dateValue < currentDayVN || dateValue < currentDayUS);
 
     if (!dateValue && !timeValue && !phoneValue && countValue === undefined) {
       toast.error("Please input form booking!");
@@ -63,7 +65,7 @@ const Booking = (props) => {
       toast.error("Must be input phoneNumber!");
     } else if (countValue === undefined) {
       toast.error("Must be selectable participants!");
-    } else if (dateValue < currentDayVN) {
+    } else if (!(dateValue < currentDayVN || dateValue < currentDayUS)) {
       toast.error("Please don't select a pass date!");
     } else if (dateTimeValue < currentTime) {
       toast.error("Please don't select a pass time!");
