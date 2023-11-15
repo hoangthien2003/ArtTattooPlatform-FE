@@ -14,22 +14,30 @@ import {
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useUserInfo } from "../../stores/useUserInfo";
 
 const CommentList = ({ serviceId }) => {
-  const [comments, setComments] = useState();
+  const user = useUserInfo((state) => state.user);
+  const [comments, setComments] = useState(null);
 
   useEffect(() => {
     getCommentByServiceId();
   }, [serviceId]);
 
   const getCommentByServiceId = async () => {
+    const token = localStorage.getItem("token");
     await axios
       .get(
         import.meta.env.VITE_REACT_APP_API_URL +
-          `/Feedback/GetFeedbackByServiceID/${serviceId}`
+          `/Feedback/GetFeedbackByServiceID/${serviceId}`,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
       )
       .then((res) => {
-        // console.log(res.data.$values);
+        console.log(res.data.$values);
         setComments(res.data.$values);
       })
       .catch((err) => {
@@ -37,43 +45,76 @@ const CommentList = ({ serviceId }) => {
       });
   };
 
+  const formatDate = (date) => {
+    const feedbackDate = new Date(date);
+    return feedbackDate.toLocaleString();
+  };
+
   return (
     <Container>
       <Stack
-        divider={<Divider orientation="horizontal" flexItem />}
+        divider={
+          <Divider
+            orientation="horizontal"
+            flexItem
+            sx={{ border: "2px solid gray" }}
+          />
+        }
         direction={"column"}
         spacing={3}
         justifyContent={"center"}
         alignItems={"flex-start"}
       >
+        <Typography variant="h4">Feedback</Typography>
+
         {comments &&
           comments.map((comment, index) => (
             <Grid container spacing={2} key={index}>
               <Grid item xs={2}>
-                <Avatar />
+                <Avatar
+                  sx={{ width: 62, height: 62 }}
+                  src={comment.user.image}
+                  alt={comment.user.fullName}
+                />
               </Grid>
               <Grid item xs={10}>
-                <Stack spacing={2} direction="column">
+                <Stack
+                  spacing={2}
+                  direction="column"
+                  divider={
+                    <Divider
+                      orientation="horizontal"
+                      flexItem
+                      sx={{ width: 300, border: "1px solid gray" }}
+                    />
+                  }
+                >
                   <div>
-                    <Typography variant="h6">Username</Typography>
+                    <Typography variant="h6">
+                      {comment.user.fullName}
+                    </Typography>
+
+                    <Typography variant="subtitle2" color={"gray"}>
+                      Date: {formatDate(comment.feedbackDate)}
+                    </Typography>
+                  </div>
+                  <div>
+                    <Typography variant="h6">
+                      {comment.feedbackDetail}
+                    </Typography>
                     <Rating
                       aria-label="20/10/2023"
                       value={comment.rating}
-                      size="small"
+                      size="medium"
+                      readOnly
                     />
                   </div>
-                  <div>
-                    <Typography>{comment.feedbackDetail}</Typography>
-                    <Typography variant="subtitle2" color={"gray"}>
-                      Date: 20/10/2023
-                    </Typography>
-                  </div>
                 </Stack>
-                <Stack direction={"row"} spacing={1}>
+                {/* <Stack direction={"row"} spacing={1}>
                   <Button>Reply</Button>
                   <Button>Edit</Button>
                   <Button>Delete</Button>
-                </Stack>
+                </Stack> */}
               </Grid>
             </Grid>
           ))}

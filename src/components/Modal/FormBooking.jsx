@@ -11,6 +11,9 @@ import {
 import { DatePicker, DateTimePicker, TimePicker } from "@mui/x-date-pickers";
 import React, { useState } from "react";
 import SliderSlotTime from "../Slider/SliderSlotTime";
+import { useUserInfo } from "../../stores/useUserInfo";
+import { useEffect } from "react";
+import axios from "axios";
 
 const currencies = [
   {
@@ -40,9 +43,39 @@ const currencies = [
 ];
 
 const FormBooking = ({ phoneRef, dateRef, timeRef, countRef, studioId }) => {
+  const user = useUserInfo((state) => state.user);
+  const [data, setData] = useState({});
   const [error, setError] = useState("");
   const [label, setLabel] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+
+  useEffect(() => {
+    getData();
+  }, []);
+  async function getData() {
+    const token = localStorage.getItem("token");
+    await axios
+      .get(
+        `${import.meta.env.VITE_REACT_APP_API_URL}/User/GetUserInfoByUserID/${
+          user.userID
+        }`,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
+
+      .then(function (response) {
+        setData(response.data);
+        // console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  console.log(data);
 
   const onChange = (e) => {
     setPhoneNumber(e.target.value);
@@ -79,7 +112,7 @@ const FormBooking = ({ phoneRef, dateRef, timeRef, countRef, studioId }) => {
                 variant="outlined"
                 inputRef={phoneRef}
                 onChange={onChange}
-                // defaultValue={phoneNumber}
+                value={data && data.phoneNumber}
                 placeholder="PhoneNumber"
                 required
               />

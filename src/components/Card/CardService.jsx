@@ -32,6 +32,8 @@ const CardService = (props) => {
 
   const navigate = useNavigate();
 
+  console.log("StudioID: ", studioId);
+
   useEffect(() => {
     getStudio();
     getServiceById();
@@ -72,10 +74,6 @@ const CardService = (props) => {
     navigate(`/services/${serviceId}`);
   };
 
-  // const handeleOnClickStudio = (event) => {
-  //   navigate(`/`);
-  // };
-
   const handleOnClickBooking = (event) => {
     const token = localStorage.getItem("token");
     if (token == null) {
@@ -109,8 +107,15 @@ const CardService = (props) => {
           justifyContent={"flex-start"}
           alignItems={"center"}
         >
-          <Avatar alt={studioName} src={studioLogo} />
-          <Typography>{studioName}</Typography>
+          <Avatar
+            alt={studioName}
+            src={studioLogo}
+            component={Link}
+            to={`StudioDetail/${studioId}`}
+          />
+          <Typography component={Link} to={`StudioDetail/${studioId}`}>
+            {studioName}
+          </Typography>
         </Stack>
       </CardContent>
       <CardContent>
