@@ -20,13 +20,12 @@ import {
 	Stack,
 	TextField,
 	Typography,
-
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import {
-  Home,
-  ProductionQuantityLimitsRounded,
-  ProductionQuantityLimitsSharp,
+	Home,
+	ProductionQuantityLimitsRounded,
+	ProductionQuantityLimitsSharp,
 } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserInfo } from "../stores/useUserInfo";
@@ -42,13 +41,13 @@ export default function BookingManagement(props) {
 	const [openDialog, setOpenDialog] = React.useState(false);
 	const notesRef = React.useRef();
 
-  React.useEffect(() => {
-    if (user.role != "MN" && user.role != "AD") {
-      navigate("/access-denied");
-      return;
-    }
-    fetchBooking();
-  }, []);
+	React.useEffect(() => {
+		if (user.role != "MN" && user.role != "AD") {
+			navigate("/access-denied");
+			return;
+		}
+		fetchBooking();
+	}, []);
 
 	const fetchBooking = async () => {
 		const token = localStorage.getItem("token");
@@ -83,32 +82,6 @@ export default function BookingManagement(props) {
 			toast.error("Cannot get booking because token is empty!");
 		}
 	};
-
-  const fetchConfirmBooking = async (bookingId, status) => {
-    const token = localStorage.getItem("token");
-    await axios
-      .put(
-        `${
-          import.meta.env.VITE_REACT_APP_API_URL
-        }/Booking/UpdateStatus/${bookingId}`,
-        status,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((res) => {
-        toast.success("Update status booking successfully!");
-        console.log(res);
-        fetchBooking();
-      })
-      .catch((err) => {
-        toast.error("Update status booking failed!");
-        console.log(err);
-      });
-  };
 
 	const fetchConfirmBooking = async (bookingId, status) => {
 		const token = localStorage.getItem("token");
