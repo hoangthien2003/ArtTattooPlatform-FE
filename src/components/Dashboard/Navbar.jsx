@@ -12,11 +12,12 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useOpenDashboard } from "../../stores/useOpenDashboard";
 
-function Navbar(props) {
-	const { title } = props;
+function Navbar() {
 	const [anchorElUser, setAnchorElUser] = React.useState(null);
 	const navigate = useNavigate();
+	const setOpenDashboard = useOpenDashboard((state) => state.setOpen);
 
 	const handleOpenUserMenu = (event) => {
 		setAnchorElUser(event.currentTarget);
@@ -27,6 +28,7 @@ function Navbar(props) {
 	const handleLogout = () => {
 		localStorage.removeItem("token");
 		handleCloseUserMenu();
+		setOpenDashboard(false);
 		navigate("/");
 	};
 

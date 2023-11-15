@@ -10,15 +10,18 @@ import {
 	Breadcrumbs,
 	Button,
 	Container,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
 	Icon,
+	Modal,
 	Stack,
+	TextField,
 	Typography,
 } from "@mui/material";
 import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import {
 	Home,
 	ProductionQuantityLimitsRounded,
@@ -34,6 +37,9 @@ export default function BookingManagement(props) {
 	const user = useUserInfo((state) => state.user);
 	const navigate = useNavigate();
 	const [bookings, setBookings] = React.useState([]);
+	const [isEmpty, setEmpty] = React.useState(false);
+	const [openDialog, setOpenDialog] = React.useState(false);
+	const notesRef = React.useRef();
 
 	React.useEffect(() => {
 		if (user.role != "MN" && user.role != "AD") {
@@ -59,7 +65,14 @@ export default function BookingManagement(props) {
 				)
 				.then((res) => {
 					console.log(res);
-					setBookings(res.data.$values);
+					const filteredBookings = res.data.$values.filter(
+						(booking) =>
+							booking.status === "Pending" ||
+							booking.status === "Confirmed"
+					);
+
+					setBookings(filteredBookings);
+					setEmpty(filteredBookings.length === 0);
 				})
 				.catch((err) => {
 					console.log(err);
@@ -76,28 +89,66 @@ export default function BookingManagement(props) {
 
 	const fetchConfirmBooking = async (bookingId, status) => {
 		const token = localStorage.getItem("token");
-		await axios
-			.put(
-				`${
-					import.meta.env.VITE_REACT_APP_API_URL
-				}/Booking/UpdateStatus/${bookingId}`,
-				status,
-				{
-					headers: {
-						Authorization: `Bearer ${token}`,
-						"Content-Type": "application/json",
-					},
-				}
-			)
-			.then((res) => {
-				toast.success("Update status booking successfully!");
-				console.log(res);
-				fetchBooking();
-			})
-			.catch((err) => {
-				toast.error("Update status booking failed!");
-				console.log(err);
-			});
+		if (status === "Canceled") {
+			const notesValue = notesRef.current.value;
+			const request = {
+				status: status,
+				notes: notesValue,
+			};
+			console.log(request);
+			await axios
+				.put(
+					`${
+						import.meta.env.VITE_REACT_APP_API_URL
+					}/Booking/UpdateStatus/${bookingId}`,
+					request,
+					{
+						headers: {
+							Authorization: `Bearer ${token}`,
+							"Content-Type": "application/json",
+						},
+					}
+				)
+				.then((res) => {
+					toast.success("Update status booking successfully!");
+					console.log(res);
+					fetchBooking();
+				})
+				.catch((err) => {
+					toast.error("Update status booking failed!");
+					console.log(err);
+				});
+		} else {
+			const request = {
+				status: status,
+				notes: "",
+			};
+			await axios
+				.put(
+					`${
+						import.meta.env.VITE_REACT_APP_API_URL
+					}/Booking/UpdateStatus/${bookingId}`,
+					request,
+					{
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					}
+				)
+				.then((res) => {
+					toast.success("Update status booking successfully!");
+					console.log(res);
+					fetchBooking();
+				})
+				.catch((err) => {
+					toast.error("Update status booking failed!");
+					console.log(err);
+				});
+		}
+	};
+
+	const handleClose = () => {
+		setOpenDialog(false);
 	};
 
 	return (
@@ -128,7 +179,7 @@ export default function BookingManagement(props) {
 					Booking Management
 				</Typography>
 			</Breadcrumbs>
-			{bookings.length != 0 ? (
+			{!isEmpty ? (
 				<Box>
 					<Typography variant="h5" className="mb-3">
 						Booking Management
@@ -154,95 +205,145 @@ export default function BookingManagement(props) {
 							</TableHead>
 							<TableBody>
 								{bookings.map((booking, index) => {
-									return (
-										<TableRow
-											sx={{
-												"&:last-child td, &:last-child th":
-													{
-														border: 0,
-													},
-											}}
-											key={index}
-										>
-											<TableCell
-												component="th"
-												scope="row"
+									if (
+										booking.status === "Pending" ||
+										booking.status === "Confirmed"
+									)
+										return (
+											<TableRow
+												sx={{
+													"&:last-child td, &:last-child th":
+														{
+															border: 0,
+														},
+												}}
+												key={index}
 											>
-												{booking.serviceName}
-											</TableCell>
-											<TableCell align="center">
-												{booking.userName}
-											</TableCell>
-											<TableCell align="center">
-												{booking.phoneNumber}
-											</TableCell>
-											<TableCell align="center">
-												{booking.bookingDate}
-											</TableCell>
-											<TableCell align="center">
-												{booking.quantity}
-											</TableCell>
-											<TableCell align="center">
-												{booking.total}$
-											</TableCell>
-											<TableCell align="center">
-												{booking.status}
-											</TableCell>
-											<TableCell align="center">
-												{booking.status !==
-													"Canceled" &&
-												booking.status !==
-													"Completed" ? (
-													<Button
-														variant="contained"
-														onClick={() => {
-															if (
-																booking.status ===
-																"Pending"
-															)
-																fetchConfirmBooking(
-																	booking.bookingId,
+												<TableCell
+													component="th"
+													scope="row"
+												>
+													{booking.serviceName}
+												</TableCell>
+												<TableCell align="center">
+													{booking.userName}
+												</TableCell>
+												<TableCell align="center">
+													{booking.phoneNumber}
+												</TableCell>
+												<TableCell align="center">
+													{booking.bookingDate}
+												</TableCell>
+												<TableCell align="center">
+													{booking.quantity}
+												</TableCell>
+												<TableCell align="center">
+													{booking.total}$
+												</TableCell>
+												<TableCell align="center">
+													{booking.status}
+												</TableCell>
+												<TableCell align="center">
+													{booking.status !==
+														"Canceled" &&
+													booking.status !==
+														"Completed" ? (
+														<Button
+															variant="contained"
+															onClick={() => {
+																if (
+																	booking.status ===
+																	"Pending"
+																)
+																	fetchConfirmBooking(
+																		booking.bookingId,
+																		"Confirmed"
+																	);
+																else if (
+																	booking.status ===
 																	"Confirmed"
+																)
+																	fetchConfirmBooking(
+																		booking.bookingId,
+																		"Completed"
+																	);
+															}}
+														>
+															{booking.status ===
+															"Pending"
+																? "Confirm"
+																: booking.status ===
+																		"Confirmed" &&
+																  "Complete"}
+														</Button>
+													) : null}
+												</TableCell>
+												<TableCell align="center">
+													{booking.status !==
+														"Canceled" &&
+													booking.status !==
+														"Completed" ? (
+														<Button
+															variant="outlined"
+															onClick={() => {
+																setOpenDialog(
+																	true
 																);
-															else if (
-																booking.status ===
-																"Confirmed"
-															)
+															}}
+														>
+															Cancel
+														</Button>
+													) : null}
+												</TableCell>
+												<Dialog
+													open={openDialog}
+													handleClose={handleClose}
+												>
+													<DialogTitle>
+														Booking Notes
+													</DialogTitle>
+													<DialogContent>
+														<DialogContentText>
+															Add notes about the
+															cancellation:
+														</DialogContentText>
+														<TextField
+															autoFocus
+															margin="dense"
+															id="bookingNotes"
+															label="Notes"
+															type="text"
+															fullWidth
+															multiline
+															rows={4}
+															variant="outlined"
+															inputRef={notesRef}
+														/>
+													</DialogContent>
+													<DialogActions>
+														<Button
+															onClick={
+																handleClose
+															}
+															color="primary"
+														>
+															Close
+														</Button>
+														<Button
+															onClick={() =>
 																fetchConfirmBooking(
 																	booking.bookingId,
-																	"Completed"
-																);
-														}}
-													>
-														{booking.status ===
-														"Pending"
-															? "Confirm"
-															: booking.status ===
-																	"Confirmed" &&
-															  "Complete"}
-													</Button>
-												) : null}
-											</TableCell>
-											<TableCell align="center">
-												{booking.status !==
-													"Canceled" &&
-												booking.status !==
-													"Completed" ? (
-													<Button
-														variant="outlined"
-														onClick={() => {
-															fetchConfirmBooking(
-																booking.bookingId,
-																"Canceled"
-															);
-														}}
-													>
-														Cancel
-													</Button>
-												) : null}
-											</TableCell>
-										</TableRow>
-									);
+																	"Canceled"
+																)
+															}
+															color="primary"
+														>
+															Cancel Booking
+														</Button>
+													</DialogActions>
+												</Dialog>
+											</TableRow>
+										);
 								})}
 							</TableBody>
 						</Table>
