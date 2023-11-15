@@ -83,7 +83,7 @@ const SliderSlotTime = ({ timeRef, studioId }) => {
           </Typography>
         </Stack>
         <Typography variant="body2" textAlign="left" sx={{ color: "gray" }}>
-          Note: Please make an appointment 1 hour before the current time{" "}
+          Note: Please make an appointment 1 day before the current time
         </Typography>
       </Stack>
       <Grid

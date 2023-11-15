@@ -17,15 +17,13 @@ import { Avatar, Card, Rating, Typography } from "@mui/material";
 import Booking from "../components/Modal/Booking";
 import CardService from "../components/Card/CardService";
 import Slider from "react-slick";
-import { Home, LocationOn } from "@mui/icons-material";
+import { Home } from "@mui/icons-material";
 import { StarList } from "../components/Feedback/StarList";
 import FeedbackForm from "../components/Feedback/FeedbackForm";
 import CommentList from "../components/Feedback/CommentList";
 import ProfileStudio from "../components/Box/ProfileStudio";
 import { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
-import GoogleMapReact from "google-map-react";
-
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
+import Map from "../components/Map/Map";
 
 export default function StudioDetail() {
   const { studioId } = useParams();
@@ -34,26 +32,21 @@ export default function StudioDetail() {
   const [studioData, setStudioData] = useState(null);
   const [serviceData, setServiceData] = useState(null);
 
-  console.log(coords);
-
   useEffect(() => {
     getStudioID();
     getServiceByStudioId();
-  }, []);
+  }, [studioId]);
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      ({ coords: { latitude, longitude } }) => {
-        setCoords({ lat: latitude, lng: longitude });
-      }
-    );
-  }, []);
+    const getCoords = async () => {
+      const addressArr = studioData?.address?.split(",");
 
-  const fn = async () => {
-    const result = await geocodeByAddress(places);
-    const lnglat = await getLatLng(result[0]);
-    setCoords(lnglat);
-  };
+      const results = await geocodeByAddress(studioData?.address);
+      const latLng = await getLatLng(results[0]);
+      setCoords(latLng);
+    };
+    studioData && getCoords();
+  }, [studioData]);
 
   const getStudioID = async () => {
     try {
@@ -250,24 +243,9 @@ export default function StudioDetail() {
               </Typography>
             </Stack>
           </Card>
+          {/* Google Map React */}
+          {studioData && <Map address={studioData.address} coords={coords} />}
 
-          <div style={{ height: 300, width: "100%", marginTop: 10 }}>
-            <GoogleMapReact
-              bootstrapURLKeys={{
-                key: import.meta.env.VITE_REACT_APP_REACT_MAP,
-              }}
-              defaultCenter={coords}
-              defaultZoom={18}
-              center={coords}
-            >
-              <AnyReactComponent
-                lat={coords && coords.lat}
-                lng={coords && coords.lng}
-              >
-                <LocationOn color="red" />
-              </AnyReactComponent>
-            </GoogleMapReact>
-          </div>
           <Typography variant="h5" className="mt-5">
             Our ratings
           </Typography>

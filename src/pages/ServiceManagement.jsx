@@ -7,13 +7,13 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import {
-	Breadcrumbs,
-	Button,
-	Container,
-	Input,
-	Stack,
-	TextField,
-	Typography,
+  Breadcrumbs,
+  Button,
+  Container,
+  Input,
+  Stack,
+  TextField,
+  Typography,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
@@ -30,8 +30,6 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
-
-
 
 export default function ServiceManagement() {
 	const user = useUserInfo((state) => state.user);
@@ -60,6 +58,12 @@ export default function ServiceManagement() {
 			const studioData = response.data.studio;
 
 			if (studioData) {
+				// Set the studioId in the newServiceData
+				setNewServiceData((prevData) => ({
+					...prevData,
+					StudioID: studioData.studioId,
+				}));
+
 				setStudio(studioData);
 				getServiceByStudioId(studioData.studioId);
 			}
@@ -82,116 +86,134 @@ export default function ServiceManagement() {
 			console.log(error);
 		}
 	};
+
+
 	//Add dialog
 	const [openDialog, setOpenDialog] = useState(false);
-	const [newServiceName, setNewServiceName] = useState('');
-	const [newImageService, setNewImageService] = useState('');
-	const [newDescription, setNewDescription] = useState('');
-	const [newStudioId, setNewStudioId] = useState('');
-	const [newPrice, setNewPrice] = useState('');
+	const [addSuccessDialog, setAddSuccessDialog] = useState(false);
+
+	const handleAddSuccessClose = () => {
+		setAddSuccessDialog(false);
+	};
+
+	const [newServiceData, setNewServiceData] = useState({
+		ServiceName: "",
+		Description: "",
+		StudioID: studio?.studioId || null,
+		Price: 0,
+		Image: "",
+	});
+
 	const handleOpenDialog = () => {
 		setOpenDialog(true);
 	};
+
 	const handleCloseDialog = () => {
 		setOpenDialog(false);
 	};
 
-	// ... (existing imports and code)
+	const handleNewServiceDataChange = (field, value) => {
+		setNewServiceData((prevData) => ({ ...prevData, [field]: value }));
+	};
 
 	const addService = async () => {
 		try {
-		  // Validate that all necessary fields are filled
-		  if (!newServiceName || !newImageService || !newDescription || !studio || !newPrice) {
-			console.error("All fields are required.");
-			return;
-		  }
-	  
-		  // Extract studioId and ensure it is a number
-		  const studioId = typeof studio.studioId === "object" ? studio.studioId.studioId : studio.studioId;
-	  
-		  // Convert newPrice to a number
-		  const priceAsDouble = parseFloat(newPrice);
-	  
-		  // Validate data types
-		  if (
-			typeof newServiceName !== "string" ||
-			typeof newImageService !== "string" ||
-			typeof newDescription !== "string" ||
-			isNaN(priceAsDouble) || // Check if priceAsDouble is a valid number
-			isNaN(studioId)         // Check if studioId is a valid number
-		  ) {
-			console.error("Invalid data types. Check the data types for each field.");
-			console.log("Data types:", {
-			  newServiceName: typeof newServiceName,
-			  newImageService: typeof newImageService,
-			  newDescription: typeof newDescription,
-			  studioId: typeof studioId,
-			  newPrice: typeof newPrice,
-			  priceAsDouble: typeof priceAsDouble,
-			});
-			return;
-		  }
-	  
-		  // Log data types and request payload
-		  console.log("Data types:", {
-			newServiceName: typeof newServiceName,
-			newImageService: typeof newImageService,
-			newDescription: typeof newDescription,
-			studioId: typeof studioId,
-			newPrice: typeof newPrice,
-			priceAsDouble: typeof priceAsDouble,
-		  });
-	  
-		  const payload = {
-			ServiceName: newServiceName,
-			Description: newDescription,
-			StudioID: studioId,
-			Price: priceAsDouble,
-			Image: newImageService,
-		  };
-		  console.log("Request Payload:", payload);
-	  
-		  // Make an API call to add the new service
-		  const token = localStorage.getItem("token");
-		  const response = await axios.post(
-			`${import.meta.env.VITE_REACT_APP_API_URL}/Service/Add`,
-			payload,
-			{
-			  headers: {
-				Authorization: `Bearer ${token}`,
-				"Content-Type": "application/json",
-			  },
+			console.log("New Service Data:", newServiceData);
+
+			// Validate that all necessary fields are filled
+			if (
+				!newServiceData.ServiceName ||
+				!newServiceData.Image ||
+				!newServiceData.Description ||
+				!newServiceData.Price
+			) {
+				console.error("All fields are required.");
+				return;
 			}
-		  );
-		  // Update the service data in the state
-		  const addedService = response.data;
-		  setServiceData((prevData) => [...prevData, addedService]);
-	  
-		  // Reset the input fields and close the dialog
-		  setNewServiceName('');
-		  setNewImageService('');
-		  setNewDescription('');
-		  setNewPrice('');
-		  handleCloseDialog();
+
+			// Validate data types
+			if (
+				typeof newServiceData.ServiceName !== "string" ||
+				typeof newServiceData.Image !== "string" ||
+				typeof newServiceData.Description !== "string" ||
+				isNaN(newServiceData.Price)
+			) {
+				console.error("Invalid data types. Check the data types for each field.");
+				console.log("Data types:", {
+					ServiceName: typeof newServiceData.ServiceName,
+					Image: typeof newServiceData.Image,
+					Description: typeof newServiceData.Description,
+					Price: typeof newServiceData.Price,
+				});
+				return;
+			}
+
+			// Ensure that StudioID is properly set
+			const studioId = studio?.studioId;
+			if (!studioId) {
+				console.error("Unable to obtain StudioID.");
+				return;
+			}
+
+			const payload = {
+				ServiceName: newServiceData.ServiceName,
+				Description: newServiceData.Description,
+				StudioID: parseInt(newServiceData.StudioID),  // Parse as an integer
+				Price: parseFloat(newServiceData.Price),
+				Image: newServiceData.Image,
+			};
+
+			console.log("Request Payload:", payload);
+
+			const token = localStorage.getItem("token");
+
+			// Use axios.post with try/catch for error handling
+			const response = await axios.post(
+				`${import.meta.env.VITE_REACT_APP_API_URL}/Service/Add`,
+				payload,
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+						"Content-Type": "application/json",
+					},
+				}
+			);
+
+			// Check if the response status is 201 (Created)
+			const addedService = response.data;
+			setServiceData((prevData) => [...prevData, addedService]);
+
+			// Reset the input fields and close the dialog
+			// After successfully adding the service, show success message
+			setAddSuccessDialog(true);
+
+			// Reset the input fields and close the dialog
+			setNewServiceData({
+				ServiceName: "",
+				Description: "",
+				StudioID: studio?.studioId || null,
+				Price: 0,
+				Image: "",
+			});
+			handleCloseDialog();
 		} catch (error) {
-		  console.error("Error adding service:", error);
-	  
-		  if (error.response) {
-			// The request was made and the server responded with a status code
-			// that falls out of the range of 2xx
-			console.error("Response data:", error.response.data);
-			console.error("Response status:", error.response.status);
-			console.error("Response headers:", error.response.headers);
-		  } else if (error.request) {
-			// The request was made but no response was received
-			console.error("No response received. Request details:", error.request);
-		  } else {
-			// Something happened in setting up the request that triggered an Error
-			console.error("Error setting up the request:", error.message);
-		  }
+			console.error("Error adding service:", error);
+
+			if (error.response) {
+				// The request was made and the server responded with a status code
+				// that falls out of the range of 2xx
+				console.error("Response data:", error.response.data);
+				console.error("Response status:", error.response.status);
+				console.error("Response headers:", error.response.headers);
+			} else if (error.request) {
+				// The request was made but no response was received
+				console.error("No response received. Request details:", error.request);
+			} else {
+				// Something happened in setting up the request that triggered an Error
+				console.error("Error setting up the request:", error.message);
+			}
 		}
-	  };
-	  
+	};
 
 
 	//Edit service
@@ -202,6 +224,7 @@ export default function ServiceManagement() {
 	const [editImageService, setEditImageService] = useState('');
 	const [editDescription, setEditDescription] = useState('');
 	const [editPrice, setEditPrice] = useState('');
+	const [updateSuccessDialog, setUpdateSuccessDialog] = useState(false);
 
 	const handleEditClick = (service) => {
 		setEditServiceId(service.serviceId);
@@ -214,62 +237,60 @@ export default function ServiceManagement() {
 
 
 	const handleEditDialogClose = () => {
+		setUpdateSuccessDialog(false); // Reset the success message
 		setOpenEditDialog(false);
 	};
-
+	const handleUpdateSuccessClose = () => {
+		setUpdateSuccessDialog(false);
+	};
 	const updateService = async () => {
 		try {
-			const token = localStorage.getItem("token");
+			const token = localStorage.getItem('token');
 
-		  const response = await axios.put(
-			`${import.meta.env.VITE_REACT_APP_API_URL}/Service/UpdateService/${editServiceId}`,
-			{
-			  serviceName: editServiceName,
-			  imageService: editImageService,
-			  description: editDescription,
-			  price: parseFloat(editPrice),
-			},
-			{
-				headers: {
-				  Authorization: `Bearer ${token}`,
-				  'Content-Type': 'application/json',
-				},
-			  }
-		  );
-	  
-		  // Check if the response status is 200 (OK)
-		  if (response.status === 200) {
-			// Update the service data in the state
-			const updatedService = response.data;
-			setServiceData((prevData) =>
-			  prevData.map((service) =>
-				service.serviceId === editServiceId ? updatedService : service
-			  )
+			const payload = {
+				StudioID: studio?.studioId,
+				ServiceName: editServiceName,
+				Description: editDescription,
+				Price: parseFloat(editPrice),
+				Image: editImageService,
+			};
+
+			const response = await axios.put(
+				`${import.meta.env.VITE_REACT_APP_API_URL}/Service/UpdateService/${editServiceId}`,
+				payload,
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+						'Content-Type': 'application/json',
+					},
+				}
 			);
-	  
-			// Reset the input fields and close the dialog
-			setEditServiceId('');
-			setEditServiceName('');
-			setEditImageService('');
-			setEditDescription('');
-			setEditPrice('');
-			handleEditDialogClose();
-		  } else {
-			console.error('Update service failed. Unexpected response status:', response.status);
-		  }
+
+			if (response.status === 200) {
+				const updatedService = response.data;
+				setServiceData((prevData) =>
+					prevData.map((service) =>
+						service.serviceId === editServiceId ? updatedService : service
+					)
+				);
+				setUpdateSuccessDialog(true);
+
+				setEditServiceId('');
+				setEditServiceName('');
+				setEditImageService('');
+				setEditDescription('');
+				setEditPrice('');
+				handleEditDialogClose();
+			} else {
+				throw new Error(`Update service failed. Unexpected response status: ${response.status}`);
+			}
 		} catch (error) {
-		  console.error('Error updating service:', error);
-		  if (error.response) {
-			console.error('Response data:', error.response.data);
-			console.error('Response status:', error.response.status);
-		  } else if (error.request) {
-			console.error('No response received. Request details:', error.request);
-		  } else {
-			console.error('Error setting up the request:', error.message);
-		  }
+			console.error('Error updating service:', error);
+			handleRequestError(error);
 		}
-	  };
-	  
+	};
+
+
 	//Delete service
 	const deleteService = async (serviceId) => {
 		try {
@@ -367,7 +388,7 @@ export default function ServiceManagement() {
 								<TableCell align="left">{service.price}</TableCell>
 								<TableCell align="left" className="ellipsis" sx={{ maxWidth: '200px' }}>{service.description}</TableCell>
 								<TableCell align="left" className="ellipsis" sx={{ maxWidth: '200px' }}>
-									<img src={service.imageService} style={{ width: "100px", height: "60px" }}>
+									<img src={service.imageService} alt="Service Image" style={{ width: "100px", height: "60px" }}>
 									</img>
 
 								</TableCell>
@@ -386,8 +407,8 @@ export default function ServiceManagement() {
 							sx={{ minWidth: '300px' }}
 							fullWidth
 							label="Service Name"
-							value={newServiceName}
-							onChange={(e) => setNewServiceName(e.target.value)}
+							value={newServiceData.ServiceName}
+							onChange={(e) => handleNewServiceDataChange('ServiceName', e.target.value)}
 							margin="normal"
 							variant="outlined"
 						/>
@@ -395,8 +416,8 @@ export default function ServiceManagement() {
 							sx={{ minWidth: '300px' }}
 							fullWidth
 							label="Image"
-							value={newImageService}
-							onChange={(e) => setNewImageService(e.target.value)}
+							value={newServiceData.Image}
+							onChange={(e) => handleNewServiceDataChange('Image', e.target.value)}
 							margin="normal"
 							variant="outlined"
 						/>
@@ -404,18 +425,17 @@ export default function ServiceManagement() {
 							sx={{ minWidth: '300px' }}
 							fullWidth
 							label="Description"
-							value={newDescription}
-							onChange={(e) => setNewDescription(e.target.value)}
+							value={newServiceData.Description}
+							onChange={(e) => handleNewServiceDataChange('Description', e.target.value)}
 							margin="normal"
 							variant="outlined"
 						/>
-
 						<TextField
 							sx={{ minWidth: '300px' }}
 							fullWidth
 							label="Price"
-							value={newPrice}
-							onChange={(e) => setNewPrice(e.target.value)}
+							value={newServiceData.Price}
+							onChange={(e) => handleNewServiceDataChange('Price', e.target.value)}
 							margin="normal"
 							variant="outlined"
 						/>
@@ -428,8 +448,17 @@ export default function ServiceManagement() {
 					</Button>
 				</DialogActions>
 			</Dialog>
+			<Dialog open={addSuccessDialog} onClose={handleAddSuccessClose}>
+				<DialogTitle>Add Success</DialogTitle>
+				<DialogContent>
+					The service has been added successfully.
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleAddSuccessClose}>OK</Button>
+				</DialogActions>
+			</Dialog>
 			{/* edit */}
-			<Dialog open={openEditDialog} onClose={handleEditDialogClose}>
+			<Dialog open={openEditDialog} onClose={() => setOpenEditDialog(false)}>
 				<DialogTitle>Edit Service</DialogTitle>
 				<DialogContent>
 					<FormControl fullWidth>
@@ -477,7 +506,7 @@ export default function ServiceManagement() {
 					</FormControl>
 				</DialogContent>
 				<DialogActions sx={{ justifyContent: 'center' }}>
-					<Button onClick={handleEditDialogClose}>Cancel</Button>
+					<Button onClick={() => setOpenEditDialog(false)}>Cancel</Button>
 					<Button onClick={updateService} variant="contained">
 						Update
 					</Button>
@@ -490,6 +519,17 @@ export default function ServiceManagement() {
 					</Button>
 				</DialogActions>
 			</Dialog>
+	        <Dialog open={updateSuccessDialog} onClose={handleUpdateSuccessClose}>
+            <DialogTitle>Update Success</DialogTitle>
+            <DialogContent>
+                The service has been updated successfully.
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleUpdateSuccessClose}>OK</Button>
+            </DialogActions>
+        </Dialog>
+
+			{/* Delete */}
 			<Dialog open={confirmDeleteDialog} onClose={() => setConfirmDeleteDialog(false)}>
 				<DialogTitle>Confirm Delete</DialogTitle>
 				<DialogContent>
@@ -519,6 +559,10 @@ export default function ServiceManagement() {
 					<Button onClick={() => setDeleteSuccessDialog(false)}>OK</Button>
 				</DialogActions>
 			</Dialog>
-		</Container>
-	);
-}
+		</Container >
+)};
+
+
+
+
+  

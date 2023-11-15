@@ -3,11 +3,13 @@ import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 
-const phoneRegExp = /^\d{10,12}$/;
+const phoneRegExpVN = /^(?:\+84|0)(\d{9,10})$/;
 const nameRegExp = /^[a-zA-Z]+$/;
 
 const FormEditProfile = (props) => {
-  const { userId, password } = props.data;
+  const { userId } = props.data;
+  const [validationErrors, setValidationErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     userName: props.data.userName,
     fullName: props.data.fullName,
@@ -15,8 +17,6 @@ const FormEditProfile = (props) => {
     phoneNumber: props.data.phoneNumber,
     image: props.data.image,
   });
-
-  const isVariableForm = () => {};
 
   const memoizedData = useMemo(() => data, [data]);
 
@@ -26,7 +26,30 @@ const FormEditProfile = (props) => {
     }
   }, [data]);
 
+  const validateForm = () => {
+    const errors = {};
+
+    if (!phoneRegExpVN.test(data.phoneNumber)) {
+      errors.phoneNumber = "Invalid Vietnamese phone number";
+    }
+
+    if (!nameRegExp.test(data.fullName)) {
+      errors.fullName = "Invalid full name";
+    }
+
+    setValidationErrors(errors);
+  };
+
   const handleSubmit = async () => {
+    setLoading(true);
+
+    validateForm();
+
+    // Check for validation errors
+    if (Object.keys(validationErrors).length > 0) {
+      setLoading(false);
+      return;
+    }
     const token = localStorage.getItem("token");
 
     await axios
@@ -42,8 +65,18 @@ const FormEditProfile = (props) => {
       )
       .then((res) => {
         toast.success("Updated profile successfully, please refresh page");
+        setData({
+          userName: res.data.userName,
+          fullName: res.data.fullName,
+          email: res.data.email,
+          phoneNumber: res.data.phoneNumber,
+          image: res.data.image,
+        });
+        setValidationErrors({});
+        window.location.reload();
       })
       .catch((err) => toast.error(`Update Failed: ${err.message}`));
+    setLoading(false);
   };
   return (
     <Container
@@ -75,7 +108,9 @@ const FormEditProfile = (props) => {
                   sx={{ width: "70%" }}
                   type="text"
                   name={key}
-                  defaultValue={data[key]}
+                  value={data[key]}
+                  error={validationErrors[key] !== undefined}
+                  helperText={validationErrors[key]}
                   onChange={(e) => setData({ ...data, [key]: e.target.value })}
                 />
               </Stack>
@@ -87,8 +122,9 @@ const FormEditProfile = (props) => {
           variant="outlined"
           onClick={handleSubmit}
           sx={{ width: "20%", placeSelf: "end" }}
+          disabled={loading}
         >
-          Submit
+          {loading ? "Submitting..." : "Submit"}
         </Button>
       </Stack>
     </Container>
