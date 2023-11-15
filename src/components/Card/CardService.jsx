@@ -32,7 +32,7 @@ const CardService = (props) => {
 
   const navigate = useNavigate();
 
-  console.log("StudioID: ", studioId);
+  // console.log("StudioID: ", studioId);
 
   useEffect(() => {
     getStudio();
