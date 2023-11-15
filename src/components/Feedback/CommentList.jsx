@@ -25,16 +25,10 @@ const CommentList = ({ serviceId }) => {
   }, [serviceId]);
 
   const getCommentByServiceId = async () => {
-    const token = localStorage.getItem("token");
     await axios
       .get(
         import.meta.env.VITE_REACT_APP_API_URL +
-          `/Feedback/GetFeedbackByServiceID/${serviceId}`,
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
+          `/Feedback/GetFeedbackByServiceID/${serviceId}`
       )
       .then((res) => {
         console.log(res.data.$values);
@@ -90,9 +84,7 @@ const CommentList = ({ serviceId }) => {
                   }
                 >
                   <div>
-                    <Typography variant="h6">
-                      {comment.user.fullName}
-                    </Typography>
+                    <Typography variant="h6">{comment.userName}</Typography>
 
                     <Typography variant="subtitle2" color={"gray"}>
                       Date: {formatDate(comment.feedbackDate)}

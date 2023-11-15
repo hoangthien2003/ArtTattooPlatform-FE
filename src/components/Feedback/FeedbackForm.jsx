@@ -21,6 +21,11 @@ export default function FeedbackForm({ serviceId }) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
+    const token = localStorage.getItem("token");
+    if (token == null) {
+      toast.error("Please login to continue!!!");
+      return;
+    }
     setOpen(true);
   };
 
