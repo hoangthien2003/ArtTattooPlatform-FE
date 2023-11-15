@@ -42,35 +42,32 @@ export default function FeedbackForm({ serviceId }) {
     const titleValue = title;
     const ratingValue = rating;
 
-    if (token != null) {
-      const email = jwtDecode(token).email;
-      const feedbackRequest = {
-        FeedbackDetail: titleValue,
-        UserID: user.userID,
-        ServiceID: serviceId,
-        Rating: ratingValue,
-      };
-
-      await axios
-        .post(
-          `${import.meta.env.VITE_REACT_APP_API_URL}/Feedback/AddFeedback`,
-          feedbackRequest,
-          {
-            headers: {
-              Authorization: "Bearer " + token,
-            },
-          }
-        )
-        .then((res) => {
-          toast.success("Feedback saved successfully");
-          console.log(res);
-          handleClickClose();
-        })
-        .catch((err) => {
-          toast.error("Feedback saved failed");
-          console.log(err);
-        });
-    }
+    const feedbackRequest = {
+      FeedbackDetail: titleValue,
+      UserID: user.userID,
+      ServiceID: serviceId,
+      Rating: ratingValue,
+    };
+    console.log(feedbackRequest);
+    await axios
+      .post(
+        `${import.meta.env.VITE_REACT_APP_API_URL}/Feedback/AddFeedback`,
+        feedbackRequest,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
+      .then((res) => {
+        toast.success("Feedback saved successfully");
+        handleClickClose();
+        window.location.reload();
+      })
+      .catch((err) => {
+        toast.error("Feedback saved failed");
+        console.log(err);
+      });
   };
 
   return (

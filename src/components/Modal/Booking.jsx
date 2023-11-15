@@ -124,7 +124,9 @@ const Booking = (props) => {
         navigate("/");
       })
       .catch((err) => {
-        toast.error("Error saving booking!!!!!");
+        toast.error(
+          `Full slot booking in ${booking.dateTime}, please change date or service booking !!!!!`
+        );
         console.log(err);
       });
   };
