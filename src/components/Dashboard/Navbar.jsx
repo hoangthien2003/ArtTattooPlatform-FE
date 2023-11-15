@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useOpenDashboard } from "../../stores/useOpenDashboard";
 import { useUserInfo } from "../../stores/useUserInfo";
 import { useState } from "react";
 import axios from "axios";
@@ -22,6 +23,14 @@ function Navbar(props) {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [data, setData] = useState(null);
   const navigate = useNavigate();
+  const setOpenDashboard = useOpenDashboard((state) => state.setOpen);
+  
+  const handleOpenUserMenu = (event) => {
+		setAnchorElUser(event.currentTarget);
+	};
+	const handleCloseUserMenu = () => {
+		setAnchorElUser(null);
+	};
 
   useEffect(() => {
     getUserAccount();
@@ -58,10 +67,11 @@ function Navbar(props) {
     setAnchorElUser(null);
   };
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    handleCloseUserMenu();
-    navigate("/");
-  };
+		localStorage.removeItem("token");
+		handleCloseUserMenu();
+		setOpenDashboard(false);
+		navigate("/");
+	};
 
   return (
     <AppBar
